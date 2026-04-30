@@ -351,6 +351,85 @@
       letter-spacing: 0.5px;
       margin-bottom: 10px;
     }
+
+    /* ---- LOGIN OVERLAY ---- */
+    #login-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    #login-overlay.visible { display: flex; }
+
+    .login-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 2rem;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .login-box h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .login-box p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 1.25rem;
+    }
+    .login-box input {
+      width: 100%;
+      font-size: 14px;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      margin-bottom: 10px;
+      transition: border 0.15s;
+    }
+    .login-box input:focus { border-color: var(--brand-mid); background: white; }
+    .login-box .btn-login {
+      width: 100%;
+      padding: 9px;
+      background: var(--brand-mid);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .login-box .btn-login:hover { background: var(--brand); }
+    .login-box .login-err {
+      font-size: 12px;
+      color: var(--danger-text);
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      margin-top: 8px;
+      display: none;
+    }
+    .login-box .btn-close-login {
+      width: 100%;
+      padding: 7px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 6px;
+    }
   </style>
 </head>
 <body>
@@ -362,9 +441,21 @@
   </div>
   <div class="mode-btns">
     <button class="mode-btn active" id="btnView" onclick="setMode('view')">Catálogo</button>
-    <button class="mode-btn" id="btnAdmin" onclick="setMode('admin')">Admin</button>
+    <button class="mode-btn" id="btnAdmin" onclick="requestAdmin()">Admin</button>
   </div>
 </header>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay">
+  <div class="login-box">
+    <h2>Acesso Administrativo</h2>
+    <p>Digite a senha para acessar o painel Admin.</p>
+    <input type="password" id="loginInput" placeholder="Senha" onkeydown="if(event.key==='Enter')tryLogin()"/>
+    <button class="btn-login" onclick="tryLogin()">Entrar</button>
+    <div class="login-err" id="loginErr">Senha incorreta. Tente novamente.</div>
+    <button class="btn-close-login" onclick="closeLogin()">Cancelar</button>
+  </div>
+</div>
 
 <main>
 
@@ -636,6 +727,42 @@ function showMsg(m, err) {
   el.style.borderColor = err ? 'var(--danger-border)' : 'var(--success-border)';
   setTimeout(() => el.style.display = 'none', 3000);
 }
+
+// ---- SENHA ADMIN ---- //
+// Para trocar a senha, altere o valor abaixo:
+const ADMIN_PASSWORD = 'eventos2024';
+const SESSION_KEY = 'admin_auth';
+
+function isAuthenticated() {
+  return sessionStorage.getItem(SESSION_KEY) === '1';
+}
+
+function requestAdmin() {
+  if (isAuthenticated()) { setMode('admin'); return; }
+  document.getElementById('login-overlay').classList.add('visible');
+  document.getElementById('loginInput').value = '';
+  document.getElementById('loginErr').style.display = 'none';
+  setTimeout(() => document.getElementById('loginInput').focus(), 100);
+}
+
+function tryLogin() {
+  const val = document.getElementById('loginInput').value;
+  if (val === ADMIN_PASSWORD) {
+    sessionStorage.setItem(SESSION_KEY, '1');
+    closeLogin();
+    setMode('admin');
+  } else {
+    document.getElementById('loginErr').style.display = 'block';
+    document.getElementById('loginInput').value = '';
+    document.getElementById('loginInput').focus();
+  }
+}
+
+function closeLogin() {
+  document.getElementById('login-overlay').classList.remove('visible');
+}
+
+// ---- FIM SENHA ---- //
 
 load();
 populate();
