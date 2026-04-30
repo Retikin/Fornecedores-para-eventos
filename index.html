@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fornecedores para Eventos</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brand: #1a3a2e;
+      --brand-mid: #2d6a4f;
+      --brand-light: #e8f4ee;
+      --accent: #f4a261;
+      --bg: #f7f9f7;
+      --surface: #ffffff;
+      --border: #e0e8e3;
+      --text: #1a2e24;
+      --muted: #5a7465;
+      --success-bg: #e8f5e9;
+      --success-text: #2e7d32;
+      --success-border: #a5d6a7;
+      --info-bg: #e3f2fd;
+      --info-text: #1565c0;
+      --info-border: #90caf9;
+      --danger-bg: #ffebee;
+      --danger-text: #c62828;
+      --danger-border: #ef9a9a;
+      --warn-bg: #fff8e1;
+      --warn-text: #e65100;
+      --warn-border: #ffe082;
+      --radius: 10px;
+      --radius-sm: 6px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--brand);
+      color: white;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    header h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    header p {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .mode-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mode-btn {
+      font-size: 13px;
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+    .mode-btn.active {
+      background: rgba(255,255,255,0.22);
+      border-color: rgba(255,255,255,0.5);
+    }
+    .mode-btn:hover { background: rgba(255,255,255,0.18); }
+
+    main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+
+    /* ---- VIEW MODE ---- */
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .filters input, .filters select {
+      font-size: 14px;
+      padding: 9px 13px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border 0.15s;
+    }
+    .filters input { flex: 1; min-width: 200px; }
+    .filters input:focus, .filters select:focus { border-color: var(--brand-mid); }
+
+    .stats-bar {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      padding-left: 2px;
+    }
+
+    .supplier-grid {
+      display: grid;
+      gap: 10px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      border-left: 3px solid var(--brand-mid);
+      transition: box-shadow 0.15s;
+    }
+    .card:hover { box-shadow: 0 2px 12px rgba(45,106,79,0.1); }
+
+    .card-body { flex: 1; min-width: 0; }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 3px;
+    }
+
+    .card-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 2px 9px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .card-cat {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 9px;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      padding: 5px 11px;
+      background: var(--success-bg);
+      color: var(--success-text);
+      border: 1px solid var(--success-border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .btn-site {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      padding: 5px 11px;
+      background: var(--info-bg);
+      color: var(--info-text);
+      border: 1px solid var(--info-border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .btn-tel {
+      font-size: 12px;
+      padding: 5px 11px;
+      background: var(--bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    .empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* ---- ADMIN MODE ---- */
+    #admin-mode { display: none; }
+
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-card h2 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .field label {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+
+    .field input {
+      width: 100%;
+      font-size: 13px;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border 0.15s;
+    }
+    .field input:focus { border-color: var(--brand-mid); background: white; }
+
+    .form-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+
+    .btn-save {
+      font-size: 13px;
+      padding: 8px 20px;
+      background: var(--brand-mid);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .btn-save:hover { background: var(--brand); }
+
+    .btn-cancel {
+      font-size: 13px;
+      padding: 8px 16px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: none;
+    }
+
+    .form-msg {
+      font-size: 12px;
+      color: var(--success-text);
+      display: none;
+      padding: 6px 10px;
+      background: var(--success-bg);
+      border: 1px solid var(--success-border);
+      border-radius: var(--radius-sm);
+    }
+
+    .admin-list { display: grid; gap: 8px; }
+
+    .admin-row {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .admin-row-info { flex: 1; min-width: 0; }
+    .admin-row-info strong { font-size: 13px; }
+    .admin-row-info span { font-size: 12px; color: var(--muted); margin-left: 6px; }
+
+    .btn-edit {
+      font-size: 12px;
+      padding: 5px 12px;
+      background: var(--info-bg);
+      color: var(--info-text);
+      border: 1px solid var(--info-border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .btn-del {
+      font-size: 12px;
+      padding: 5px 12px;
+      background: var(--danger-bg);
+      color: var(--danger-text);
+      border: 1px solid var(--danger-border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Fornecedores para Eventos</h1>
+    <p>Diretório de fornecedores e prestadores de serviço</p>
+  </div>
+  <div class="mode-btns">
+    <button class="mode-btn active" id="btnView" onclick="setMode('view')">Catálogo</button>
+    <button class="mode-btn" id="btnAdmin" onclick="setMode('admin')">Admin</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- VIEW -->
+  <div id="view-mode">
+    <div class="filters">
+      <input id="search" type="text" placeholder="Buscar fornecedor, categoria, local..." oninput="renderList()"/>
+      <select id="catFilter" onchange="renderList()">
+        <option value="">Todas as categorias</option>
+      </select>
+      <select id="locFilter" onchange="renderList()">
+        <option value="">Todos os locais</option>
+      </select>
+    </div>
+    <p class="stats-bar" id="statsBar"></p>
+    <div class="supplier-grid" id="list"></div>
+    <div class="empty" id="empty" style="display:none">Nenhum fornecedor encontrado.</div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="admin-mode">
+    <div class="form-card">
+      <h2 id="formTitle">Novo Fornecedor</h2>
+      <div class="form-grid">
+        <div class="field"><label>Categoria *</label><input id="fCat" placeholder="Ex: Gráfica, Coffee Break..."/></div>
+        <div class="field"><label>Local</label><input id="fLoc" placeholder="Ex: SP, Florianópolis..."/></div>
+        <div class="field"><label>Nome do Fornecedor *</label><input id="fName" placeholder="Nome da empresa ou pessoa"/></div>
+        <div class="field"><label>Site / Instagram</label><input id="fSite" placeholder="https://..."/></div>
+        <div class="field"><label>Contato (tel / WhatsApp)</label><input id="fContact" placeholder="11 9xxxx-xxxx ou https://wa.me/..."/></div>
+        <div class="field"><label>Nome do Contato</label><input id="fContactName" placeholder="Ex: Comercial, Maria..."/></div>
+        <div class="field"><label>Especialidade / Obs</label><input id="fSub" placeholder="Ex: voucher de foto, crachás..."/></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" onclick="saveEntry()" id="saveBtn">Salvar Fornecedor</button>
+        <button class="btn-cancel" onclick="cancelEdit()" id="cancelBtn">Cancelar</button>
+        <span class="form-msg" id="formMsg"></span>
+      </div>
+    </div>
+
+    <p class="section-title">Fornecedores cadastrados</p>
+    <div class="admin-list" id="adminList"></div>
+  </div>
+
+</main>
+
+<script>
+const SEED = [
+  {id:1,cat:"Gráfica",sub:"voucher de foto, ficha de palco, adesivos de mesa, apostila",loc:"Florianópolis",name:"Duplic Digital",site:"https://www.duplic.com.br/",contact:"https://wa.me/554832333434",contactName:"Comercial"},
+  {id:2,cat:"Gráfica",sub:"livretos",loc:"SP",name:"Promo Press",site:"https://www.promopress.com.br/",contact:"https://wa.me/551131263126",contactName:"Felipe"},
+  {id:3,cat:"Gráfica",sub:"crachás, cordões",loc:"SP",name:"Printi",site:"https://www.instagram.com/printibr/",contact:"https://wa.me/5511917788793",contactName:"Laurien"},
+  {id:4,cat:"Gráfica",sub:"fichas de aplicação, livreto, adesivos",loc:"SP",name:"Smart Power Gráfica",site:"https://www.instagram.com/bzumm_grafica/",contact:"https://wa.me/5511997174470",contactName:"George"},
+  {id:5,cat:"Energético personalizado",sub:"",loc:"SP (nacional)",name:"Smart Power Energy",site:"https://www.instagram.com/smartpowerenergydrink/",contact:"https://wa.me/558009190011",contactName:"Comercial"},
+  {id:6,cat:"Água personalizada",sub:"",loc:"SP (nacional)",name:"Personalize Água",site:"https://www.instagram.com/personalizeagua/",contact:"https://wa.me/5511972125530",contactName:"Comercial"},
+  {id:7,cat:"Chocolates",sub:"personalizados",loc:"SP (nacional)",name:"ID Chocolates Personalizados",site:"https://www.instagram.com/chocolatespersonalizados/",contact:"https://wa.me/5511998387402",contactName:"Comercial"},
+  {id:8,cat:"Chocolates",sub:"",loc:"SP (nacional)",name:"Cau Chocolates",site:"https://www.instagram.com/cauchocolates/",contact:"",contactName:""},
+  {id:9,cat:"Comunicação Visual",sub:"letra caixa",loc:"SP",name:"Koerteck",site:"https://www.korteck.com.br/",contact:"",contactName:""},
+  {id:10,cat:"Comunicação Visual",sub:"backdrop",loc:"SP",name:"DJ Comunicação",site:"http://www.djcomunicacao.com.br/",contact:"https://wa.me/5519989855257",contactName:"Comercial"},
+  {id:11,cat:"Comunicação Visual",sub:"backdrop",loc:"SP",name:"Graf Stock",site:"https://www.grafstock.com.br/",contact:"https://wa.me/5511975018587",contactName:"Pedro"},
+  {id:12,cat:"Comunicação Visual",sub:"",loc:"Florianópolis",name:"RDO",site:"",contact:"48 9650-5070",contactName:"Airton"},
+  {id:13,cat:"Brindes",sub:"moletom",loc:"SP",name:"ML Confecções",site:"https://www.instagram.com/mlconfeccoesoficial/",contact:"https://wa.me/558981472227",contactName:"Comercial"},
+  {id:14,cat:"Brindes",sub:"pulseiras de silicone",loc:"SP",name:"Super Pulseiras",site:"https://www.instagram.com/pulseirasdesilicone/",contact:"",contactName:""},
+  {id:15,cat:"Brindes",sub:"canetas",loc:"SP",name:"Sky Brindes",site:"https://www.instagram.com/skybrindesoficial/",contact:"https://wa.me/5511920193076",contactName:"Isaías"},
+  {id:16,cat:"Brindes",sub:"placas de premiação",loc:"SP",name:"Arrisca Placas",site:"https://www.instagram.com/arriscaplacas/",contact:"https://wa.me/551145633540",contactName:"Comercial"},
+  {id:17,cat:"Brindes",sub:"caixas",loc:"SP",name:"Papirus Impressões",site:"https://www.instagram.com/papirus_lembrancas/",contact:"https://wa.me/5513996298809",contactName:"Comercial"},
+  {id:18,cat:"Brindes",sub:"geral",loc:"",name:"Creativa Personalizados",site:"",contact:"11 96599-3802",contactName:""},
+  {id:19,cat:"Brindes",sub:"bolsas e agasalhos",loc:"",name:"Lo Ruama Lopes",site:"",contact:"11 94081-2830",contactName:""},
+  {id:20,cat:"Brindes",sub:"placas de premiação",loc:"",name:"Pedrina",site:"",contact:"11 94785-9297",contactName:""},
+  {id:21,cat:"Brindes",sub:"placas de premiação",loc:"",name:"Placas D' Premiação",site:"",contact:"11 97808-6472",contactName:""},
+  {id:22,cat:"Brindes",sub:"geral",loc:"",name:"Karen TC",site:"",contact:"11 97547-7515",contactName:""},
+  {id:23,cat:"Brindes",sub:"geral",loc:"",name:"Roberto/Rafael",site:"",contact:"11 99441-6171",contactName:""},
+  {id:24,cat:"Brindes",sub:"acrílico",loc:"Jaraguá do Sul",name:"Acrílico Store",site:"https://www.acrilicostore.com.br/",contact:"47 9237-8099",contactName:"Adriely"},
+  {id:25,cat:"Brindes",sub:"geral",loc:"Florianópolis",name:"Maxxi Brindes",site:"",contact:"48 8467-5627",contactName:"Comercial"},
+  {id:26,cat:"Brindes",sub:"mala personalizada",loc:"SP",name:"Meraki Brindes",site:"",contact:"11 95833-9509",contactName:"Carolina"},
+  {id:27,cat:"Brindes",sub:"malas personalizadas",loc:"SP",name:"Juliana Moura",site:"",contact:"19 99166-8624",contactName:""},
+  {id:28,cat:"Brindes",sub:"boné e ecobag",loc:"",name:"Lolo Valentin",site:"",contact:"11 94081-2830",contactName:"Lo Ruama"},
+  {id:29,cat:"Personalizados",sub:"",loc:"",name:"Cris Tangram Personalizados",site:"",contact:"11 99891-3430",contactName:""},
+  {id:30,cat:"Personalizados",sub:"",loc:"",name:"Thiago Leal",site:"",contact:"53 8455-4951",contactName:""},
+  {id:31,cat:"Personalizados",sub:"",loc:"",name:"Dani Sampaio",site:"",contact:"11 99284-7098",contactName:""},
+  {id:32,cat:"Personalizados",sub:"pins",loc:"",name:"Thiago Leal (pins)",site:"",contact:"53 8455-4951",contactName:"indicação Tales Azambuja"},
+  {id:33,cat:"Crachás / Pulseiras / Cordões",sub:"",loc:"SP",name:"JK Ingressos",site:"https://www.jkingressos.com.br/",contact:"11 99447-1589",contactName:"Milene"},
+  {id:34,cat:"Crachás / Camisetas / Brindes",sub:"crachá, cordão, camiseta, sacolas, garrafas térmicas",loc:"",name:"Elaine Piola",site:"",contact:"16 99382-5120",contactName:""},
+  {id:35,cat:"Joias / Semijoias",sub:"",loc:"",name:"Paula Cavancanti Joias",site:"",contact:"92 8114-9775",contactName:""},
+  {id:36,cat:"Camisetas",sub:"",loc:"",name:"Julia Melo",site:"",contact:"12 99254-0566",contactName:""},
+  {id:37,cat:"Moleskine",sub:"",loc:"SP",name:"Vanessa Personalizados",site:"",contact:"11 95992-8804",contactName:""},
+  {id:38,cat:"Moleskine",sub:"",loc:"SP",name:"Gaivotha",site:"",contact:"11 94325-6997",contactName:""},
+  {id:39,cat:"Canetas / Moleskines",sub:"",loc:"",name:"Dom Brindes",site:"",contact:"11 95291-5333",contactName:""},
+  {id:40,cat:"Equipamentos Técnicos",sub:"etiquetadora, rádios, microfones",loc:"Florianópolis",name:"Ramtech",site:"https://www.instagram.com/ramtecheventos/",contact:"https://wa.me/554884064385",contactName:"Adriana"},
+  {id:41,cat:"Coffee Break",sub:"",loc:"Florianópolis",name:"Ale Quitutes",site:"",contact:"48 8467-9061",contactName:"Ale"},
+  {id:42,cat:"Coffee Break",sub:"",loc:"SP",name:"Pedro Athayde",site:"",contact:"21 97405-8969",contactName:""},
+  {id:43,cat:"Coffee Break",sub:"",loc:"SP",name:"Tout Va Bien",site:"https://www.instagram.com/buffettoutvabien/",contact:"11 98752-9893",contactName:"Jorgiana"},
+  {id:44,cat:"Coffee Break",sub:"",loc:"SP",name:"Thais",site:"",contact:"11 97611-6291",contactName:"Thais"},
+  {id:45,cat:"Coffee Break",sub:"",loc:"SP",name:"Renata Clemente",site:"",contact:"11 99906-2006",contactName:"Renata"},
+  {id:46,cat:"Coffee Break",sub:"",loc:"SP",name:"Imperio Nobre",site:"",contact:"11 99507-1304",contactName:"Marcia"},
+  {id:47,cat:"Coffee Break",sub:"",loc:"Florianópolis",name:"Gourmet Prime Gastronomia",site:"https://www.instagram.com/gourmetprimegastronomia/",contact:"",contactName:""},
+  {id:48,cat:"Banner / Gráfica",sub:"",loc:"SP",name:"Felipe (Banner)",site:"",contact:"11 939375976",contactName:"Felipe"}
+];
+
+const KEY = 'fornecedores_v1';
+let db = [], editId = null;
+
+function load() {
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (raw) { db = JSON.parse(raw); return; }
+  } catch(e) {}
+  db = SEED.map(x => ({...x}));
+  persist();
+}
+
+function persist() {
+  try { localStorage.setItem(KEY, JSON.stringify(db)); } catch(e) {}
+}
+
+const nextId = () => db.length ? Math.max(...db.map(x => x.id)) + 1 : 1;
+const cats = () => [...new Set(db.map(x => x.cat))].sort();
+const locs = () => [...new Set(db.map(x => x.loc).filter(Boolean))].sort();
+
+function populate() {
+  const cs = document.getElementById('catFilter');
+  const ls = document.getElementById('locFilter');
+  const cv = cs.value, lv = ls.value;
+  cs.innerHTML = '<option value="">Todas as categorias</option>' +
+    cats().map(c => `<option value="${c}"${c===cv?' selected':''}>${c}</option>`).join('');
+  ls.innerHTML = '<option value="">Todos os locais</option>' +
+    locs().map(l => `<option value="${l}"${l===lv?' selected':''}>${l}</option>`).join('');
+}
+
+function isWa(s) { return s && s.includes('wa.me'); }
+function isUrl(s) { return s && (s.startsWith('http') || s.startsWith('www')); }
+
+function renderList() {
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  const cf = document.getElementById('catFilter').value;
+  const lf = document.getElementById('locFilter').value;
+
+  let items = db.filter(x => {
+    if (cf && x.cat !== cf) return false;
+    if (lf && x.loc !== lf) return false;
+    if (q && ![x.cat, x.name, x.loc, x.sub, x.contactName].join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  document.getElementById('statsBar').textContent =
+    items.length === db.length
+      ? `${db.length} fornecedores`
+      : `${items.length} de ${db.length} fornecedores`;
+
+  const list = document.getElementById('list');
+  const empty = document.getElementById('empty');
+
+  if (!items.length) {
+    list.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  list.innerHTML = items.map(x => {
+    const waBtn = isWa(x.contact)
+      ? `<a href="${x.contact}" target="_blank" class="btn-wa">&#128222; WhatsApp${x.contactName ? ' · ' + x.contactName : ''}</a>` : '';
+    const telBtn = (!isWa(x.contact) && x.contact)
+      ? `<span class="btn-tel">&#128222; ${x.contact}${x.contactName ? ' · ' + x.contactName : ''}</span>` : '';
+    const siteBtn = isUrl(x.site)
+      ? `<a href="${x.site}" target="_blank" class="btn-site">&#127760; Site/IG</a>` : '';
+    return `<div class="card">
+      <div class="card-body">
+        <div class="card-top">
+          <span class="card-name">${x.name}</span>
+          ${x.loc ? `<span class="tag">${x.loc}</span>` : ''}
+        </div>
+        <p class="card-cat">${x.cat}${x.sub ? ' · ' + x.sub : ''}</p>
+        <div class="card-actions">${waBtn}${telBtn}${siteBtn}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAdminList() {
+  document.getElementById('adminList').innerHTML = db.map(x =>
+    `<div class="admin-row">
+      <div class="admin-row-info">
+        <strong>${x.name}</strong>
+        <span>${x.cat}</span>
+        ${x.loc ? `<span>· ${x.loc}</span>` : ''}
+      </div>
+      <button class="btn-edit" onclick="editEntry(${x.id})">Editar</button>
+      <button class="btn-del" onclick="deleteEntry(${x.id})">Excluir</button>
+    </div>`
+  ).join('');
+}
+
+function setMode(m) {
+  document.getElementById('view-mode').style.display = m === 'view' ? 'block' : 'none';
+  document.getElementById('admin-mode').style.display = m === 'admin' ? 'block' : 'none';
+  document.getElementById('btnView').classList.toggle('active', m === 'view');
+  document.getElementById('btnAdmin').classList.toggle('active', m === 'admin');
+  if (m === 'admin') renderAdminList();
+}
+
+function getForm() {
+  return {
+    cat: document.getElementById('fCat').value.trim(),
+    loc: document.getElementById('fLoc').value.trim(),
+    name: document.getElementById('fName').value.trim(),
+    site: document.getElementById('fSite').value.trim(),
+    contact: document.getElementById('fContact').value.trim(),
+    contactName: document.getElementById('fContactName').value.trim(),
+    sub: document.getElementById('fSub').value.trim()
+  };
+}
+
+function clearForm() {
+  ['fCat','fLoc','fName','fSite','fContact','fContactName','fSub'].forEach(id => document.getElementById(id).value = '');
+  editId = null;
+  document.getElementById('formTitle').textContent = 'Novo Fornecedor';
+  document.getElementById('saveBtn').textContent = 'Salvar Fornecedor';
+  document.getElementById('cancelBtn').style.display = 'none';
+}
+
+function saveEntry() {
+  const f = getForm();
+  if (!f.cat || !f.name) { showMsg('Preencha ao menos categoria e nome.', true); return; }
+  if (editId) {
+    const i = db.findIndex(x => x.id === editId);
+    if (i > -1) db[i] = { ...db[i], ...f };
+  } else {
+    db.push({ id: nextId(), ...f });
+  }
+  persist();
+  clearForm();
+  populate();
+  renderAdminList();
+  showMsg('Salvo com sucesso!');
+}
+
+function editEntry(id) {
+  const x = db.find(e => e.id === id);
+  if (!x) return;
+  editId = id;
+  document.getElementById('fCat').value = x.cat;
+  document.getElementById('fLoc').value = x.loc;
+  document.getElementById('fName').value = x.name;
+  document.getElementById('fSite').value = x.site;
+  document.getElementById('fContact').value = x.contact;
+  document.getElementById('fContactName').value = x.contactName;
+  document.getElementById('fSub').value = x.sub || '';
+  document.getElementById('formTitle').textContent = 'Editar Fornecedor';
+  document.getElementById('saveBtn').textContent = 'Atualizar';
+  document.getElementById('cancelBtn').style.display = 'inline';
+  document.getElementById('admin-mode').scrollIntoView({ behavior: 'smooth' });
+}
+
+function cancelEdit() { clearForm(); }
+
+function deleteEntry(id) {
+  if (!confirm('Excluir este fornecedor?')) return;
+  db = db.filter(x => x.id !== id);
+  persist();
+  populate();
+  renderAdminList();
+}
+
+function showMsg(m, err) {
+  const el = document.getElementById('formMsg');
+  el.textContent = m;
+  el.style.display = 'inline';
+  el.style.color = err ? 'var(--danger-text)' : 'var(--success-text)';
+  el.style.background = err ? 'var(--danger-bg)' : 'var(--success-bg)';
+  el.style.borderColor = err ? 'var(--danger-border)' : 'var(--success-border)';
+  setTimeout(() => el.style.display = 'none', 3000);
+}
+
+load();
+populate();
+renderList();
+</script>
+</body>
+</html>
