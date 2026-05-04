@@ -495,12 +495,19 @@
       </div>
     </div>
 
-    <p class="section-title">Fornecedores cadastrados</p>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+      <p class="section-title" style="margin-bottom:0">Fornecedores cadastrados</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="exportCSV()" style="font-size:12px;padding:6px 14px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬇ Exportar CSV</button>
+        <label style="font-size:12px;padding:6px 14px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬆ Importar Excel<input type="file" accept=".xlsx,.xls" onchange="importXLSX(event)" style="display:none"/></label>
+      </div>
+    </div>
     <div class="admin-list" id="adminList"></div>
   </div>
 
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 const SEED = [
   {id:1,cat:"Gráfica",sub:"voucher de foto, ficha de palco, adesivos de mesa, apostila",loc:"Florianópolis",name:"Duplic Digital",site:"https://www.duplic.com.br/",contact:"https://wa.me/554832333434",contactName:"Comercial"},
@@ -763,6 +770,86 @@ function closeLogin() {
 }
 
 // ---- FIM SENHA ---- //
+
+// ---- EXPORTAR / IMPORTAR CSV ---- //
+function exportCSV() {
+  const headers = ['Categoria','Especialidade','Local','Fornecedor','Site/Instagram','Contato','Nome do Contato'];
+  const rows = db.map(x => [x.cat, x.sub, x.loc, x.name, x.site, x.contact, x.contactName]
+    .map(v => `"${(v||'').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'fornecedores-eventos.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importXLSX(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const action = confirm(
+    'Como deseja importar?\n\nOK = Adicionar à lista atual\nCancelar = Substituir tudo'
+  );
+  // action: true = adicionar, false = substituir
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
+
+      if (!rows.length) { alert('Nenhum dado encontrado na planilha.'); return; }
+
+      // Mapeamento flexível de colunas (aceita variações de nome)
+      const map = (row, keys) => {
+        for (const k of keys) {
+          const found = Object.keys(row).find(r => r.toLowerCase().includes(k.toLowerCase()));
+          if (found) return String(row[found] || '').trim();
+        }
+        return '';
+      };
+
+      const newEntries = rows.map((row, i) => ({
+        id: (action ? nextId() + i : i + 1),
+        cat:         map(row, ['categoria', 'cat']),
+        sub:         map(row, ['especialidade', 'obs', 'sub', 'especial']),
+        loc:         map(row, ['local', 'loc', 'cidade']),
+        name:        map(row, ['fornecedor', 'nome', 'name', 'empresa']),
+        site:        map(row, ['site', 'instagram', 'ig', 'url', 'link']),
+        contact:     map(row, ['contato', 'tel', 'whatsapp', 'telefone', 'contact']),
+        contactName: map(row, ['nome do contato', 'responsável', 'atendente', 'contactname']),
+      })).filter(x => x.name || x.cat);
+
+      if (!newEntries.length) { alert('Nenhum fornecedor válido encontrado. Verifique se a planilha tem colunas como "Fornecedor" e "Categoria".'); return; }
+
+      if (action) {
+        // Adicionar
+        const maxId = db.length ? Math.max(...db.map(x => x.id)) : 0;
+        newEntries.forEach((e, i) => e.id = maxId + i + 1);
+        db = [...db, ...newEntries];
+      } else {
+        // Substituir
+        db = newEntries;
+      }
+
+      persist();
+      populate();
+      renderAdminList();
+      renderList();
+      alert(`✅ ${newEntries.length} fornecedores ${action ? 'adicionados' : 'importados'} com sucesso!`);
+    } catch(err) {
+      alert('Erro ao ler o arquivo. Certifique-se de enviar um arquivo .xlsx ou .xls válido.\n\n' + err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsArrayBuffer(file);
+}
+// ---- FIM EXPORTAR / IMPORTAR ---- //
 
 load();
 populate();
