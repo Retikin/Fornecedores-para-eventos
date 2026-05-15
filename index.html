@@ -29,6 +29,9 @@
       --warn-bg: #fff8e1;
       --warn-text: #e65100;
       --warn-border: #ffe082;
+      --purple-bg: #f3e5f5;
+      --purple-text: #6a1b9a;
+      --purple-border: #ce93d8;
       --radius: 10px;
       --radius-sm: 6px;
     }
@@ -91,7 +94,7 @@
 
     main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
 
-    /* ---- VIEW MODE ---- */
+    /* ---- FILTROS (compartilhado view + admin) ---- */
     .filters {
       display: flex;
       gap: 8px;
@@ -203,6 +206,21 @@
       font-weight: 500;
     }
 
+    .btn-pdf {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      padding: 5px 11px;
+      background: var(--purple-bg);
+      color: var(--purple-text);
+      border: 1px solid var(--purple-border);
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
     .btn-tel {
       font-size: 12px;
       padding: 5px 11px;
@@ -268,6 +286,55 @@
     }
     .field input:focus { border-color: var(--brand-mid); background: white; }
 
+    .field-full { grid-column: 1 / -1; }
+
+    .pdf-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 8px 11px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      min-height: 40px;
+    }
+    .pdf-area-empty {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .pdf-attached {
+      font-size: 12px;
+      color: var(--purple-text);
+      background: var(--purple-bg);
+      border: 1px solid var(--purple-border);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-upload-pdf {
+      font-size: 12px;
+      padding: 6px 12px;
+      background: var(--brand-mid);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .btn-upload-pdf:hover { background: var(--brand); }
+    .btn-remove-pdf {
+      font-size: 11px;
+      padding: 3px 8px;
+      background: transparent;
+      color: var(--danger-text);
+      border: 1px solid var(--danger-border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+
     .form-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
 
     .btn-save {
@@ -304,22 +371,66 @@
       border-radius: var(--radius-sm);
     }
 
-    .admin-list { display: grid; gap: 8px; }
+    .admin-list { display: grid; gap: 10px; }
 
     .admin-row {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      border-left: 3px solid var(--brand-mid);
+    }
+
+    .admin-row-header {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+    .admin-row-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .admin-row-buttons {
+      margin-left: auto;
+      display: flex;
+      gap: 6px;
     }
 
-    .admin-row-info { flex: 1; min-width: 0; }
-    .admin-row-info strong { font-size: 13px; }
-    .admin-row-info span { font-size: 12px; color: var(--muted); margin-left: 6px; }
+    .admin-row-specs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 6px 16px;
+      font-size: 12px;
+      color: var(--text);
+    }
+    .admin-row-specs .spec-label {
+      color: var(--muted);
+      font-weight: 500;
+      margin-right: 4px;
+    }
+    .admin-row-specs .spec-value {
+      color: var(--text);
+      word-break: break-word;
+    }
+    .admin-row-specs .spec-empty {
+      color: #b0bdb4;
+      font-style: italic;
+    }
+    .admin-row-specs a {
+      color: var(--info-text);
+      text-decoration: none;
+    }
+    .admin-row-specs a:hover { text-decoration: underline; }
+
+    .admin-row-pdf {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px;
+    }
 
     .btn-edit {
       font-size: 12px;
@@ -351,6 +462,17 @@
       letter-spacing: 0.5px;
       margin-bottom: 10px;
     }
+
+    .storage-bar {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      padding: 6px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .storage-bar.warn { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
 
     /* ---- LOGIN OVERLAY ---- */
     #login-overlay {
@@ -486,7 +608,21 @@
         <div class="field"><label>Site / Instagram</label><input id="fSite" placeholder="https://..."/></div>
         <div class="field"><label>Contato (tel / WhatsApp)</label><input id="fContact" placeholder="11 9xxxx-xxxx ou https://wa.me/..."/></div>
         <div class="field"><label>Nome do Contato</label><input id="fContactName" placeholder="Ex: Comercial, Maria..."/></div>
-        <div class="field"><label>Especialidade / Obs</label><input id="fSub" placeholder="Ex: voucher de foto, crachás..."/></div>
+        <div class="field field-full"><label>Especialidade / Obs</label><input id="fSub" placeholder="Ex: voucher de foto, crachás..."/></div>
+        <div class="field field-full">
+          <label>Catálogo de Brindes (PDF) <span style="color:var(--muted);font-weight:400">— máx. 1MB</span></label>
+          <div class="pdf-area" id="pdfArea">
+            <span class="pdf-area-empty" id="pdfAreaEmpty">Nenhum catálogo anexado.</span>
+            <span class="pdf-attached" id="pdfAreaAttached" style="display:none">
+              📄 <span id="pdfFilename"></span>
+              <button type="button" class="btn-remove-pdf" onclick="removePdf()">Remover</button>
+            </span>
+            <label class="btn-upload-pdf">
+              ⬆ Anexar PDF
+              <input type="file" accept="application/pdf,.pdf" onchange="handlePdfUpload(event)" style="display:none"/>
+            </label>
+          </div>
+        </div>
       </div>
       <div class="form-actions">
         <button class="btn-save" onclick="saveEntry()" id="saveBtn">Salvar Fornecedor</button>
@@ -500,9 +636,26 @@
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button onclick="exportCSV()" style="font-size:12px;padding:6px 14px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬇ Exportar CSV</button>
         <label style="font-size:12px;padding:6px 14px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬆ Importar Excel<input type="file" accept=".xlsx,.xls" onchange="importXLSX(event)" style="display:none"/></label>
+        <button onclick="exportBackup()" style="font-size:12px;padding:6px 14px;background:var(--info-bg);color:var(--info-text);border:1px solid var(--info-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500" title="Backup completo (incluindo PDFs)">💾 Backup JSON</button>
+        <label style="font-size:12px;padding:6px 14px;background:var(--purple-bg);color:var(--purple-text);border:1px solid var(--purple-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500" title="Restaurar backup">♻ Restaurar<input type="file" accept=".json,application/json" onchange="importBackup(event)" style="display:none"/></label>
       </div>
     </div>
+
+    <p class="storage-bar" id="storageBar"></p>
+
+    <!-- FILTROS ADMIN -->
+    <div class="filters">
+      <input id="adminSearch" type="text" placeholder="Buscar fornecedor, categoria, local..." oninput="renderAdminList()"/>
+      <select id="adminCatFilter" onchange="renderAdminList()">
+        <option value="">Todas as categorias</option>
+      </select>
+      <select id="adminLocFilter" onchange="renderAdminList()">
+        <option value="">Todos os locais</option>
+      </select>
+    </div>
+
     <div class="admin-list" id="adminList"></div>
+    <div class="empty" id="adminEmpty" style="display:none">Nenhum fornecedor encontrado com esses filtros.</div>
   </div>
 
 </main>
@@ -561,7 +714,9 @@ const SEED = [
 ];
 
 const KEY = 'fornecedores_v1';
+const PDF_MAX_BYTES = 1024 * 1024; // 1MB por PDF
 let db = [], editId = null;
+let pendingPdf = null; // { name, dataUrl } enquanto edita
 
 function load() {
   try {
@@ -573,7 +728,13 @@ function load() {
 }
 
 function persist() {
-  try { localStorage.setItem(KEY, JSON.stringify(db)); } catch(e) {}
+  try {
+    localStorage.setItem(KEY, JSON.stringify(db));
+    return true;
+  } catch(e) {
+    alert('❌ Erro ao salvar: o navegador atingiu o limite de armazenamento.\n\nDica: remova PDFs de fornecedores antigos ou faça um backup JSON e limpe alguns dados.');
+    return false;
+  }
 }
 
 const nextId = () => db.length ? Math.max(...db.map(x => x.id)) + 1 : 1;
@@ -581,6 +742,7 @@ const cats = () => [...new Set(db.map(x => x.cat))].sort();
 const locs = () => [...new Set(db.map(x => x.loc).filter(Boolean))].sort();
 
 function populate() {
+  // Catálogo
   const cs = document.getElementById('catFilter');
   const ls = document.getElementById('locFilter');
   const cv = cs.value, lv = ls.value;
@@ -588,10 +750,24 @@ function populate() {
     cats().map(c => `<option value="${c}"${c===cv?' selected':''}>${c}</option>`).join('');
   ls.innerHTML = '<option value="">Todos os locais</option>' +
     locs().map(l => `<option value="${l}"${l===lv?' selected':''}>${l}</option>`).join('');
+
+  // Admin
+  const acs = document.getElementById('adminCatFilter');
+  const als = document.getElementById('adminLocFilter');
+  if (acs && als) {
+    const acv = acs.value, alv = als.value;
+    acs.innerHTML = '<option value="">Todas as categorias</option>' +
+      cats().map(c => `<option value="${c}"${c===acv?' selected':''}>${c}</option>`).join('');
+    als.innerHTML = '<option value="">Todos os locais</option>' +
+      locs().map(l => `<option value="${l}"${l===alv?' selected':''}>${l}</option>`).join('');
+  }
 }
 
 function isWa(s) { return s && s.includes('wa.me'); }
 function isUrl(s) { return s && (s.startsWith('http') || s.startsWith('www')); }
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 
 function renderList() {
   const q = (document.getElementById('search').value || '').toLowerCase();
@@ -622,36 +798,99 @@ function renderList() {
 
   list.innerHTML = items.map(x => {
     const waBtn = isWa(x.contact)
-      ? `<a href="${x.contact}" target="_blank" class="btn-wa">&#128222; WhatsApp${x.contactName ? ' · ' + x.contactName : ''}</a>` : '';
+      ? `<a href="${escapeHtml(x.contact)}" target="_blank" class="btn-wa">&#128222; WhatsApp${x.contactName ? ' · ' + escapeHtml(x.contactName) : ''}</a>` : '';
     const telBtn = (!isWa(x.contact) && x.contact)
-      ? `<span class="btn-tel">&#128222; ${x.contact}${x.contactName ? ' · ' + x.contactName : ''}</span>` : '';
+      ? `<span class="btn-tel">&#128222; ${escapeHtml(x.contact)}${x.contactName ? ' · ' + escapeHtml(x.contactName) : ''}</span>` : '';
     const siteBtn = isUrl(x.site)
-      ? `<a href="${x.site}" target="_blank" class="btn-site">&#127760; Site/IG</a>` : '';
+      ? `<a href="${escapeHtml(x.site)}" target="_blank" class="btn-site">&#127760; Site/IG</a>` : '';
+    const pdfBtn = x.pdf
+      ? `<a class="btn-pdf" onclick="openPdf(${x.id})">📄 Catálogo</a>` : '';
     return `<div class="card">
       <div class="card-body">
         <div class="card-top">
-          <span class="card-name">${x.name}</span>
-          ${x.loc ? `<span class="tag">${x.loc}</span>` : ''}
+          <span class="card-name">${escapeHtml(x.name)}</span>
+          ${x.loc ? `<span class="tag">${escapeHtml(x.loc)}</span>` : ''}
         </div>
-        <p class="card-cat">${x.cat}${x.sub ? ' · ' + x.sub : ''}</p>
-        <div class="card-actions">${waBtn}${telBtn}${siteBtn}</div>
+        <p class="card-cat">${escapeHtml(x.cat)}${x.sub ? ' · ' + escapeHtml(x.sub) : ''}</p>
+        <div class="card-actions">${waBtn}${telBtn}${siteBtn}${pdfBtn}</div>
       </div>
     </div>`;
   }).join('');
 }
 
 function renderAdminList() {
-  document.getElementById('adminList').innerHTML = db.map(x =>
-    `<div class="admin-row">
-      <div class="admin-row-info">
-        <strong>${x.name}</strong>
-        <span>${x.cat}</span>
-        ${x.loc ? `<span>· ${x.loc}</span>` : ''}
-      </div>
-      <button class="btn-edit" onclick="editEntry(${x.id})">Editar</button>
-      <button class="btn-del" onclick="deleteEntry(${x.id})">Excluir</button>
-    </div>`
-  ).join('');
+  const q = (document.getElementById('adminSearch').value || '').toLowerCase();
+  const cf = document.getElementById('adminCatFilter').value;
+  const lf = document.getElementById('adminLocFilter').value;
+
+  let items = db.filter(x => {
+    if (cf && x.cat !== cf) return false;
+    if (lf && x.loc !== lf) return false;
+    if (q && ![x.cat, x.name, x.loc, x.sub, x.contactName, x.contact, x.site].join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const empty = document.getElementById('adminEmpty');
+  if (!items.length) {
+    document.getElementById('adminList').innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    document.getElementById('adminList').innerHTML = items.map(x => {
+      const spec = (label, value, isLink) => {
+        if (!value) return `<div><span class="spec-label">${label}:</span><span class="spec-empty">—</span></div>`;
+        if (isLink && isUrl(value)) {
+          return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">${escapeHtml(value)}</a></div>`;
+        }
+        if (isLink && isWa(value)) {
+          return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">WhatsApp</a></div>`;
+        }
+        return `<div><span class="spec-label">${label}:</span><span class="spec-value">${escapeHtml(value)}</span></div>`;
+      };
+
+      const pdfLine = x.pdf
+        ? `<div class="admin-row-pdf">📄 Catálogo anexado: <a href="#" onclick="event.preventDefault();openPdf(${x.id})" style="color:var(--purple-text);font-weight:500">${escapeHtml(x.pdf.name || 'catalogo.pdf')}</a></div>`
+        : `<div class="admin-row-pdf" style="color:var(--muted)">📄 Sem catálogo anexado.</div>`;
+
+      return `<div class="admin-row">
+        <div class="admin-row-header">
+          <span class="admin-row-name">${escapeHtml(x.name)}</span>
+          ${x.cat ? `<span class="tag">${escapeHtml(x.cat)}</span>` : ''}
+          ${x.loc ? `<span class="tag">${escapeHtml(x.loc)}</span>` : ''}
+          <div class="admin-row-buttons">
+            <button class="btn-edit" onclick="editEntry(${x.id})">Editar</button>
+            <button class="btn-del" onclick="deleteEntry(${x.id})">Excluir</button>
+          </div>
+        </div>
+        <div class="admin-row-specs">
+          ${spec('Tipo / Especialidade', x.sub)}
+          ${spec('Local', x.loc)}
+          ${spec('Contato', x.contact, true)}
+          ${spec('Nome do contato', x.contactName)}
+          ${spec('Site / Instagram', x.site, true)}
+        </div>
+        ${pdfLine}
+      </div>`;
+    }).join('');
+  }
+
+  updateStorageBar();
+}
+
+function updateStorageBar() {
+  const bar = document.getElementById('storageBar');
+  if (!bar) return;
+  try {
+    const bytes = new Blob([localStorage.getItem(KEY) || '']).size;
+    const kb = (bytes / 1024).toFixed(0);
+    const mb = (bytes / 1024 / 1024).toFixed(2);
+    const pct = Math.min(100, Math.round(bytes / (5 * 1024 * 1024) * 100));
+    const pdfCount = db.filter(x => x.pdf).length;
+    bar.innerHTML = `💾 Armazenamento usado: <strong>${mb} MB</strong> (~${pct}% do limite do navegador) · ${pdfCount} ${pdfCount === 1 ? 'PDF anexado' : 'PDFs anexados'}`;
+    bar.classList.toggle('warn', pct >= 70);
+  } catch(e) {
+    bar.textContent = '';
+  }
 }
 
 function setMode(m) {
@@ -659,7 +898,7 @@ function setMode(m) {
   document.getElementById('admin-mode').style.display = m === 'admin' ? 'block' : 'none';
   document.getElementById('btnView').classList.toggle('active', m === 'view');
   document.getElementById('btnAdmin').classList.toggle('active', m === 'admin');
-  if (m === 'admin') renderAdminList();
+  if (m === 'admin') { populate(); renderAdminList(); }
 }
 
 function getForm() {
@@ -677,24 +916,93 @@ function getForm() {
 function clearForm() {
   ['fCat','fLoc','fName','fSite','fContact','fContactName','fSub'].forEach(id => document.getElementById(id).value = '');
   editId = null;
+  pendingPdf = null;
+  updatePdfArea(null);
   document.getElementById('formTitle').textContent = 'Novo Fornecedor';
   document.getElementById('saveBtn').textContent = 'Salvar Fornecedor';
   document.getElementById('cancelBtn').style.display = 'none';
 }
 
+function updatePdfArea(pdf) {
+  const empty = document.getElementById('pdfAreaEmpty');
+  const attached = document.getElementById('pdfAreaAttached');
+  const filename = document.getElementById('pdfFilename');
+  if (pdf && pdf.name) {
+    empty.style.display = 'none';
+    attached.style.display = 'inline-flex';
+    filename.textContent = pdf.name;
+  } else {
+    empty.style.display = 'inline';
+    attached.style.display = 'none';
+    filename.textContent = '';
+  }
+}
+
+function handlePdfUpload(event) {
+  const file = event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    alert('Apenas arquivos PDF são aceitos.');
+    return;
+  }
+  if (file.size > PDF_MAX_BYTES) {
+    alert(`Arquivo muito grande (${(file.size/1024/1024).toFixed(2)} MB).\n\nO limite por PDF é de 1 MB.\n\nDica: comprima o PDF em sites como ilovepdf.com antes de anexar.`);
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    pendingPdf = { name: file.name, dataUrl: e.target.result };
+    updatePdfArea(pendingPdf);
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePdf() {
+  if (!confirm('Remover o PDF anexado?')) return;
+  pendingPdf = null;
+  updatePdfArea(null);
+}
+
 function saveEntry() {
   const f = getForm();
   if (!f.cat || !f.name) { showMsg('Preencha ao menos categoria e nome.', true); return; }
+
+  let pdfToSave = pendingPdf;
+  // Se está editando e não mexeu no PDF, mantém o que já tinha
+  if (editId && pendingPdf === null) {
+    const existing = db.find(x => x.id === editId);
+    if (existing && existing.pdf) pdfToSave = existing.pdf;
+  }
+
   if (editId) {
     const i = db.findIndex(x => x.id === editId);
-    if (i > -1) db[i] = { ...db[i], ...f };
+    if (i > -1) {
+      db[i] = { ...db[i], ...f };
+      if (pdfToSave) db[i].pdf = pdfToSave;
+      else delete db[i].pdf;
+    }
   } else {
-    db.push({ id: nextId(), ...f });
+    const entry = { id: nextId(), ...f };
+    if (pdfToSave) entry.pdf = pdfToSave;
+    db.push(entry);
   }
-  persist();
+
+  if (!persist()) {
+    // Reverte se não conseguiu salvar
+    if (editId) {
+      // tenta recarregar do storage
+      load();
+    } else {
+      db.pop();
+    }
+    return;
+  }
+
   clearForm();
   populate();
   renderAdminList();
+  renderList();
   showMsg('Salvo com sucesso!');
 }
 
@@ -709,6 +1017,8 @@ function editEntry(id) {
   document.getElementById('fContact').value = x.contact;
   document.getElementById('fContactName').value = x.contactName;
   document.getElementById('fSub').value = x.sub || '';
+  pendingPdf = x.pdf ? { ...x.pdf } : null;
+  updatePdfArea(pendingPdf);
   document.getElementById('formTitle').textContent = 'Editar Fornecedor';
   document.getElementById('saveBtn').textContent = 'Atualizar';
   document.getElementById('cancelBtn').style.display = 'inline';
@@ -723,6 +1033,24 @@ function deleteEntry(id) {
   persist();
   populate();
   renderAdminList();
+  renderList();
+}
+
+function openPdf(id) {
+  const x = db.find(e => e.id === id);
+  if (!x || !x.pdf || !x.pdf.dataUrl) {
+    alert('PDF não encontrado.');
+    return;
+  }
+  // Abre em nova aba
+  const w = window.open();
+  if (!w) {
+    alert('Permita pop-ups para abrir o PDF.');
+    return;
+  }
+  w.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(x.pdf.name || 'Catálogo')}</title></head>
+    <body style="margin:0"><iframe src="${x.pdf.dataUrl}" style="width:100vw;height:100vh;border:0"></iframe></body></html>`);
+  w.document.close();
 }
 
 function showMsg(m, err) {
@@ -736,7 +1064,6 @@ function showMsg(m, err) {
 }
 
 // ---- SENHA ADMIN ---- //
-// Para trocar a senha, altere o valor abaixo:
 const ADMIN_PASSWORD = 'eventos2024';
 const SESSION_KEY = 'admin_auth';
 
@@ -769,12 +1096,10 @@ function closeLogin() {
   document.getElementById('login-overlay').classList.remove('visible');
 }
 
-// ---- FIM SENHA ---- //
-
 // ---- EXPORTAR / IMPORTAR CSV ---- //
 function exportCSV() {
-  const headers = ['Categoria','Especialidade','Local','Fornecedor','Site/Instagram','Contato','Nome do Contato'];
-  const rows = db.map(x => [x.cat, x.sub, x.loc, x.name, x.site, x.contact, x.contactName]
+  const headers = ['Categoria','Especialidade','Local','Fornecedor','Site/Instagram','Contato','Nome do Contato','Tem PDF'];
+  const rows = db.map(x => [x.cat, x.sub, x.loc, x.name, x.site, x.contact, x.contactName, x.pdf ? 'sim' : 'não']
     .map(v => `"${(v||'').replace(/"/g,'""')}"`).join(','));
   const csv = [headers.join(','), ...rows].join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -793,7 +1118,6 @@ function importXLSX(event) {
   const action = confirm(
     'Como deseja importar?\n\nOK = Adicionar à lista atual\nCancelar = Substituir tudo'
   );
-  // action: true = adicionar, false = substituir
 
   const reader = new FileReader();
   reader.onload = function(e) {
@@ -805,7 +1129,6 @@ function importXLSX(event) {
 
       if (!rows.length) { alert('Nenhum dado encontrado na planilha.'); return; }
 
-      // Mapeamento flexível de colunas (aceita variações de nome)
       const map = (row, keys) => {
         for (const k of keys) {
           const found = Object.keys(row).find(r => r.toLowerCase().includes(k.toLowerCase()));
@@ -828,12 +1151,10 @@ function importXLSX(event) {
       if (!newEntries.length) { alert('Nenhum fornecedor válido encontrado. Verifique se a planilha tem colunas como "Fornecedor" e "Categoria".'); return; }
 
       if (action) {
-        // Adicionar
         const maxId = db.length ? Math.max(...db.map(x => x.id)) : 0;
         newEntries.forEach((e, i) => e.id = maxId + i + 1);
         db = [...db, ...newEntries];
       } else {
-        // Substituir
         db = newEntries;
       }
 
@@ -849,7 +1170,46 @@ function importXLSX(event) {
   };
   reader.readAsArrayBuffer(file);
 }
-// ---- FIM EXPORTAR / IMPORTAR ---- //
+
+// ---- BACKUP JSON (inclui PDFs) ---- //
+function exportBackup() {
+  const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `fornecedores-backup-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  if (!confirm('⚠ Isso vai SUBSTITUIR todos os fornecedores atuais pelos do backup.\n\nDeseja continuar?')) {
+    event.target.value = '';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw new Error('Formato inválido — esperava uma lista de fornecedores.');
+      db = data;
+      if (!persist()) {
+        alert('Backup carregado mas não foi possível salvar no navegador (limite de espaço excedido).');
+      }
+      populate();
+      renderAdminList();
+      renderList();
+      alert(`✅ Backup restaurado: ${data.length} fornecedores carregados.`);
+    } catch(err) {
+      alert('Erro ao restaurar backup: ' + err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
 
 load();
 populate();
