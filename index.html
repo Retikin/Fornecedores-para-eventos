@@ -58,22 +58,10 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     }
 
-    header h1 {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: 0.3px;
-    }
+    header h1 { font-size: 17px; font-weight: 600; letter-spacing: 0.3px; }
+    header p { font-size: 12px; opacity: 0.7; margin-top: 2px; }
 
-    header p {
-      font-size: 12px;
-      opacity: 0.7;
-      margin-top: 2px;
-    }
-
-    .mode-btns {
-      display: flex;
-      gap: 6px;
-    }
+    .mode-btns { display: flex; gap: 6px; }
 
     .mode-btn {
       font-size: 13px;
@@ -94,14 +82,12 @@
 
     main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
 
-    /* ---- FILTROS (compartilhado view + admin) ---- */
     .filters {
       display: flex;
       gap: 8px;
       margin-bottom: 1.25rem;
       flex-wrap: wrap;
     }
-
     .filters input, .filters select {
       font-size: 14px;
       padding: 9px 13px;
@@ -122,10 +108,7 @@
       padding-left: 2px;
     }
 
-    .supplier-grid {
-      display: grid;
-      gap: 10px;
-    }
+    .supplier-grid { display: grid; gap: 10px; }
 
     .card {
       background: var(--surface);
@@ -139,9 +122,7 @@
       transition: box-shadow 0.15s;
     }
     .card:hover { box-shadow: 0 2px 12px rgba(45,106,79,0.1); }
-
     .card-body { flex: 1; min-width: 0; }
-
     .card-top {
       display: flex;
       align-items: center;
@@ -149,12 +130,7 @@
       flex-wrap: wrap;
       margin-bottom: 3px;
     }
-
-    .card-name {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text);
-    }
+    .card-name { font-weight: 600; font-size: 14px; color: var(--text); }
 
     .tag {
       font-size: 11px;
@@ -166,66 +142,36 @@
       white-space: nowrap;
     }
 
-    .card-cat {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 9px;
-    }
-
-    .card-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .card-cat { font-size: 12px; color: var(--muted); margin-bottom: 9px; }
+    .card-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 
     .btn-wa {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 12px;
-      padding: 5px 11px;
-      background: var(--success-bg);
-      color: var(--success-text);
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; padding: 5px 11px;
+      background: var(--success-bg); color: var(--success-text);
       border: 1px solid var(--success-border);
       border-radius: var(--radius-sm);
-      text-decoration: none;
-      font-weight: 500;
+      text-decoration: none; font-weight: 500;
     }
-
     .btn-site {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 12px;
-      padding: 5px 11px;
-      background: var(--info-bg);
-      color: var(--info-text);
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; padding: 5px 11px;
+      background: var(--info-bg); color: var(--info-text);
       border: 1px solid var(--info-border);
       border-radius: var(--radius-sm);
-      text-decoration: none;
-      font-weight: 500;
+      text-decoration: none; font-weight: 500;
     }
-
-    .btn-pdf {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 12px;
-      padding: 5px 11px;
-      background: var(--purple-bg);
-      color: var(--purple-text);
+    .btn-catalog {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; padding: 5px 11px;
+      background: var(--purple-bg); color: var(--purple-text);
       border: 1px solid var(--purple-border);
       border-radius: var(--radius-sm);
-      text-decoration: none;
-      font-weight: 500;
-      cursor: pointer;
+      text-decoration: none; font-weight: 500;
     }
-
     .btn-tel {
-      font-size: 12px;
-      padding: 5px 11px;
-      background: var(--bg);
-      color: var(--muted);
+      font-size: 12px; padding: 5px 11px;
+      background: var(--bg); color: var(--muted);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
     }
@@ -247,20 +193,15 @@
       padding: 1.25rem 1.5rem;
       margin-bottom: 1.5rem;
     }
-
     .form-card h2 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      color: var(--text);
+      font-size: 15px; font-weight: 600;
+      margin-bottom: 1rem; color: var(--text);
     }
-
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-
     @media (max-width: 560px) {
       .form-grid { grid-template-columns: 1fr; }
     }
@@ -272,7 +213,6 @@
       margin-bottom: 4px;
       font-weight: 500;
     }
-
     .field input {
       width: 100%;
       font-size: 13px;
@@ -285,58 +225,21 @@
       transition: border 0.15s;
     }
     .field input:focus { border-color: var(--brand-mid); background: white; }
-
     .field-full { grid-column: 1 / -1; }
 
-    .pdf-area {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      padding: 8px 11px;
-      border: 1px dashed var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--bg);
-      min-height: 40px;
-    }
-    .pdf-area-empty {
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .pdf-attached {
-      font-size: 12px;
-      color: var(--purple-text);
-      background: var(--purple-bg);
-      border: 1px solid var(--purple-border);
-      padding: 4px 10px;
-      border-radius: var(--radius-sm);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-upload-pdf {
-      font-size: 12px;
-      padding: 6px 12px;
-      background: var(--brand-mid);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .btn-upload-pdf:hover { background: var(--brand); }
-    .btn-remove-pdf {
+    .field-hint {
       font-size: 11px;
-      padding: 3px 8px;
-      background: transparent;
-      color: var(--danger-text);
-      border: 1px solid var(--danger-border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
+      color: var(--muted);
+      margin-top: 4px;
+      font-style: italic;
     }
 
-    .form-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
-
+    .form-actions {
+      display: flex; gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
     .btn-save {
       font-size: 13px;
       padding: 8px 20px;
@@ -349,7 +252,6 @@
       transition: background 0.15s;
     }
     .btn-save:hover { background: var(--brand); }
-
     .btn-cancel {
       font-size: 13px;
       padding: 8px 16px;
@@ -360,7 +262,6 @@
       cursor: pointer;
       display: none;
     }
-
     .form-msg {
       font-size: 12px;
       color: var(--success-text);
@@ -380,7 +281,6 @@
       padding: 12px 14px;
       border-left: 3px solid var(--brand-mid);
     }
-
     .admin-row-header {
       display: flex;
       align-items: center;
@@ -398,7 +298,6 @@
       display: flex;
       gap: 6px;
     }
-
     .admin-row-specs {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -425,12 +324,18 @@
     }
     .admin-row-specs a:hover { text-decoration: underline; }
 
-    .admin-row-pdf {
+    .admin-row-catalog {
       margin-top: 8px;
       padding-top: 8px;
       border-top: 1px dashed var(--border);
       font-size: 12px;
     }
+    .admin-row-catalog a {
+      color: var(--purple-text);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .admin-row-catalog a:hover { text-decoration: underline; }
 
     .btn-edit {
       font-size: 12px;
@@ -442,7 +347,6 @@
       cursor: pointer;
       font-weight: 500;
     }
-
     .btn-del {
       font-size: 12px;
       padding: 5px 12px;
@@ -462,17 +366,6 @@
       letter-spacing: 0.5px;
       margin-bottom: 10px;
     }
-
-    .storage-bar {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 10px;
-      padding: 6px 10px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-    }
-    .storage-bar.warn { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
 
     /* ---- LOGIN OVERLAY ---- */
     #login-overlay {
@@ -610,18 +503,9 @@
         <div class="field"><label>Nome do Contato</label><input id="fContactName" placeholder="Ex: Comercial, Maria..."/></div>
         <div class="field field-full"><label>Especialidade / Obs</label><input id="fSub" placeholder="Ex: voucher de foto, crachás..."/></div>
         <div class="field field-full">
-          <label>Catálogo de Brindes (PDF) <span style="color:var(--muted);font-weight:400">— máx. 1MB</span></label>
-          <div class="pdf-area" id="pdfArea">
-            <span class="pdf-area-empty" id="pdfAreaEmpty">Nenhum catálogo anexado.</span>
-            <span class="pdf-attached" id="pdfAreaAttached" style="display:none">
-              📄 <span id="pdfFilename"></span>
-              <button type="button" class="btn-remove-pdf" onclick="removePdf()">Remover</button>
-            </span>
-            <label class="btn-upload-pdf">
-              ⬆ Anexar PDF
-              <input type="file" accept="application/pdf,.pdf" onchange="handlePdfUpload(event)" style="display:none"/>
-            </label>
-          </div>
+          <label>Catálogo de Brindes (link do Drive)</label>
+          <input id="fCatalog" type="url" placeholder="https://drive.google.com/..."/>
+          <p class="field-hint">💡 No Drive: clique em "Compartilhar" → defina como "Qualquer pessoa com o link" → copie e cole aqui.</p>
         </div>
       </div>
       <div class="form-actions">
@@ -636,12 +520,8 @@
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button onclick="exportCSV()" style="font-size:12px;padding:6px 14px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬇ Exportar CSV</button>
         <label style="font-size:12px;padding:6px 14px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬆ Importar Excel<input type="file" accept=".xlsx,.xls" onchange="importXLSX(event)" style="display:none"/></label>
-        <button onclick="exportBackup()" style="font-size:12px;padding:6px 14px;background:var(--info-bg);color:var(--info-text);border:1px solid var(--info-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500" title="Backup completo (incluindo PDFs)">💾 Backup JSON</button>
-        <label style="font-size:12px;padding:6px 14px;background:var(--purple-bg);color:var(--purple-text);border:1px solid var(--purple-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500" title="Restaurar backup">♻ Restaurar<input type="file" accept=".json,application/json" onchange="importBackup(event)" style="display:none"/></label>
       </div>
     </div>
-
-    <p class="storage-bar" id="storageBar"></p>
 
     <!-- FILTROS ADMIN -->
     <div class="filters">
@@ -714,9 +594,7 @@ const SEED = [
 ];
 
 const KEY = 'fornecedores_v1';
-const PDF_MAX_BYTES = 1024 * 1024; // 1MB por PDF
 let db = [], editId = null;
-let pendingPdf = null; // { name, dataUrl } enquanto edita
 
 function load() {
   try {
@@ -728,13 +606,7 @@ function load() {
 }
 
 function persist() {
-  try {
-    localStorage.setItem(KEY, JSON.stringify(db));
-    return true;
-  } catch(e) {
-    alert('❌ Erro ao salvar: o navegador atingiu o limite de armazenamento.\n\nDica: remova PDFs de fornecedores antigos ou faça um backup JSON e limpe alguns dados.');
-    return false;
-  }
+  try { localStorage.setItem(KEY, JSON.stringify(db)); } catch(e) {}
 }
 
 const nextId = () => db.length ? Math.max(...db.map(x => x.id)) + 1 : 1;
@@ -742,7 +614,7 @@ const cats = () => [...new Set(db.map(x => x.cat))].sort();
 const locs = () => [...new Set(db.map(x => x.loc).filter(Boolean))].sort();
 
 function populate() {
-  // Catálogo
+  // Catálogo público
   const cs = document.getElementById('catFilter');
   const ls = document.getElementById('locFilter');
   const cv = cs.value, lv = ls.value;
@@ -803,8 +675,8 @@ function renderList() {
       ? `<span class="btn-tel">&#128222; ${escapeHtml(x.contact)}${x.contactName ? ' · ' + escapeHtml(x.contactName) : ''}</span>` : '';
     const siteBtn = isUrl(x.site)
       ? `<a href="${escapeHtml(x.site)}" target="_blank" class="btn-site">&#127760; Site/IG</a>` : '';
-    const pdfBtn = x.pdf
-      ? `<a class="btn-pdf" onclick="openPdf(${x.id})">📄 Catálogo</a>` : '';
+    const catalogBtn = isUrl(x.catalog)
+      ? `<a href="${escapeHtml(x.catalog)}" target="_blank" class="btn-catalog">&#128196; Catálogo</a>` : '';
     return `<div class="card">
       <div class="card-body">
         <div class="card-top">
@@ -812,7 +684,7 @@ function renderList() {
           ${x.loc ? `<span class="tag">${escapeHtml(x.loc)}</span>` : ''}
         </div>
         <p class="card-cat">${escapeHtml(x.cat)}${x.sub ? ' · ' + escapeHtml(x.sub) : ''}</p>
-        <div class="card-actions">${waBtn}${telBtn}${siteBtn}${pdfBtn}</div>
+        <div class="card-actions">${waBtn}${telBtn}${siteBtn}${catalogBtn}</div>
       </div>
     </div>`;
   }).join('');
@@ -834,63 +706,46 @@ function renderAdminList() {
   if (!items.length) {
     document.getElementById('adminList').innerHTML = '';
     empty.style.display = 'block';
-  } else {
-    empty.style.display = 'none';
-    document.getElementById('adminList').innerHTML = items.map(x => {
-      const spec = (label, value, isLink) => {
-        if (!value) return `<div><span class="spec-label">${label}:</span><span class="spec-empty">—</span></div>`;
-        if (isLink && isUrl(value)) {
-          return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">${escapeHtml(value)}</a></div>`;
-        }
-        if (isLink && isWa(value)) {
-          return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">WhatsApp</a></div>`;
-        }
-        return `<div><span class="spec-label">${label}:</span><span class="spec-value">${escapeHtml(value)}</span></div>`;
-      };
-
-      const pdfLine = x.pdf
-        ? `<div class="admin-row-pdf">📄 Catálogo anexado: <a href="#" onclick="event.preventDefault();openPdf(${x.id})" style="color:var(--purple-text);font-weight:500">${escapeHtml(x.pdf.name || 'catalogo.pdf')}</a></div>`
-        : `<div class="admin-row-pdf" style="color:var(--muted)">📄 Sem catálogo anexado.</div>`;
-
-      return `<div class="admin-row">
-        <div class="admin-row-header">
-          <span class="admin-row-name">${escapeHtml(x.name)}</span>
-          ${x.cat ? `<span class="tag">${escapeHtml(x.cat)}</span>` : ''}
-          ${x.loc ? `<span class="tag">${escapeHtml(x.loc)}</span>` : ''}
-          <div class="admin-row-buttons">
-            <button class="btn-edit" onclick="editEntry(${x.id})">Editar</button>
-            <button class="btn-del" onclick="deleteEntry(${x.id})">Excluir</button>
-          </div>
-        </div>
-        <div class="admin-row-specs">
-          ${spec('Tipo / Especialidade', x.sub)}
-          ${spec('Local', x.loc)}
-          ${spec('Contato', x.contact, true)}
-          ${spec('Nome do contato', x.contactName)}
-          ${spec('Site / Instagram', x.site, true)}
-        </div>
-        ${pdfLine}
-      </div>`;
-    }).join('');
+    return;
   }
+  empty.style.display = 'none';
 
-  updateStorageBar();
-}
+  document.getElementById('adminList').innerHTML = items.map(x => {
+    const spec = (label, value, isLink) => {
+      if (!value) return `<div><span class="spec-label">${label}:</span><span class="spec-empty">—</span></div>`;
+      if (isLink && isUrl(value)) {
+        return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">${escapeHtml(value)}</a></div>`;
+      }
+      if (isLink && isWa(value)) {
+        return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">WhatsApp</a></div>`;
+      }
+      return `<div><span class="spec-label">${label}:</span><span class="spec-value">${escapeHtml(value)}</span></div>`;
+    };
 
-function updateStorageBar() {
-  const bar = document.getElementById('storageBar');
-  if (!bar) return;
-  try {
-    const bytes = new Blob([localStorage.getItem(KEY) || '']).size;
-    const kb = (bytes / 1024).toFixed(0);
-    const mb = (bytes / 1024 / 1024).toFixed(2);
-    const pct = Math.min(100, Math.round(bytes / (5 * 1024 * 1024) * 100));
-    const pdfCount = db.filter(x => x.pdf).length;
-    bar.innerHTML = `💾 Armazenamento usado: <strong>${mb} MB</strong> (~${pct}% do limite do navegador) · ${pdfCount} ${pdfCount === 1 ? 'PDF anexado' : 'PDFs anexados'}`;
-    bar.classList.toggle('warn', pct >= 70);
-  } catch(e) {
-    bar.textContent = '';
-  }
+    const catalogLine = isUrl(x.catalog)
+      ? `<div class="admin-row-catalog">&#128196; Catálogo de brindes: <a href="${escapeHtml(x.catalog)}" target="_blank">Abrir link &rarr;</a></div>`
+      : `<div class="admin-row-catalog" style="color:var(--muted)">&#128196; Sem catálogo de brindes.</div>`;
+
+    return `<div class="admin-row">
+      <div class="admin-row-header">
+        <span class="admin-row-name">${escapeHtml(x.name)}</span>
+        ${x.cat ? `<span class="tag">${escapeHtml(x.cat)}</span>` : ''}
+        ${x.loc ? `<span class="tag">${escapeHtml(x.loc)}</span>` : ''}
+        <div class="admin-row-buttons">
+          <button class="btn-edit" onclick="editEntry(${x.id})">Editar</button>
+          <button class="btn-del" onclick="deleteEntry(${x.id})">Excluir</button>
+        </div>
+      </div>
+      <div class="admin-row-specs">
+        ${spec('Tipo / Especialidade', x.sub)}
+        ${spec('Local', x.loc)}
+        ${spec('Contato', x.contact, true)}
+        ${spec('Nome do contato', x.contactName)}
+        ${spec('Site / Instagram', x.site, true)}
+      </div>
+      ${catalogLine}
+    </div>`;
+  }).join('');
 }
 
 function setMode(m) {
@@ -909,96 +764,33 @@ function getForm() {
     site: document.getElementById('fSite').value.trim(),
     contact: document.getElementById('fContact').value.trim(),
     contactName: document.getElementById('fContactName').value.trim(),
-    sub: document.getElementById('fSub').value.trim()
+    sub: document.getElementById('fSub').value.trim(),
+    catalog: document.getElementById('fCatalog').value.trim()
   };
 }
 
 function clearForm() {
-  ['fCat','fLoc','fName','fSite','fContact','fContactName','fSub'].forEach(id => document.getElementById(id).value = '');
+  ['fCat','fLoc','fName','fSite','fContact','fContactName','fSub','fCatalog'].forEach(id => document.getElementById(id).value = '');
   editId = null;
-  pendingPdf = null;
-  updatePdfArea(null);
   document.getElementById('formTitle').textContent = 'Novo Fornecedor';
   document.getElementById('saveBtn').textContent = 'Salvar Fornecedor';
   document.getElementById('cancelBtn').style.display = 'none';
 }
 
-function updatePdfArea(pdf) {
-  const empty = document.getElementById('pdfAreaEmpty');
-  const attached = document.getElementById('pdfAreaAttached');
-  const filename = document.getElementById('pdfFilename');
-  if (pdf && pdf.name) {
-    empty.style.display = 'none';
-    attached.style.display = 'inline-flex';
-    filename.textContent = pdf.name;
-  } else {
-    empty.style.display = 'inline';
-    attached.style.display = 'none';
-    filename.textContent = '';
-  }
-}
-
-function handlePdfUpload(event) {
-  const file = event.target.files[0];
-  event.target.value = '';
-  if (!file) return;
-  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
-    alert('Apenas arquivos PDF são aceitos.');
-    return;
-  }
-  if (file.size > PDF_MAX_BYTES) {
-    alert(`Arquivo muito grande (${(file.size/1024/1024).toFixed(2)} MB).\n\nO limite por PDF é de 1 MB.\n\nDica: comprima o PDF em sites como ilovepdf.com antes de anexar.`);
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    pendingPdf = { name: file.name, dataUrl: e.target.result };
-    updatePdfArea(pendingPdf);
-  };
-  reader.readAsDataURL(file);
-}
-
-function removePdf() {
-  if (!confirm('Remover o PDF anexado?')) return;
-  pendingPdf = null;
-  updatePdfArea(null);
-}
-
 function saveEntry() {
   const f = getForm();
   if (!f.cat || !f.name) { showMsg('Preencha ao menos categoria e nome.', true); return; }
-
-  let pdfToSave = pendingPdf;
-  // Se está editando e não mexeu no PDF, mantém o que já tinha
-  if (editId && pendingPdf === null) {
-    const existing = db.find(x => x.id === editId);
-    if (existing && existing.pdf) pdfToSave = existing.pdf;
-  }
-
-  if (editId) {
-    const i = db.findIndex(x => x.id === editId);
-    if (i > -1) {
-      db[i] = { ...db[i], ...f };
-      if (pdfToSave) db[i].pdf = pdfToSave;
-      else delete db[i].pdf;
-    }
-  } else {
-    const entry = { id: nextId(), ...f };
-    if (pdfToSave) entry.pdf = pdfToSave;
-    db.push(entry);
-  }
-
-  if (!persist()) {
-    // Reverte se não conseguiu salvar
-    if (editId) {
-      // tenta recarregar do storage
-      load();
-    } else {
-      db.pop();
-    }
+  if (f.catalog && !isUrl(f.catalog)) {
+    showMsg('O link do catálogo precisa começar com http:// ou https://', true);
     return;
   }
-
+  if (editId) {
+    const i = db.findIndex(x => x.id === editId);
+    if (i > -1) db[i] = { ...db[i], ...f };
+  } else {
+    db.push({ id: nextId(), ...f });
+  }
+  persist();
   clearForm();
   populate();
   renderAdminList();
@@ -1010,15 +802,14 @@ function editEntry(id) {
   const x = db.find(e => e.id === id);
   if (!x) return;
   editId = id;
-  document.getElementById('fCat').value = x.cat;
-  document.getElementById('fLoc').value = x.loc;
-  document.getElementById('fName').value = x.name;
-  document.getElementById('fSite').value = x.site;
-  document.getElementById('fContact').value = x.contact;
-  document.getElementById('fContactName').value = x.contactName;
+  document.getElementById('fCat').value = x.cat || '';
+  document.getElementById('fLoc').value = x.loc || '';
+  document.getElementById('fName').value = x.name || '';
+  document.getElementById('fSite').value = x.site || '';
+  document.getElementById('fContact').value = x.contact || '';
+  document.getElementById('fContactName').value = x.contactName || '';
   document.getElementById('fSub').value = x.sub || '';
-  pendingPdf = x.pdf ? { ...x.pdf } : null;
-  updatePdfArea(pendingPdf);
+  document.getElementById('fCatalog').value = x.catalog || '';
   document.getElementById('formTitle').textContent = 'Editar Fornecedor';
   document.getElementById('saveBtn').textContent = 'Atualizar';
   document.getElementById('cancelBtn').style.display = 'inline';
@@ -1034,23 +825,6 @@ function deleteEntry(id) {
   populate();
   renderAdminList();
   renderList();
-}
-
-function openPdf(id) {
-  const x = db.find(e => e.id === id);
-  if (!x || !x.pdf || !x.pdf.dataUrl) {
-    alert('PDF não encontrado.');
-    return;
-  }
-  // Abre em nova aba
-  const w = window.open();
-  if (!w) {
-    alert('Permita pop-ups para abrir o PDF.');
-    return;
-  }
-  w.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(x.pdf.name || 'Catálogo')}</title></head>
-    <body style="margin:0"><iframe src="${x.pdf.dataUrl}" style="width:100vw;height:100vh;border:0"></iframe></body></html>`);
-  w.document.close();
 }
 
 function showMsg(m, err) {
@@ -1096,10 +870,10 @@ function closeLogin() {
   document.getElementById('login-overlay').classList.remove('visible');
 }
 
-// ---- EXPORTAR / IMPORTAR CSV ---- //
+// ---- EXPORTAR / IMPORTAR ---- //
 function exportCSV() {
-  const headers = ['Categoria','Especialidade','Local','Fornecedor','Site/Instagram','Contato','Nome do Contato','Tem PDF'];
-  const rows = db.map(x => [x.cat, x.sub, x.loc, x.name, x.site, x.contact, x.contactName, x.pdf ? 'sim' : 'não']
+  const headers = ['Categoria','Especialidade','Local','Fornecedor','Site/Instagram','Contato','Nome do Contato','Link Catálogo'];
+  const rows = db.map(x => [x.cat, x.sub, x.loc, x.name, x.site, x.contact, x.contactName, x.catalog]
     .map(v => `"${(v||'').replace(/"/g,'""')}"`).join(','));
   const csv = [headers.join(','), ...rows].join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -1146,6 +920,7 @@ function importXLSX(event) {
         site:        map(row, ['site', 'instagram', 'ig', 'url', 'link']),
         contact:     map(row, ['contato', 'tel', 'whatsapp', 'telefone', 'contact']),
         contactName: map(row, ['nome do contato', 'responsável', 'atendente', 'contactname']),
+        catalog:     map(row, ['catálogo', 'catalogo', 'drive', 'link catálogo', 'link catalogo']),
       })).filter(x => x.name || x.cat);
 
       if (!newEntries.length) { alert('Nenhum fornecedor válido encontrado. Verifique se a planilha tem colunas como "Fornecedor" e "Categoria".'); return; }
@@ -1169,46 +944,6 @@ function importXLSX(event) {
     event.target.value = '';
   };
   reader.readAsArrayBuffer(file);
-}
-
-// ---- BACKUP JSON (inclui PDFs) ---- //
-function exportBackup() {
-  const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const date = new Date().toISOString().slice(0, 10);
-  a.href = url;
-  a.download = `fornecedores-backup-${date}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importBackup(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  if (!confirm('⚠ Isso vai SUBSTITUIR todos os fornecedores atuais pelos do backup.\n\nDeseja continuar?')) {
-    event.target.value = '';
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!Array.isArray(data)) throw new Error('Formato inválido — esperava uma lista de fornecedores.');
-      db = data;
-      if (!persist()) {
-        alert('Backup carregado mas não foi possível salvar no navegador (limite de espaço excedido).');
-      }
-      populate();
-      renderAdminList();
-      renderList();
-      alert(`✅ Backup restaurado: ${data.length} fornecedores carregados.`);
-    } catch(err) {
-      alert('Erro ao restaurar backup: ' + err.message);
-    }
-    event.target.value = '';
-  };
-  reader.readAsText(file);
 }
 
 load();
