@@ -852,7 +852,9 @@
       <p class="section-title" style="margin-bottom:0">Fornecedores cadastrados</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn-manage" onclick="openManage()">⚙ Gerenciar categorias, locais e especialidades</button>
-        <button onclick="exportCSV()" style="font-size:12px;padding:6px 14px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬇ Exportar CSV</button>
+        <button onclick="exportXLSX()" style="font-size:12px;padding:6px 14px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬇ Exportar Excel</button>
+        <button onclick="exportJSON()" style="font-size:12px;padding:6px 14px;background:var(--info-bg);color:var(--info-text);border:1px solid var(--info-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">💾 Backup (JSON)</button>
+        <label style="font-size:12px;padding:6px 14px;background:var(--purple-bg);color:var(--purple-text);border:1px solid var(--purple-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">♻️ Restaurar Backup<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"/></label>
         <label style="font-size:12px;padding:6px 14px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬆ Importar Excel<input type="file" accept=".xlsx,.xls" onchange="importXLSX(event)" style="display:none"/></label>
       </div>
     </div>
@@ -1705,24 +1707,171 @@ function closeLogin() {
 }
 
 /* ---------- EXPORTAR / IMPORTAR ---------- */
-function exportCSV() {
+function exportXLSX() {
+  // Monta os dados como array de arrays (AOA) pra ter controle de células
   const headers = ['Categorias','Especialidades','Locais','Atende','Fornecedor','Site/Instagram','Contato','Nome do Contato','Observações','Link Catálogo'];
-  const rows = db.map(x => {
-    const cats = (x.cats || []).join(' | ');
-    const specs = (x.specs || []).join(' | ');
-    const locs = (x.locs || []).join(' | ');
-    const reach = (x.reach || []).join(' | ');
-    return [cats, specs, locs, reach, x.name, x.site, x.contact, x.contactName, x.notes, x.catalog]
-      .map(v => `"${(v||'').replace(/"/g,'""')}"`).join(',');
+
+  const data = [headers];
+  db.forEach(x => {
+    data.push([
+      (x.cats || []).join(' | '),
+      (x.specs || []).join(' | '),
+      (x.locs || []).join(' | '),
+      (x.reach || []).join(' | '),
+      x.name || '',
+      x.site || '',
+      x.contact || '',
+      x.contactName || '',
+      x.notes || '',
+      x.catalog || ''
+    ]);
   });
-  const csv = [headers.join(','), ...rows].join('\n');
-  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+
+  // Cria a worksheet
+  const ws = XLSX.utils.aoa_to_sheet(data);
+
+  // Define largura das colunas
+  ws['!cols'] = [
+    { wch: 28 }, // Categorias
+    { wch: 32 }, // Especialidades
+    { wch: 20 }, // Locais
+    { wch: 18 }, // Atende
+    { wch: 30 }, // Fornecedor
+    { wch: 40 }, // Site
+    { wch: 32 }, // Contato
+    { wch: 18 }, // Nome do Contato
+    { wch: 40 }, // Observações
+    { wch: 40 }  // Link Catálogo
+  ];
+
+  // Nota: freeze pane e cores no cabeçalho só funcionam na versão paga do SheetJS.
+  // Largura das colunas e hyperlinks funcionam na versão open source.
+
+  // Nota: largura das colunas e hyperlinks funcionam na versão open source do SheetJS.
+  // Cores no cabeçalho e freeze pane requerem a versão paga.
+
+  // Transforma links em hyperlinks clicáveis
+  for (let r = 1; r < data.length; r++) {
+    // Site (coluna F = índice 5)
+    const siteCell = XLSX.utils.encode_cell({ r, c: 5 });
+    if (ws[siteCell] && ws[siteCell].v && (ws[siteCell].v.startsWith('http') || ws[siteCell].v.startsWith('www'))) {
+      ws[siteCell].l = { Target: ws[siteCell].v, Tooltip: 'Abrir site' };
+    }
+    // Contato (coluna G = índice 6)
+    const contactCell = XLSX.utils.encode_cell({ r, c: 6 });
+    if (ws[contactCell] && ws[contactCell].v && ws[contactCell].v.includes('wa.me')) {
+      ws[contactCell].l = { Target: ws[contactCell].v, Tooltip: 'Abrir WhatsApp' };
+    }
+    // Link Catálogo (coluna J = índice 9)
+    const catCell = XLSX.utils.encode_cell({ r, c: 9 });
+    if (ws[catCell] && ws[catCell].v && (ws[catCell].v.startsWith('http') || ws[catCell].v.startsWith('www'))) {
+      ws[catCell].l = { Target: ws[catCell].v, Tooltip: 'Abrir catálogo' };
+    }
+  }
+
+  // Cria o workbook
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Fornecedores');
+
+  // Adiciona uma segunda aba com as listas mestras (catálogos)
+  const catalogSheet = [
+    ['Categorias cadastradas', '', 'Locais cadastrados', '', 'Especialidades cadastradas']
+  ];
+  const maxLen = Math.max(allCats.length, allLocs.length, allSpecs.length);
+  for (let i = 0; i < maxLen; i++) {
+    catalogSheet.push([
+      allCats[i] || '',
+      '',
+      allLocs[i] || '',
+      '',
+      allSpecs[i] || ''
+    ]);
+  }
+  const catWs = XLSX.utils.aoa_to_sheet(catalogSheet);
+  catWs['!cols'] = [{ wch: 30 }, { wch: 4 }, { wch: 25 }, { wch: 4 }, { wch: 30 }];
+  XLSX.utils.book_append_sheet(wb, catWs, 'Catálogos');
+
+  // Nome do arquivo com data
+  const now = new Date();
+  const stamp = now.toISOString().split('T')[0]; // YYYY-MM-DD
+  XLSX.writeFile(wb, `fornecedores-cadenza-${stamp}.xlsx`);
+}
+
+function exportJSON() {
+  const backup = {
+    version: 'v3',
+    exported_at: new Date().toISOString(),
+    counts: {
+      fornecedores: db.length,
+      categorias: allCats.length,
+      locais: allLocs.length,
+      especialidades: allSpecs.length
+    },
+    catalogs: {
+      cats: allCats,
+      locs: allLocs,
+      specs: allSpecs
+    },
+    suppliers: db
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
+  const stamp = new Date().toISOString().split('T')[0];
   a.href = url;
-  a.download = 'fornecedores-eventos.csv';
+  a.download = `backup-fornecedores-cadenza-${stamp}.json`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+function importJSON(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const confirmMsg = '⚠️ Restaurar backup vai SUBSTITUIR tudo que está aqui agora.\n\nRecomendação: faça um backup atual (botão "Backup JSON") antes de restaurar, por garantia.\n\nDeseja continuar?';
+  if (!confirm(confirmMsg)) {
+    event.target.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+
+      // Valida que tem a estrutura mínima esperada
+      if (!data.suppliers || !Array.isArray(data.suppliers)) {
+        alert('❌ Arquivo inválido: não contém lista de fornecedores.');
+        return;
+      }
+
+      // Aceita backups de versões antigas também — passa cada entry pela migração
+      db = data.suppliers.map(migrateEntry);
+
+      // Restaura catálogos se vieram no backup, senão reconstrói do db
+      if (data.catalogs) {
+        allCats = data.catalogs.cats || [];
+        allLocs = data.catalogs.locs || [];
+        allSpecs = data.catalogs.specs || [];
+      }
+      rebuildCatalogs(true);
+
+      persist();
+      persistCatalogs();
+      populate();
+      renderAdminList();
+      renderList();
+      renderCatChips();
+      renderLocChips();
+      renderSpecChips();
+
+      alert(`✅ Backup restaurado com sucesso!\n\n${db.length} fornecedores\n${allCats.length} categorias\n${allLocs.length} locais\n${allSpecs.length} especialidades`);
+    } catch(err) {
+      alert('❌ Erro ao ler o backup. O arquivo pode estar corrompido ou não ser um backup válido.\n\n' + err.message);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
 }
 
 function splitMulti(val) {
