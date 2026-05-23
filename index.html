@@ -1,700 +1,530 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fornecedores para Eventos</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Fornecedores para Eventos</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --brand: #1a3a2e;
+  --brand-mid: #2d6a4f;
+  --brand-light: #e8f4ee;
+  --accent: #f4a261;
+  --bg: #f7f9f7;
+  --surface: #ffffff;
+  --border: #e0e8e3;
+  --text: #1a2e24;
+  --muted: #5a7465;
+  --success-bg: #e8f5e9;
+  --success-text: #2e7d32;
+  --success-border: #a5d6a7;
+  --info-bg: #e3f2fd;
+  --info-text: #1565c0;
+  --info-border: #90caf9;
+  --danger-bg: #ffebee;
+  --danger-text: #c62828;
+  --danger-border: #ef9a9a;
+  --warn-bg: #fff8e1;
+  --warn-text: #e65100;
+  --warn-border: #ffe082;
+  --purple-bg: #f3e5f5;
+  --purple-text: #6a1b9a;
+  --purple-border: #ce93d8;
+  --reach-bg: #e0f2f1;
+  --reach-text: #00695c;
+  --reach-border: #80cbc4;
+  --radius: 12px;
+  --radius-sm: 6px;
+}
 
-    :root {
-      --brand: #1a3a2e;
-      --brand-mid: #2d6a4f;
-      --brand-light: #e8f4ee;
-      --accent: #f4a261;
-      --bg: #f7f9f7;
-      --surface: #ffffff;
-      --border: #e0e8e3;
-      --text: #1a2e24;
-      --muted: #5a7465;
-      --success-bg: #e8f5e9;
-      --success-text: #2e7d32;
-      --success-border: #a5d6a7;
-      --info-bg: #e3f2fd;
-      --info-text: #1565c0;
-      --info-border: #90caf9;
-      --danger-bg: #ffebee;
-      --danger-text: #c62828;
-      --danger-border: #ef9a9a;
-      --warn-bg: #fff8e1;
-      --warn-text: #e65100;
-      --warn-border: #ffe082;
-      --purple-bg: #f3e5f5;
-      --purple-text: #6a1b9a;
-      --purple-border: #ce93d8;
-      --reach-bg: #e0f2f1;
-      --reach-text: #00695c;
-      --reach-border: #80cbc4;
-      --radius: 10px;
-      --radius-sm: 6px;
-    }
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
 
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+header {
+  background: var(--brand);
+  color: white;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+header h1 { font-size: 17px; font-weight: 600; letter-spacing: 0.3px; }
+header p { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+.mode-btns { display: flex; gap: 6px; }
+.mode-btn {
+  font-size: 13px; padding: 7px 16px;
+  border-radius: var(--radius-sm); cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1); color: white;
+  font-weight: 500; transition: background 0.15s;
+}
+.mode-btn.active { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); }
+.mode-btn:hover { background: rgba(255,255,255,0.18); }
 
-    header {
-      background: var(--brand);
-      color: white;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
+main { max-width: 920px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
 
-    header h1 { font-size: 17px; font-weight: 600; letter-spacing: 0.3px; }
-    header p { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+.filters {
+  display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap;
+}
+.filters input, .filters select {
+  font-size: 14px; padding: 9px 13px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); outline: none;
+  transition: border 0.15s;
+}
+.filters input { flex: 1; min-width: 200px; }
+.filters input:focus, .filters select:focus { border-color: var(--brand-mid); }
 
-    .mode-btns { display: flex; gap: 6px; }
+.stats-bar { font-size: 12px; color: var(--muted); margin-bottom: 1rem; padding-left: 2px; }
 
-    .mode-btn {
-      font-size: 13px;
-      padding: 7px 16px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.25);
-      background: rgba(255,255,255,0.1);
-      color: white;
-      font-weight: 500;
-      transition: background 0.15s;
-    }
-    .mode-btn.active {
-      background: rgba(255,255,255,0.22);
-      border-color: rgba(255,255,255,0.5);
-    }
-    .mode-btn:hover { background: rgba(255,255,255,0.18); }
+/* ===== CARD REDESENHADO ===== */
+.supplier-grid { display: grid; gap: 16px; }
 
-    main { max-width: 860px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(45,106,79,0.06);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.card:hover { box-shadow: 0 4px 18px rgba(45,106,79,0.13); transform: translateY(-1px); }
 
-    .filters {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-    .filters input, .filters select {
-      font-size: 14px;
-      padding: 9px 13px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--surface);
-      color: var(--text);
-      outline: none;
-      transition: border 0.15s;
-    }
-    .filters input { flex: 1; min-width: 200px; }
-    .filters input:focus, .filters select:focus { border-color: var(--brand-mid); }
+/* Cabeçalho do card */
+.card-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.card-header-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.card-name-block { flex: 1; min-width: 0; }
+.card-name {
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 
-    .stats-bar {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 1rem;
-      padding-left: 2px;
-    }
+/* Tags */
+.tag {
+  font-size: 11px; padding: 3px 10px;
+  border-radius: 20px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--muted); white-space: nowrap;
+}
+.tag-cat { background: var(--brand-light); color: var(--brand); border-color: #c5e1d3; }
+.tag-reach { background: var(--reach-bg); color: var(--reach-text); border-color: var(--reach-border); }
+.tag-loc { background: #f0f4ff; color: #3949ab; border-color: #c5cae9; }
 
-    .supplier-grid { display: grid; gap: 10px; }
+/* Info grid do card */
+.card-info {
+  padding: 14px 20px 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  border-bottom: 1px solid var(--border);
+}
+@media (max-width: 600px) { .card-info { grid-template-columns: 1fr; } }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 13px 16px;
-      display: flex;
-      align-items: flex-start;
-      gap: 13px;
-      border-left: 3px solid var(--brand-mid);
-      transition: box-shadow 0.15s;
-    }
-    .card:hover { box-shadow: 0 2px 12px rgba(45,106,79,0.1); }
-    .card-body { flex: 1; min-width: 0; }
-    .card-top {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 5px;
-    }
-    .card-name { font-weight: 600; font-size: 14px; color: var(--text); margin-right: 4px; }
+.card-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+}
+.card-info-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+  background: var(--brand-light);
+  color: var(--brand-mid);
+}
+.card-info-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px;
+  margin-bottom: 2px;
+}
+.card-info-value { font-size: 12.5px; color: var(--text); word-break: break-word; }
+.card-info-value a { color: var(--info-text); text-decoration: none; }
+.card-info-value a:hover { text-decoration: underline; }
+.card-info-value.empty { color: #b0bdb4; font-style: italic; }
 
-    .tag {
-      font-size: 11px;
-      padding: 2px 9px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--muted);
-      white-space: nowrap;
-    }
-    .tag-cat {
-      background: var(--brand-light);
-      color: var(--brand);
-      border-color: #c5e1d3;
-    }
-    .tag-reach {
-      background: var(--reach-bg);
-      color: var(--reach-text);
-      border-color: var(--reach-border);
-    }
+/* Observações */
+.card-notes-row {
+  padding: 10px 20px;
+  background: #fcfaf3;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--muted);
+  font-style: italic;
+  border-left: 3px solid var(--accent);
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
 
-    .card-cat { font-size: 12px; color: var(--muted); margin-bottom: 9px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
-    .card-notes {
-      font-size: 11px;
-      color: var(--muted);
-      font-style: italic;
-      margin-bottom: 9px;
-      padding: 5px 8px;
-      background: #fcfaf3;
-      border-left: 2px solid var(--accent);
-      border-radius: 3px;
-    }
-    .spec-inline { color: var(--text); }
-    .notes-inline { color: var(--muted); }
-    .card-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+/* Galeria de imagens */
+.card-gallery {
+  padding: 12px 20px;
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+  border-bottom: 1px solid var(--border);
+}
+.card-gallery:empty { display: none; }
+.gallery-img {
+  width: 130px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.gallery-img:hover { opacity: 0.88; transform: scale(1.02); }
 
-    .btn-wa {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12px; padding: 5px 11px;
-      background: var(--success-bg); color: var(--success-text);
-      border: 1px solid var(--success-border);
-      border-radius: var(--radius-sm);
-      text-decoration: none; font-weight: 500;
-    }
-    .btn-site {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12px; padding: 5px 11px;
-      background: var(--info-bg); color: var(--info-text);
-      border: 1px solid var(--info-border);
-      border-radius: var(--radius-sm);
-      text-decoration: none; font-weight: 500;
-    }
-    .btn-catalog {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12px; padding: 5px 11px;
-      background: var(--purple-bg); color: var(--purple-text);
-      border: 1px solid var(--purple-border);
-      border-radius: var(--radius-sm);
-      text-decoration: none; font-weight: 500;
-    }
-    .btn-tel {
-      font-size: 12px; padding: 5px 11px;
-      background: var(--bg); color: var(--muted);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-    }
+/* Rodapé do card */
+.card-footer {
+  padding: 11px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.card-footer-left { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.card-footer-right { display: flex; gap: 6px; }
 
-    .empty {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--muted);
-      font-size: 14px;
-    }
+/* Botões de ação */
+.btn-wa, .btn-site, .btn-catalog {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; padding: 6px 13px;
+  border-radius: var(--radius-sm);
+  text-decoration: none; font-weight: 500; white-space: nowrap;
+  border: 1px solid transparent;
+}
+.btn-wa { background: var(--success-bg); color: var(--success-text); border-color: var(--success-border); }
+.btn-site { background: var(--info-bg); color: var(--info-text); border-color: var(--info-border); }
+.btn-catalog { background: var(--purple-bg); color: var(--purple-text); border-color: var(--purple-border); }
+.btn-tel { font-size: 12px; padding: 6px 13px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); border-radius: var(--radius-sm); }
 
-    /* ---- ADMIN MODE ---- */
-    #admin-mode { display: none; }
+.no-catalog-label {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--muted); font-style: italic;
+}
 
-    .form-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .form-card h2 {
-      font-size: 15px; font-weight: 600;
-      margin-bottom: 1rem; color: var(--text);
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    @media (max-width: 560px) {
-      .form-grid { grid-template-columns: 1fr; }
-    }
+.btn-view-catalog {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--brand-mid);
+  background: white; color: var(--brand-mid);
+  text-decoration: none; font-weight: 500;
+  white-space: nowrap; cursor: pointer;
+}
+.btn-view-catalog:hover { background: var(--brand-light); }
 
-    .field label {
-      font-size: 12px;
-      color: var(--muted);
-      display: block;
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-    .field label .req { color: var(--danger-text); }
-    .field input {
-      width: 100%;
-      font-size: 13px;
-      padding: 8px 11px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--bg);
-      color: var(--text);
-      outline: none;
-      transition: border 0.15s;
-    }
-    .field input:focus { border-color: var(--brand-mid); background: white; }
-    .field textarea {
-      width: 100%;
-      font-size: 13px;
-      padding: 8px 11px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--bg);
-      color: var(--text);
-      outline: none;
-      transition: border 0.15s;
-      font-family: inherit;
-      resize: vertical;
-      min-height: 70px;
-    }
-    .field textarea:focus { border-color: var(--brand-mid); background: white; }
-    .field-full { grid-column: 1 / -1; }
+.empty {
+  text-align: center; padding: 3rem 1rem;
+  color: var(--muted); font-size: 14px;
+}
 
-    .field-hint {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
-      font-style: italic;
-    }
+/* ===== ADMIN MODE ===== */
+#admin-mode { display: none; }
 
-    /* ---- CHIPS PICKER (categorias e locais) ---- */
-    .chip-box {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--bg);
-      padding: 8px;
-      min-height: 44px;
-    }
-    .chip-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-    .chip-list:empty { display: none; }
-    .chip {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.12s;
-    }
-    .chip:hover { border-color: var(--brand-mid); }
-    .chip.selected {
-      background: var(--brand-mid);
-      color: white;
-      border-color: var(--brand-mid);
-      font-weight: 500;
-    }
-    .chip-add-row {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-    .chip-add-row input {
-      flex: 1;
-      font-size: 12px;
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--surface);
-      outline: none;
-    }
-    .chip-add-row input:focus { border-color: var(--brand-mid); }
-    .chip-add-btn {
-      font-size: 12px;
-      padding: 6px 12px;
-      background: var(--brand-mid);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-    .chip-add-btn:hover { background: var(--brand); }
-    .chip-empty {
-      font-size: 11px;
-      color: var(--muted);
-      font-style: italic;
-      padding: 2px 4px;
-    }
+.form-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.form-card h2 { font-size: 15px; font-weight: 600; margin-bottom: 1rem; color: var(--text); }
 
-    /* ---- CHECKBOX GROUP (atende) ---- */
-    .checkbox-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .check-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      padding: 5px 11px;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.12s;
-    }
-    .check-chip input { display: none; }
-    .check-chip:hover { border-color: var(--brand-mid); }
-    .check-chip.checked {
-      background: var(--reach-bg);
-      color: var(--reach-text);
-      border-color: var(--reach-border);
-      font-weight: 500;
-    }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
 
-    .form-actions {
-      display: flex; gap: 8px;
-      margin-top: 14px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .btn-save {
-      font-size: 13px;
-      padding: 8px 20px;
-      background: var(--brand-mid);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.15s;
-    }
-    .btn-save:hover { background: var(--brand); }
-    .btn-cancel {
-      font-size: 13px;
-      padding: 8px 16px;
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      display: none;
-    }
-    .form-msg {
-      font-size: 12px;
-      color: var(--success-text);
-      display: none;
-      padding: 6px 10px;
-      background: var(--success-bg);
-      border: 1px solid var(--success-border);
-      border-radius: var(--radius-sm);
-    }
+.field label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 4px; font-weight: 500; }
+.field label .req { color: var(--danger-text); }
+.field input, .field textarea {
+  width: 100%; font-size: 13px; padding: 8px 11px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg); color: var(--text); outline: none;
+  transition: border 0.15s; font-family: inherit;
+}
+.field input:focus, .field textarea:focus { border-color: var(--brand-mid); background: white; }
+.field textarea { resize: vertical; min-height: 70px; }
+.field-full { grid-column: 1 / -1; }
+.field-hint { font-size: 11px; color: var(--muted); margin-top: 4px; font-style: italic; }
 
-    .admin-list { display: grid; gap: 10px; }
+/* Image upload field */
+.img-upload-area {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--bg);
+}
+.img-upload-area:hover { border-color: var(--brand-mid); background: var(--brand-light); }
+.img-upload-area input { display: none; }
+.img-upload-label { font-size: 13px; color: var(--muted); cursor: pointer; }
+.img-upload-label strong { color: var(--brand-mid); }
 
-    .admin-row {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      border-left: 3px solid var(--brand-mid);
-    }
-    .admin-row-header {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 8px;
-    }
-    .admin-row-name {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text);
-      margin-right: 4px;
-    }
-    .admin-row-buttons {
-      margin-left: auto;
-      display: flex;
-      gap: 6px;
-    }
-    .admin-row-specs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 6px 16px;
-      font-size: 12px;
-      color: var(--text);
-    }
-    .admin-row-specs .spec-label {
-      color: var(--muted);
-      font-weight: 500;
-      margin-right: 4px;
-    }
-    .admin-row-specs .spec-value {
-      color: var(--text);
-      word-break: break-word;
-    }
-    .admin-row-specs .spec-empty {
-      color: #b0bdb4;
-      font-style: italic;
-    }
-    .admin-row-specs a {
-      color: var(--info-text);
-      text-decoration: none;
-    }
-    .admin-row-specs a:hover { text-decoration: underline; }
+.img-preview-list {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;
+}
+.img-preview-item {
+  position: relative; display: inline-block;
+}
+.img-preview-item img {
+  width: 80px; height: 60px; object-fit: cover;
+  border-radius: 6px; border: 1px solid var(--border);
+  display: block;
+}
+.img-preview-remove {
+  position: absolute; top: -5px; right: -5px;
+  width: 18px; height: 18px;
+  background: var(--danger-text); color: white;
+  border-radius: 50%; border: none; cursor: pointer;
+  font-size: 10px; display: flex; align-items: center; justify-content: center;
+  font-weight: bold;
+}
 
-    .admin-row-catalog {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px dashed var(--border);
-      font-size: 12px;
-    }
-    .admin-row-catalog a {
-      color: var(--purple-text);
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .admin-row-catalog a:hover { text-decoration: underline; }
+/* Chip boxes */
+.chip-box {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg); padding: 8px; min-height: 44px;
+}
+.chip-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip-list:empty { display: none; }
+.chip {
+  font-size: 12px; padding: 4px 10px;
+  border-radius: 20px; border: 1px solid var(--border);
+  background: var(--surface); color: var(--text);
+  cursor: pointer; user-select: none; transition: all 0.12s;
+}
+.chip:hover { border-color: var(--brand-mid); }
+.chip.selected { background: var(--brand-mid); color: white; border-color: var(--brand-mid); font-weight: 500; }
+.chip-add-row { display: flex; gap: 6px; align-items: center; }
+.chip-add-row input {
+  flex: 1; font-size: 12px; padding: 6px 10px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); outline: none;
+}
+.chip-add-row input:focus { border-color: var(--brand-mid); }
+.chip-add-btn {
+  font-size: 12px; padding: 6px 12px;
+  background: var(--brand-mid); color: white;
+  border: none; border-radius: var(--radius-sm);
+  cursor: pointer; font-weight: 500; white-space: nowrap;
+}
+.chip-add-btn:hover { background: var(--brand); }
+.chip-empty { font-size: 11px; color: var(--muted); font-style: italic; padding: 2px 4px; }
 
-    .btn-edit {
-      font-size: 12px;
-      padding: 5px 12px;
-      background: var(--info-bg);
-      color: var(--info-text);
-      border: 1px solid var(--info-border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .btn-del {
-      font-size: 12px;
-      padding: 5px 12px;
-      background: var(--danger-bg);
-      color: var(--danger-text);
-      border: 1px solid var(--danger-border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-weight: 500;
-    }
+/* Checkbox group */
+.checkbox-group { display: flex; flex-wrap: wrap; gap: 6px; }
+.check-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; padding: 5px 11px;
+  border-radius: 20px; border: 1px solid var(--border);
+  background: var(--bg); color: var(--text);
+  cursor: pointer; user-select: none; transition: all 0.12s;
+}
+.check-chip input { display: none; }
+.check-chip:hover { border-color: var(--brand-mid); }
+.check-chip.checked { background: var(--reach-bg); color: var(--reach-text); border-color: var(--reach-border); font-weight: 500; }
 
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 10px;
-    }
+.form-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+.btn-save {
+  font-size: 13px; padding: 8px 20px;
+  background: var(--brand-mid); color: white;
+  border: none; border-radius: var(--radius-sm);
+  cursor: pointer; font-weight: 600; transition: background 0.15s;
+}
+.btn-save:hover { background: var(--brand); }
+.btn-cancel {
+  font-size: 13px; padding: 8px 16px;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; display: none;
+}
+.form-msg {
+  font-size: 12px; color: var(--success-text); display: none;
+  padding: 6px 10px; background: var(--success-bg);
+  border: 1px solid var(--success-border); border-radius: var(--radius-sm);
+}
 
-    .btn-manage {
-      font-size: 12px;
-      padding: 6px 14px;
-      background: var(--brand-light);
-      color: var(--brand);
-      border: 1px solid #c5e1d3;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .btn-manage:hover { background: #d8ecdf; }
+/* Admin list */
+.admin-list { display: grid; gap: 10px; }
+.admin-row {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px;
+  border-left: 3px solid var(--brand-mid);
+}
+.admin-row-header { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.admin-row-name { font-weight: 600; font-size: 14px; color: var(--text); margin-right: 4px; }
+.admin-row-buttons { margin-left: auto; display: flex; gap: 6px; }
+.admin-row-specs {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 6px 16px; font-size: 12px; color: var(--text);
+}
+.admin-row-specs .spec-label { color: var(--muted); font-weight: 500; margin-right: 4px; }
+.admin-row-specs .spec-value { color: var(--text); word-break: break-word; }
+.admin-row-specs .spec-empty { color: #b0bdb4; font-style: italic; }
+.admin-row-specs a { color: var(--info-text); text-decoration: none; }
+.admin-row-specs a:hover { text-decoration: underline; }
+.admin-row-catalog {
+  margin-top: 8px; padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  font-size: 12px;
+}
+.admin-row-catalog a { color: var(--purple-text); text-decoration: none; font-weight: 500; }
+.admin-row-catalog a:hover { text-decoration: underline; }
+.admin-img-thumbs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.admin-img-thumbs img { width: 60px; height: 45px; object-fit: cover; border-radius: 5px; border: 1px solid var(--border); }
 
-    /* ---- LOGIN OVERLAY ---- */
-    #login-overlay, #manage-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 200;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    #login-overlay.visible, #manage-overlay.visible { display: flex; }
+.btn-edit {
+  font-size: 12px; padding: 5px 12px;
+  background: var(--info-bg); color: var(--info-text);
+  border: 1px solid var(--info-border); border-radius: var(--radius-sm);
+  cursor: pointer; font-weight: 500;
+}
+.btn-del {
+  font-size: 12px; padding: 5px 12px;
+  background: var(--danger-bg); color: var(--danger-text);
+  border: 1px solid var(--danger-border); border-radius: var(--radius-sm);
+  cursor: pointer; font-weight: 500;
+}
 
-    .login-box {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 2rem;
-      width: 100%;
-      max-width: 340px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    }
-    .login-box h2 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-    .login-box p {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 1.25rem;
-    }
-    .login-box input {
-      width: 100%;
-      font-size: 14px;
-      padding: 9px 12px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      background: var(--bg);
-      color: var(--text);
-      outline: none;
-      margin-bottom: 10px;
-      transition: border 0.15s;
-    }
-    .login-box input:focus { border-color: var(--brand-mid); background: white; }
-    .login-box .btn-login {
-      width: 100%;
-      padding: 9px;
-      background: var(--brand-mid);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
-    }
-    .login-box .btn-login:hover { background: var(--brand); }
-    .login-box .login-err {
-      font-size: 12px;
-      color: var(--danger-text);
-      background: var(--danger-bg);
-      border: 1px solid var(--danger-border);
-      border-radius: var(--radius-sm);
-      padding: 6px 10px;
-      margin-top: 8px;
-      display: none;
-    }
-    .login-box .btn-close-login {
-      width: 100%;
-      padding: 7px;
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      cursor: pointer;
-      margin-top: 6px;
-    }
+.section-title {
+  font-size: 13px; font-weight: 600; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;
+}
+.btn-manage {
+  font-size: 12px; padding: 6px 14px;
+  background: var(--brand-light); color: var(--brand);
+  border: 1px solid #c5e1d3; border-radius: var(--radius-sm);
+  cursor: pointer; font-weight: 500;
+}
+.btn-manage:hover { background: #d8ecdf; }
 
-    /* ---- MANAGE OVERLAY ---- */
-    .manage-box {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      width: 100%;
-      max-width: 560px;
-      max-height: 85vh;
-      overflow-y: auto;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-    }
-    .manage-box h2 {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-    .manage-box .manage-sub {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 1rem;
-    }
-    .manage-tabs {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .manage-tab {
-      font-size: 13px;
-      padding: 8px 14px;
-      background: transparent;
-      color: var(--muted);
-      border: none;
-      border-bottom: 2px solid transparent;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .manage-tab.active {
-      color: var(--brand);
-      border-bottom-color: var(--brand-mid);
-    }
-    .manage-list {
-      display: grid;
-      gap: 6px;
-      margin-bottom: 1rem;
-      max-height: 380px;
-      overflow-y: auto;
-    }
-    .manage-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-    }
-    .manage-row-name {
-      flex: 1;
-      font-size: 13px;
-      color: var(--text);
-    }
-    .manage-row-count {
-      font-size: 11px;
-      color: var(--muted);
-      margin-right: 4px;
-    }
-    .manage-row-btn {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      background: var(--surface);
-      color: var(--muted);
-    }
-    .manage-row-btn.rename { background: var(--info-bg); color: var(--info-text); border-color: var(--info-border); }
-    .manage-row-btn.del { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger-border); }
-    .manage-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-    }
-    .manage-actions .btn-close {
-      font-size: 13px;
-      padding: 7px 16px;
-      background: var(--brand-mid);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-weight: 500;
-    }
-  </style>
+/* Overlays */
+#login-overlay, #manage-overlay, #lightbox-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45); z-index: 200;
+  align-items: center; justify-content: center; padding: 1rem;
+}
+#login-overlay.visible, #manage-overlay.visible, #lightbox-overlay.visible { display: flex; }
+
+#lightbox-overlay { background: rgba(0,0,0,0.85); z-index: 300; }
+#lightbox-overlay img { max-width: 90vw; max-height: 88vh; border-radius: 8px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+#lightbox-overlay .lb-close {
+  position: fixed; top: 20px; right: 24px;
+  font-size: 30px; color: white; cursor: pointer;
+  line-height: 1; font-weight: 300; opacity: 0.8;
+}
+#lightbox-overlay .lb-close:hover { opacity: 1; }
+
+.login-box {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 2rem; width: 100%; max-width: 340px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.login-box h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.login-box p { font-size: 13px; color: var(--muted); margin-bottom: 1.25rem; }
+.login-box input {
+  width: 100%; font-size: 14px; padding: 9px 12px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg); color: var(--text); outline: none;
+  margin-bottom: 10px; transition: border 0.15s;
+}
+.login-box input:focus { border-color: var(--brand-mid); background: white; }
+.login-box .btn-login {
+  width: 100%; padding: 9px;
+  background: var(--brand-mid); color: white;
+  border: none; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s;
+}
+.login-box .btn-login:hover { background: var(--brand); }
+.login-box .login-err {
+  font-size: 12px; color: var(--danger-text);
+  background: var(--danger-bg); border: 1px solid var(--danger-border);
+  border-radius: var(--radius-sm); padding: 6px 10px;
+  margin-top: 8px; display: none;
+}
+.login-box .btn-close-login {
+  width: 100%; padding: 7px;
+  background: transparent; color: var(--muted);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  font-size: 13px; cursor: pointer; margin-top: 6px;
+}
+
+/* Manage overlay */
+.manage-box {
+  background: var(--surface); border-radius: var(--radius);
+  padding: 1.5rem; width: 100%; max-width: 560px;
+  max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.manage-box h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.manage-box .manage-sub { font-size: 12px; color: var(--muted); margin-bottom: 1rem; }
+.manage-tabs { display: flex; gap: 6px; margin-bottom: 1rem; border-bottom: 1px solid var(--border); }
+.manage-tab {
+  font-size: 13px; padding: 8px 14px;
+  background: transparent; color: var(--muted);
+  border: none; border-bottom: 2px solid transparent;
+  cursor: pointer; font-weight: 500;
+}
+.manage-tab.active { color: var(--brand); border-bottom-color: var(--brand-mid); }
+.manage-list { display: grid; gap: 6px; margin-bottom: 1rem; max-height: 380px; overflow-y: auto; }
+.manage-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+}
+.manage-row-name { flex: 1; font-size: 13px; color: var(--text); }
+.manage-row-count { font-size: 11px; color: var(--muted); margin-right: 4px; }
+.manage-row-btn {
+  font-size: 11px; padding: 4px 10px;
+  border-radius: var(--radius-sm); border: 1px solid var(--border);
+  cursor: pointer; background: var(--surface); color: var(--muted);
+}
+.manage-row-btn.rename { background: var(--info-bg); color: var(--info-text); border-color: var(--info-border); }
+.manage-row-btn.del { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger-border); }
+.manage-actions {
+  display: flex; gap: 8px; justify-content: flex-end;
+  margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);
+}
+.manage-actions .btn-close {
+  font-size: 13px; padding: 7px 16px;
+  background: var(--brand-mid); color: white;
+  border: none; border-radius: var(--radius-sm);
+  cursor: pointer; font-weight: 500;
+}
+</style>
 </head>
 <body>
 
@@ -721,7 +551,13 @@
   </div>
 </div>
 
-<!-- MANAGE CATEGORIES / LOCATIONS / SPECS OVERLAY -->
+<!-- LIGHTBOX -->
+<div id="lightbox-overlay" onclick="closeLightbox()">
+  <span class="lb-close">&#x2715;</span>
+  <img id="lightbox-img" src="" alt=""/>
+</div>
+
+<!-- MANAGE OVERLAY -->
 <div id="manage-overlay">
   <div class="manage-box">
     <h2>Gerenciar Categorias, Locais e Especialidades</h2>
@@ -739,17 +575,12 @@
 </div>
 
 <main>
-
   <!-- VIEW -->
   <div id="view-mode">
     <div class="filters">
       <input id="search" type="text" placeholder="Buscar fornecedor, categoria, local..." oninput="renderList()"/>
-      <select id="catFilter" onchange="renderList()">
-        <option value="">Todas as categorias</option>
-      </select>
-      <select id="locFilter" onchange="renderList()">
-        <option value="">Todos os locais</option>
-      </select>
+      <select id="catFilter" onchange="renderList()"><option value="">Todas as categorias</option></select>
+      <select id="locFilter" onchange="renderList()"><option value="">Todos os locais</option></select>
       <select id="reachFilter" onchange="renderList()">
         <option value="">Qualquer abrangência</option>
         <option value="Local">Local</option>
@@ -768,7 +599,6 @@
     <div class="form-card">
       <h2 id="formTitle">Novo Fornecedor</h2>
       <div class="form-grid">
-
         <!-- CATEGORIAS -->
         <div class="field field-full">
           <label>Categorias <span class="req">*</span></label>
@@ -808,10 +638,9 @@
 
         <div class="field"><label>Nome do Fornecedor <span class="req">*</span></label><input id="fName" placeholder="Nome da empresa ou pessoa"/></div>
         <div class="field"><label>Site / Instagram</label><input id="fSite" placeholder="https://..."/></div>
-
         <div class="field">
           <label>Contato (tel / WhatsApp)</label>
-          <input id="fContact" placeholder="Ex: 48 99119-8358 (vira link do WhatsApp)" oninput="previewWa()"/>
+          <input id="fContact" placeholder="Ex: 48 99119-8358" oninput="previewWa()"/>
           <p class="field-hint" id="waPreview" style="display:none"></p>
         </div>
         <div class="field"><label>Nome do Contato</label><input id="fContactName" placeholder="Ex: Comercial, Maria..."/></div>
@@ -826,21 +655,33 @@
               <button class="chip-add-btn" type="button" onclick="addNewSpec()">Adicionar</button>
             </div>
           </div>
-          <p class="field-hint">Ex: crachás, moletom, backdrop, voucher de foto... (clique pra selecionar várias).</p>
+          <p class="field-hint">Ex: crachás, moletom, backdrop... (clique pra selecionar várias).</p>
         </div>
 
         <!-- OBSERVAÇÕES -->
         <div class="field field-full">
           <label>Observações</label>
           <textarea id="fNotes" placeholder="Anotações livres: indicações, atendimento, prazos, lembretes..."></textarea>
-          <p class="field-hint">Campo livre pra anotações que não cabem em uma tag.</p>
         </div>
+
         <div class="field field-full">
           <label>Catálogo de Brindes (link)</label>
           <input id="fCatalog" type="url" placeholder="https://..."/>
-          <p class="field-hint">💡 Pode ser link do Drive, Dropbox, site do fornecedor ou qualquer URL. Se for do Drive, lembre de deixar como "Qualquer pessoa com o link".</p>
+          <p class="field-hint">💡 Link do Drive, Dropbox ou site do fornecedor.</p>
+        </div>
+
+        <!-- IMAGENS DO FORNECEDOR -->
+        <div class="field field-full">
+          <label>Imagens do Fornecedor</label>
+          <div class="img-upload-area" onclick="document.getElementById('fImagesInput').click()">
+            <input type="file" id="fImagesInput" accept="image/*" multiple onchange="handleImageUpload(event)"/>
+            <p class="img-upload-label">🖼️ Clique para adicionar imagens (produtos, portfólio)<br><strong>JPG, PNG, GIF — até 5 imagens</strong></p>
+          </div>
+          <div class="img-preview-list" id="imgPreviewList"></div>
+          <p class="field-hint">As imagens ficam salvas no navegador junto com o cadastro.</p>
         </div>
       </div>
+
       <div class="form-actions">
         <button class="btn-save" onclick="saveEntry()" id="saveBtn">Salvar Fornecedor</button>
         <button class="btn-cancel" onclick="cancelEdit()" id="cancelBtn">Cancelar</button>
@@ -859,33 +700,21 @@
       </div>
     </div>
 
-    <!-- FILTROS ADMIN -->
     <div class="filters">
       <input id="adminSearch" type="text" placeholder="Buscar fornecedor, categoria, local..." oninput="renderAdminList()"/>
-      <select id="adminCatFilter" onchange="renderAdminList()">
-        <option value="">Todas as categorias</option>
-      </select>
-      <select id="adminLocFilter" onchange="renderAdminList()">
-        <option value="">Todos os locais</option>
-      </select>
+      <select id="adminCatFilter" onchange="renderAdminList()"><option value="">Todas as categorias</option></select>
+      <select id="adminLocFilter" onchange="renderAdminList()"><option value="">Todos os locais</option></select>
     </div>
-
     <div class="admin-list" id="adminList"></div>
     <div class="empty" id="adminEmpty" style="display:none">Nenhum fornecedor encontrado com esses filtros.</div>
   </div>
-
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 /* ============================================================
-   FORNECEDORES PARA EVENTOS - v2
-   - Categorias e locais como catálogo (multi-seleção)
-   - Cadastros antigos migrados automaticamente
-   - Campo "Atende em" (Local / Regional / Nacional / Internacional)
-   - WhatsApp gerado automaticamente a partir do número
-   - Gerenciador de categorias/locais (renomear/excluir)
-   ============================================================ */
+   FORNECEDORES PARA EVENTOS - v3 (com imagens nos cards)
+============================================================ */
 
 const SEED = [
   {id:1,cat:"Gráfica",sub:"voucher de foto, ficha de palco, adesivos de mesa, apostila",loc:"Florianópolis",name:"Duplic Digital",site:"https://www.duplic.com.br/",contact:"https://wa.me/554832333434",contactName:"Comercial"},
@@ -938,130 +767,73 @@ const SEED = [
   {id:48,cat:"Banner / Gráfica",sub:"",loc:"SP",name:"Felipe (Banner)",site:"",contact:"11 939375976",contactName:"Felipe"}
 ];
 
-const KEY = 'fornecedores_v2';
+const KEY = 'fornecedores_v3';
 const OLD_KEY = 'fornecedores_v1';
+const OLD_KEY2 = 'fornecedores_v2';
 const CATS_KEY = 'fornecedores_cats_v2';
 const LOCS_KEY = 'fornecedores_locs_v2';
 const SPECS_KEY = 'fornecedores_specs_v2';
 
 let db = [];
-let allCats = [];
-let allLocs = [];
-let allSpecs = [];
+let allCats = [], allLocs = [], allSpecs = [];
 let editId = null;
-let selectedCats = [];
-let selectedLocs = [];
-let selectedSpecs = [];
-let selectedReach = [];
+let selectedCats = [], selectedLocs = [], selectedSpecs = [], selectedReach = [];
+let pendingImages = []; // array de { dataUrl, name }
 let manageTab = 'cats';
 
 /* ---------- MIGRAÇÃO ---------- */
-// Detecta "(nacional)", "(regional)", etc dentro do campo loc dos cadastros antigos
 function splitOldLocation(rawLoc) {
   if (!rawLoc) return { locs: [], reach: [] };
-  const reachMap = {
-    'nacional': 'Nacional',
-    'internacional': 'Internacional',
-    'regional': 'Regional',
-    'local': 'Local'
-  };
+  const reachMap = { 'nacional': 'Nacional', 'internacional': 'Internacional', 'regional': 'Regional', 'local': 'Local' };
   const reach = [];
   let cleaned = rawLoc;
-  // Pega tudo dentro de parênteses
   cleaned = cleaned.replace(/\(([^)]+)\)/g, (_, inside) => {
-    const parts = inside.split(/[,;\/]/).map(s => s.trim().toLowerCase());
-    parts.forEach(p => {
+    inside.split(/[,;\/]/).map(s => s.trim().toLowerCase()).forEach(p => {
       if (reachMap[p] && !reach.includes(reachMap[p])) reach.push(reachMap[p]);
     });
     return '';
   }).trim();
-  // O resto é o(s) local(is) propriamente dito(s)
-  const locs = cleaned
-    ? cleaned.split(/[,;\/]/).map(s => s.trim()).filter(Boolean)
-    : [];
+  const locs = cleaned ? cleaned.split(/[,;\/]/).map(s => s.trim()).filter(Boolean) : [];
   return { locs, reach };
 }
 
-// Decide se uma string parece uma lista de tags (curta, vírgulas) ou uma observação livre
 function splitSubField(rawSub) {
   if (!rawSub) return { specs: [], notes: '' };
   const s = rawSub.trim();
-
-  // Se contém palavras-indicadoras de observação, vai inteiro pra notes
   const noteIndicators = /\bindica[cç][aã]o\b|\bcontato\b|\bobserva[cç][aã]o\b|\batende\b|\brecome[nm]da/i;
   if (noteIndicators.test(s)) return { specs: [], notes: s };
-
-  // Se não tem vírgula e tem mais de 4 palavras, parece frase: vai pra notes
   if (!s.includes(',') && s.split(/\s+/).length > 4) return { specs: [], notes: s };
-
-  // Tenta quebrar por vírgula ou ponto-e-vírgula
   if (s.includes(',') || s.includes(';')) {
     const parts = s.split(/[,;]/).map(p => p.trim()).filter(Boolean);
-    // Se algum pedaço é uma frase grande (>5 palavras), trata tudo como nota
     if (parts.some(p => p.split(/\s+/).length > 5)) return { specs: [], notes: s };
     return { specs: parts, notes: '' };
   }
-
-  // Caso geral: vira uma tag única
   return { specs: [s], notes: '' };
 }
 
 function migrateEntry(x) {
-  // v3 final: já tem cats E specs como arrays
-  if (Array.isArray(x.cats) && Array.isArray(x.specs)) {
-    return x;
-  }
-  // v2 intermediária: tem cats array mas ainda usa "sub" (string única)
+  if (Array.isArray(x.cats) && Array.isArray(x.specs)) return x;
   if (Array.isArray(x.cats)) {
     const { specs, notes } = splitSubField(x.sub || '');
     const result = { ...x, specs, notes };
     delete result.sub;
     return result;
   }
-  // v1 (formato original): cat singular, sub string, loc string
   const cats = x.cat ? [x.cat.trim()].filter(Boolean) : [];
   const { locs, reach } = splitOldLocation(x.loc || '');
   const { specs, notes } = splitSubField(x.sub || '');
-  return {
-    id: x.id,
-    cats,
-    locs,
-    reach,
-    specs,
-    notes,
-    name: x.name || '',
-    site: x.site || '',
-    contact: x.contact || '',
-    contactName: x.contactName || '',
-    catalog: x.catalog || ''
-  };
+  return { id: x.id, cats, locs, reach, specs, notes, name: x.name || '', site: x.site || '', contact: x.contact || '', contactName: x.contactName || '', catalog: x.catalog || '', images: x.images || [] };
 }
 
 function load() {
-  // Tenta carregar a versão nova
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      db = parsed.map(migrateEntry);
-      loadCatalogs();
-      return;
-    }
+    if (raw) { const parsed = JSON.parse(raw); db = parsed.map(migrateEntry); loadCatalogs(); return; }
   } catch(e) {}
-
-  // Senão tenta migrar a versão antiga
   try {
-    const rawOld = localStorage.getItem(OLD_KEY);
-    if (rawOld) {
-      const oldDb = JSON.parse(rawOld);
-      db = oldDb.map(migrateEntry);
-      rebuildCatalogs();
-      persist();
-      return;
-    }
+    const rawOld = localStorage.getItem(OLD_KEY2) || localStorage.getItem(OLD_KEY);
+    if (rawOld) { db = JSON.parse(rawOld).map(migrateEntry); rebuildCatalogs(); persist(); return; }
   } catch(e) {}
-
-  // Senão usa o SEED
   db = SEED.map(migrateEntry);
   rebuildCatalogs();
   persist();
@@ -1088,9 +860,7 @@ function rebuildCatalogs(merge) {
     locsFromDb.forEach(l => { if (!allLocs.includes(l)) allLocs.push(l); });
     specsFromDb.forEach(s => { if (!allSpecs.includes(s)) allSpecs.push(s); });
   } else {
-    allCats = catsFromDb;
-    allLocs = locsFromDb;
-    allSpecs = specsFromDb;
+    allCats = catsFromDb; allLocs = locsFromDb; allSpecs = specsFromDb;
   }
   allCats.sort((a,b) => a.localeCompare(b, 'pt-BR'));
   allLocs.sort((a,b) => a.localeCompare(b, 'pt-BR'));
@@ -1098,9 +868,7 @@ function rebuildCatalogs(merge) {
   persistCatalogs();
 }
 
-function persist() {
-  try { localStorage.setItem(KEY, JSON.stringify(db)); } catch(e) {}
-}
+function persist() { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch(e) {} }
 function persistCatalogs() {
   try {
     localStorage.setItem(CATS_KEY, JSON.stringify(allCats));
@@ -1114,33 +882,23 @@ const nextId = () => db.length ? Math.max(...db.map(x => x.id)) + 1 : 1;
 /* ---------- HELPERS ---------- */
 function isWa(s) { return s && typeof s === 'string' && s.includes('wa.me'); }
 function isUrl(s) { return s && (s.startsWith('http') || s.startsWith('www')); }
-function escapeHtml(s) {
-  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
+function escapeHtml(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-// Converte um número de telefone brasileiro em link wa.me
 function buildWaLink(raw) {
   if (!raw) return '';
   const s = raw.trim();
-  // Se já é link, normaliza
   if (s.includes('wa.me')) {
     const m = s.match(/wa\.me\/(\+?\d+)/);
     if (m) return 'https://wa.me/' + m[1].replace(/\D/g,'');
     return s;
   }
-  // Só dígitos
   let digits = s.replace(/\D/g, '');
   if (!digits) return '';
-  // Se começa com 0, remove
   if (digits.startsWith('0')) digits = digits.replace(/^0+/, '');
-  // Adiciona 55 se necessário (números BR com 10 ou 11 dígitos)
-  if ((digits.length === 10 || digits.length === 11) && !digits.startsWith('55')) {
-    digits = '55' + digits;
-  }
+  if ((digits.length === 10 || digits.length === 11) && !digits.startsWith('55')) digits = '55' + digits;
   return 'https://wa.me/' + digits;
 }
 
-// Mostra um telefone amigável a partir do link wa.me
 function prettyPhone(waOrTel) {
   if (!waOrTel) return '';
   let d = waOrTel.match(/wa\.me\/(\+?\d+)/);
@@ -1154,112 +912,98 @@ function prettyPhone(waOrTel) {
   return waOrTel;
 }
 
+/* ---------- IMAGE UPLOAD ---------- */
+function handleImageUpload(event) {
+  const files = Array.from(event.target.files);
+  const maxImages = 5;
+  const remaining = maxImages - pendingImages.length;
+  if (remaining <= 0) { alert('Máximo de 5 imagens por fornecedor.'); return; }
+
+  files.slice(0, remaining).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      pendingImages.push({ dataUrl: e.target.result, name: file.name });
+      renderImgPreview();
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+function removeImage(idx) {
+  pendingImages.splice(idx, 1);
+  renderImgPreview();
+}
+
+function renderImgPreview() {
+  const container = document.getElementById('imgPreviewList');
+  container.innerHTML = pendingImages.map((img, idx) => `
+    <div class="img-preview-item">
+      <img src="${escapeHtml(img.dataUrl)}" alt="${escapeHtml(img.name)}"/>
+      <button class="img-preview-remove" onclick="removeImage(${idx})">✕</button>
+    </div>
+  `).join('');
+}
+
+/* ---------- LIGHTBOX ---------- */
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-overlay').classList.add('visible');
+}
+function closeLightbox() {
+  document.getElementById('lightbox-overlay').classList.remove('visible');
+  document.getElementById('lightbox-img').src = '';
+}
+
 /* ---------- CHIPS PICKER ---------- */
 function renderChips(target, items, selected, onClick) {
   const el = document.getElementById(target);
-  if (!items.length) {
-    el.innerHTML = '<span class="chip-empty">Nenhum item ainda. Adicione abaixo.</span>';
-    return;
-  }
+  if (!items.length) { el.innerHTML = '<span class="chip-empty">Nenhum item ainda. Adicione abaixo.</span>'; return; }
   el.innerHTML = items.map(name => {
     const sel = selected.includes(name) ? ' selected' : '';
     return `<span class="chip${sel}" onclick="${onClick}('${name.replace(/'/g, "\\'")}')">${escapeHtml(name)}</span>`;
   }).join('');
 }
 
-function renderCatChips() {
-  renderChips('catChips', allCats, selectedCats, 'toggleCat');
-}
-function renderLocChips() {
-  renderChips('locChips', allLocs, selectedLocs, 'toggleLoc');
-}
-function renderSpecChips() {
-  renderChips('specChips', allSpecs, selectedSpecs, 'toggleSpec');
-}
+function renderCatChips() { renderChips('catChips', allCats, selectedCats, 'toggleCat'); }
+function renderLocChips() { renderChips('locChips', allLocs, selectedLocs, 'toggleLoc'); }
+function renderSpecChips() { renderChips('specChips', allSpecs, selectedSpecs, 'toggleSpec'); }
 
-function toggleCat(name) {
-  const i = selectedCats.indexOf(name);
-  if (i > -1) selectedCats.splice(i, 1);
-  else selectedCats.push(name);
-  renderCatChips();
-}
-function toggleLoc(name) {
-  const i = selectedLocs.indexOf(name);
-  if (i > -1) selectedLocs.splice(i, 1);
-  else selectedLocs.push(name);
-  renderLocChips();
-}
-function toggleSpec(name) {
-  const i = selectedSpecs.indexOf(name);
-  if (i > -1) selectedSpecs.splice(i, 1);
-  else selectedSpecs.push(name);
-  renderSpecChips();
-}
+function toggleCat(name) { const i = selectedCats.indexOf(name); if (i > -1) selectedCats.splice(i,1); else selectedCats.push(name); renderCatChips(); }
+function toggleLoc(name) { const i = selectedLocs.indexOf(name); if (i > -1) selectedLocs.splice(i,1); else selectedLocs.push(name); renderLocChips(); }
+function toggleSpec(name) { const i = selectedSpecs.indexOf(name); if (i > -1) selectedSpecs.splice(i,1); else selectedSpecs.push(name); renderSpecChips(); }
 
 function addNewCat() {
   const inp = document.getElementById('catAddInput');
-  const v = inp.value.trim();
-  if (!v) return;
-  // Evita duplicata case-insensitive
+  const v = inp.value.trim(); if (!v) return;
   const exists = allCats.find(c => c.toLowerCase() === v.toLowerCase());
-  if (exists) {
-    if (!selectedCats.includes(exists)) selectedCats.push(exists);
-  } else {
-    allCats.push(v);
-    allCats.sort((a,b) => a.localeCompare(b, 'pt-BR'));
-    if (!selectedCats.includes(v)) selectedCats.push(v);
-    persistCatalogs();
-  }
-  inp.value = '';
-  renderCatChips();
+  if (exists) { if (!selectedCats.includes(exists)) selectedCats.push(exists); }
+  else { allCats.push(v); allCats.sort((a,b) => a.localeCompare(b,'pt-BR')); if (!selectedCats.includes(v)) selectedCats.push(v); persistCatalogs(); }
+  inp.value = ''; renderCatChips();
 }
-
 function addNewLoc() {
   const inp = document.getElementById('locAddInput');
-  const v = inp.value.trim();
-  if (!v) return;
+  const v = inp.value.trim(); if (!v) return;
   const exists = allLocs.find(l => l.toLowerCase() === v.toLowerCase());
-  if (exists) {
-    if (!selectedLocs.includes(exists)) selectedLocs.push(exists);
-  } else {
-    allLocs.push(v);
-    allLocs.sort((a,b) => a.localeCompare(b, 'pt-BR'));
-    if (!selectedLocs.includes(v)) selectedLocs.push(v);
-    persistCatalogs();
-  }
-  inp.value = '';
-  renderLocChips();
+  if (exists) { if (!selectedLocs.includes(exists)) selectedLocs.push(exists); }
+  else { allLocs.push(v); allLocs.sort((a,b) => a.localeCompare(b,'pt-BR')); if (!selectedLocs.includes(v)) selectedLocs.push(v); persistCatalogs(); }
+  inp.value = ''; renderLocChips();
 }
-
 function addNewSpec() {
   const inp = document.getElementById('specAddInput');
-  const v = inp.value.trim();
-  if (!v) return;
+  const v = inp.value.trim(); if (!v) return;
   const exists = allSpecs.find(s => s.toLowerCase() === v.toLowerCase());
-  if (exists) {
-    if (!selectedSpecs.includes(exists)) selectedSpecs.push(exists);
-  } else {
-    allSpecs.push(v);
-    allSpecs.sort((a,b) => a.localeCompare(b, 'pt-BR'));
-    if (!selectedSpecs.includes(v)) selectedSpecs.push(v);
-    persistCatalogs();
-  }
-  inp.value = '';
-  renderSpecChips();
+  if (exists) { if (!selectedSpecs.includes(exists)) selectedSpecs.push(exists); }
+  else { allSpecs.push(v); allSpecs.sort((a,b) => a.localeCompare(b,'pt-BR')); if (!selectedSpecs.includes(v)) selectedSpecs.push(v); persistCatalogs(); }
+  inp.value = ''; renderSpecChips();
 }
 
-/* ---------- CHECK CHIPS (abrangência) ---------- */
+/* ---------- CHECK CHIPS ---------- */
 function toggleCheckChip(input) {
   const label = input.closest('.check-chip');
-  if (input.checked) {
-    label.classList.add('checked');
-    if (!selectedReach.includes(input.value)) selectedReach.push(input.value);
-  } else {
-    label.classList.remove('checked');
-    selectedReach = selectedReach.filter(v => v !== input.value);
-  }
+  if (input.checked) { label.classList.add('checked'); if (!selectedReach.includes(input.value)) selectedReach.push(input.value); }
+  else { label.classList.remove('checked'); selectedReach = selectedReach.filter(v => v !== input.value); }
 }
-
 function setReachUI(values) {
   selectedReach = [...values];
   document.querySelectorAll('#reachGroup input').forEach(inp => {
@@ -1269,7 +1013,7 @@ function setReachUI(values) {
   });
 }
 
-/* ---------- WHATSAPP PREVIEW ---------- */
+/* ---------- WA PREVIEW ---------- */
 function previewWa() {
   const raw = document.getElementById('fContact').value.trim();
   const el = document.getElementById('waPreview');
@@ -1278,9 +1022,7 @@ function previewWa() {
   if (link && link.includes('wa.me')) {
     el.style.display = 'block';
     el.innerHTML = `💬 Será salvo como: <a href="${link}" target="_blank" style="color:var(--success-text)">${link}</a>`;
-  } else {
-    el.style.display = 'none';
-  }
+  } else { el.style.display = 'none'; }
 }
 
 /* ---------- POPULATE FILTERS ---------- */
@@ -1288,32 +1030,21 @@ function populate() {
   const cs = document.getElementById('catFilter');
   const ls = document.getElementById('locFilter');
   const cv = cs.value, lv = ls.value;
-  cs.innerHTML = '<option value="">Todas as categorias</option>' +
-    allCats.map(c => `<option value="${escapeHtml(c)}"${c===cv?' selected':''}>${escapeHtml(c)}</option>`).join('');
-  ls.innerHTML = '<option value="">Todos os locais</option>' +
-    allLocs.map(l => `<option value="${escapeHtml(l)}"${l===lv?' selected':''}>${escapeHtml(l)}</option>`).join('');
-
+  cs.innerHTML = '<option value="">Todas as categorias</option>' + allCats.map(c => `<option value="${escapeHtml(c)}"${c===cv?' selected':''}>${escapeHtml(c)}</option>`).join('');
+  ls.innerHTML = '<option value="">Todos os locais</option>' + allLocs.map(l => `<option value="${escapeHtml(l)}"${l===lv?' selected':''}>${escapeHtml(l)}</option>`).join('');
   const acs = document.getElementById('adminCatFilter');
   const als = document.getElementById('adminLocFilter');
   if (acs && als) {
     const acv = acs.value, alv = als.value;
-    acs.innerHTML = '<option value="">Todas as categorias</option>' +
-      allCats.map(c => `<option value="${escapeHtml(c)}"${c===acv?' selected':''}>${escapeHtml(c)}</option>`).join('');
-    als.innerHTML = '<option value="">Todos os locais</option>' +
-      allLocs.map(l => `<option value="${escapeHtml(l)}"${l===alv?' selected':''}>${escapeHtml(l)}</option>`).join('');
+    acs.innerHTML = '<option value="">Todas as categorias</option>' + allCats.map(c => `<option value="${escapeHtml(c)}"${c===acv?' selected':''}>${escapeHtml(c)}</option>`).join('');
+    als.innerHTML = '<option value="">Todos os locais</option>' + allLocs.map(l => `<option value="${escapeHtml(l)}"${l===alv?' selected':''}>${escapeHtml(l)}</option>`).join('');
   }
 }
 
 /* ---------- RENDER CATÁLOGO PÚBLICO ---------- */
 function entryMatchesSearch(x, q) {
   if (!q) return true;
-  const blob = [
-    ...(x.cats || []),
-    ...(x.locs || []),
-    ...(x.reach || []),
-    ...(x.specs || []),
-    x.name, x.notes, x.contactName
-  ].join(' ').toLowerCase();
+  const blob = [...(x.cats||[]),...(x.locs||[]),...(x.reach||[]),...(x.specs||[]),x.name,x.notes,x.contactName].join(' ').toLowerCase();
   return blob.includes(q);
 }
 
@@ -1324,26 +1055,20 @@ function renderList() {
   const rf = document.getElementById('reachFilter').value;
 
   let items = db.filter(x => {
-    if (cf && !(x.cats || []).includes(cf)) return false;
-    if (lf && !(x.locs || []).includes(lf)) return false;
-    if (rf && !(x.reach || []).includes(rf)) return false;
+    if (cf && !(x.cats||[]).includes(cf)) return false;
+    if (lf && !(x.locs||[]).includes(lf)) return false;
+    if (rf && !(x.reach||[]).includes(rf)) return false;
     if (!entryMatchesSearch(x, q)) return false;
     return true;
   });
 
-  document.getElementById('statsBar').textContent =
-    items.length === db.length
-      ? `${db.length} fornecedores`
-      : `${items.length} de ${db.length} fornecedores`;
+  document.getElementById('statsBar').textContent = items.length === db.length
+    ? `${db.length} fornecedores`
+    : `${items.length} de ${db.length} fornecedores`;
 
   const list = document.getElementById('list');
   const empty = document.getElementById('empty');
-
-  if (!items.length) {
-    list.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
+  if (!items.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
 
   list.innerHTML = items.map(x => {
@@ -1352,32 +1077,76 @@ function renderList() {
       ? `<a href="${escapeHtml(waLink)}" target="_blank" class="btn-wa">📞 WhatsApp${x.contactName ? ' · ' + escapeHtml(x.contactName) : ''}</a>` : '';
     const siteBtn = isUrl(x.site)
       ? `<a href="${escapeHtml(x.site)}" target="_blank" class="btn-site">🌐 Site/IG</a>` : '';
-    const catalogBtn = isUrl(x.catalog)
-      ? `<a href="${escapeHtml(x.catalog)}" target="_blank" class="btn-catalog">📄 Catálogo</a>` : '';
 
-    const locTags = (x.locs || []).map(l => `<span class="tag">${escapeHtml(l)}</span>`).join('');
-    const reachTags = (x.reach || []).map(r => `<span class="tag tag-reach">${escapeHtml(r)}</span>`).join('');
-    const catTags = (x.cats || []).map(c => `<span class="tag tag-cat">${escapeHtml(c)}</span>`).join('');
-    const specsLine = (x.specs && x.specs.length)
-      ? `<span class="spec-inline">${x.specs.map(escapeHtml).join(' · ')}</span>`
+    const catTags = (x.cats||[]).map(c => `<span class="tag tag-cat">${escapeHtml(c)}</span>`).join('');
+    const locTags = (x.locs||[]).map(l => `<span class="tag tag-loc">${escapeHtml(l)}</span>`).join('');
+    const reachTags = (x.reach||[]).map(r => `<span class="tag tag-reach">${escapeHtml(r)}</span>`).join('');
+
+    // Info: especialidades
+    const specsVal = (x.specs && x.specs.length) ? x.specs.map(escapeHtml).join(', ') : '';
+    const infoSpecs = specsVal
+      ? `<div class="card-info-item">
+          <div class="card-info-icon">🏷️</div>
+          <div><div class="card-info-label">Especialidades</div><div class="card-info-value">${specsVal}</div></div>
+        </div>`
       : '';
-    const notesLine = x.notes
-      ? `<span class="notes-inline" title="${escapeHtml(x.notes)}">${escapeHtml(x.notes.length > 80 ? x.notes.substring(0,80) + '…' : x.notes)}</span>`
+
+    // Info: contato
+    const contactDisplay = waLink
+      ? `<a href="${escapeHtml(waLink)}" target="_blank">WhatsApp · ${escapeHtml(prettyPhone(waLink) || x.contact)}</a>`
+      : (x.contact ? escapeHtml(x.contact) : '');
+    const infoContact = contactDisplay
+      ? `<div class="card-info-item">
+          <div class="card-info-icon">💬</div>
+          <div><div class="card-info-label">Contato</div><div class="card-info-value">${contactDisplay}${x.contactName ? '<br><span style="color:var(--muted)">'+escapeHtml(x.contactName)+'</span>' : ''}</div></div>
+        </div>`
+      : '';
+
+    // Info: site
+    const infoSite = isUrl(x.site)
+      ? `<div class="card-info-item">
+          <div class="card-info-icon">🌐</div>
+          <div><div class="card-info-label">Site / Instagram</div><div class="card-info-value"><a href="${escapeHtml(x.site)}" target="_blank">${escapeHtml(x.site.replace(/https?:\/\/(www\.)?/,'').replace(/\/$/,''))}</a></div></div>
+        </div>`
+      : '';
+
+    const hasInfo = infoSpecs || infoContact || infoSite;
+
+    // Observações
+    const notesRow = x.notes
+      ? `<div class="card-notes-row">📌 ${escapeHtml(x.notes.length > 120 ? x.notes.substring(0,120) + '…' : x.notes)}</div>`
+      : '';
+
+    // Galeria
+    const images = x.images || [];
+    const gallery = images.length
+      ? `<div class="card-gallery">${images.map(img => `<img class="gallery-img" src="${escapeHtml(img.dataUrl)}" alt="Imagem" onclick="openLightbox('${escapeHtml(img.dataUrl)}')" loading="lazy"/>`).join('')}</div>`
+      : '';
+
+    // Footer: catálogo
+    const catalogLeft = isUrl(x.catalog)
+      ? `<span class="no-catalog-label">📋 Catálogo disponível</span>`
+      : `<span class="no-catalog-label">📋 Sem catálogo de brindes</span>`;
+
+    const catalogBtn = isUrl(x.catalog)
+      ? `<a href="${escapeHtml(x.catalog)}" target="_blank" class="btn-view-catalog">👁 Ver catálogo completo</a>`
       : '';
 
     return `<div class="card">
-      <div class="card-body">
-        <div class="card-top">
-          <span class="card-name">${escapeHtml(x.name)}</span>
-          ${locTags}
-          ${reachTags}
+      <div class="card-header">
+        <div class="card-header-top">
+          <div class="card-name-block">
+            <div class="card-name">${escapeHtml(x.name)}</div>
+            <div class="card-tags">${catTags}${locTags}${reachTags}</div>
+          </div>
         </div>
-        <div class="card-cat">
-          ${catTags}
-          ${specsLine ? `<span style="margin-left:4px">· ${specsLine}</span>` : ''}
-        </div>
-        ${notesLine ? `<div class="card-notes">${notesLine}</div>` : ''}
-        <div class="card-actions">${waBtn}${siteBtn}${catalogBtn}</div>
+      </div>
+      ${hasInfo ? `<div class="card-info">${infoSpecs}${infoContact}${infoSite}</div>` : ''}
+      ${notesRow}
+      ${gallery}
+      <div class="card-footer">
+        <div class="card-footer-left">${catalogLeft}</div>
+        <div class="card-footer-right">${catalogBtn}</div>
       </div>
     </div>`;
   }).join('');
@@ -1390,62 +1159,58 @@ function renderAdminList() {
   const lf = document.getElementById('adminLocFilter').value;
 
   let items = db.filter(x => {
-    if (cf && !(x.cats || []).includes(cf)) return false;
-    if (lf && !(x.locs || []).includes(lf)) return false;
+    if (cf && !(x.cats||[]).includes(cf)) return false;
+    if (lf && !(x.locs||[]).includes(lf)) return false;
     if (!entryMatchesSearch(x, q)) return false;
     return true;
   });
 
   const empty = document.getElementById('adminEmpty');
-  if (!items.length) {
-    document.getElementById('adminList').innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
+  if (!items.length) { document.getElementById('adminList').innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
 
+  const spec = (label, value, isLink) => {
+    if (!value || (Array.isArray(value) && !value.length))
+      return `<div><span class="spec-label">${label}:</span><span class="spec-empty">—</span></div>`;
+    if (Array.isArray(value))
+      return `<div><span class="spec-label">${label}:</span><span class="spec-value">${value.map(escapeHtml).join(', ')}</span></div>`;
+    if (isLink && (isUrl(value) || isWa(value))) {
+      const text = isWa(value) ? 'WhatsApp · ' + prettyPhone(value) : value;
+      return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">${escapeHtml(text)}</a></div>`;
+    }
+    return `<div><span class="spec-label">${label}:</span><span class="spec-value">${escapeHtml(value)}</span></div>`;
+  };
+
   document.getElementById('adminList').innerHTML = items.map(x => {
-    const spec = (label, value, isLink) => {
-      if (!value || (Array.isArray(value) && !value.length)) {
-        return `<div><span class="spec-label">${label}:</span><span class="spec-empty">—</span></div>`;
-      }
-      if (Array.isArray(value)) {
-        return `<div><span class="spec-label">${label}:</span><span class="spec-value">${value.map(escapeHtml).join(', ')}</span></div>`;
-      }
-      if (isLink && (isUrl(value) || isWa(value))) {
-        const text = isWa(value) ? 'WhatsApp · ' + prettyPhone(value) : value;
-        return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">${escapeHtml(text)}</a></div>`;
-      }
-      return `<div><span class="spec-label">${label}:</span><span class="spec-value">${escapeHtml(value)}</span></div>`;
-    };
-
     const catalogLine = isUrl(x.catalog)
-      ? `<div class="admin-row-catalog">📄 Catálogo de brindes: <a href="${escapeHtml(x.catalog)}" target="_blank">Abrir link →</a></div>`
+      ? `<div class="admin-row-catalog">📄 Catálogo: <a href="${escapeHtml(x.catalog)}" target="_blank">Abrir link →</a></div>`
       : `<div class="admin-row-catalog" style="color:var(--muted)">📄 Sem catálogo de brindes.</div>`;
-
-    const catTags = (x.cats || []).map(c => `<span class="tag tag-cat">${escapeHtml(c)}</span>`).join('');
-    const locTags = (x.locs || []).map(l => `<span class="tag">${escapeHtml(l)}</span>`).join('');
-    const reachTags = (x.reach || []).map(r => `<span class="tag tag-reach">${escapeHtml(r)}</span>`).join('');
-    const specSpecs = (x.specs && x.specs.length) ? x.specs.join(', ') : '';
+    const catTags = (x.cats||[]).map(c => `<span class="tag tag-cat">${escapeHtml(c)}</span>`).join('');
+    const locTags = (x.locs||[]).map(l => `<span class="tag tag-loc">${escapeHtml(l)}</span>`).join('');
+    const reachTags = (x.reach||[]).map(r => `<span class="tag tag-reach">${escapeHtml(r)}</span>`).join('');
+    const specStr = (x.specs && x.specs.length) ? x.specs.join(', ') : '';
+    const images = x.images || [];
+    const imgThumbs = images.length
+      ? `<div class="admin-img-thumbs">${images.map(img => `<img src="${escapeHtml(img.dataUrl)}" alt="Imagem" onclick="openLightbox('${escapeHtml(img.dataUrl)}')" style="cursor:pointer"/>`).join('')}</div>`
+      : '';
 
     return `<div class="admin-row">
       <div class="admin-row-header">
         <span class="admin-row-name">${escapeHtml(x.name)}</span>
-        ${catTags}
-        ${locTags}
-        ${reachTags}
+        ${catTags}${locTags}${reachTags}
         <div class="admin-row-buttons">
-          <button class="btn-edit" onclick="editEntry(${x.id})">Editar</button>
-          <button class="btn-del" onclick="deleteEntry(${x.id})">Excluir</button>
+          <button class="btn-edit" onclick="editEntry(${x.id})">✏ Editar</button>
+          <button class="btn-del" onclick="deleteEntry(${x.id})">🗑 Excluir</button>
         </div>
       </div>
       <div class="admin-row-specs">
-        ${spec('Especialidades', specSpecs)}
+        ${spec('Especialidades', specStr)}
         ${spec('Contato', x.contact, true)}
         ${spec('Nome do contato', x.contactName)}
         ${spec('Site / Instagram', x.site, true)}
       </div>
       ${x.notes ? `<div class="admin-row-catalog" style="background:#fcfaf3;border-left:2px solid var(--accent);padding-left:8px;border-top:none;margin-top:8px"><strong style="color:var(--muted);font-size:11px">OBS:</strong> ${escapeHtml(x.notes)}</div>` : ''}
+      ${imgThumbs}
       ${catalogLine}
     </div>`;
   }).join('');
@@ -1457,68 +1222,50 @@ function setMode(m) {
   document.getElementById('admin-mode').style.display = m === 'admin' ? 'block' : 'none';
   document.getElementById('btnView').classList.toggle('active', m === 'view');
   document.getElementById('btnAdmin').classList.toggle('active', m === 'admin');
-  if (m === 'admin') {
-    populate();
-    renderAdminList();
-    renderCatChips();
-    renderLocChips();
-    renderSpecChips();
-  }
+  if (m === 'admin') { populate(); renderAdminList(); renderCatChips(); renderLocChips(); renderSpecChips(); }
 }
 
 /* ---------- FORM ---------- */
 function getForm() {
   return {
-    cats: [...selectedCats],
-    locs: [...selectedLocs],
-    reach: [...selectedReach],
-    specs: [...selectedSpecs],
+    cats: [...selectedCats], locs: [...selectedLocs], reach: [...selectedReach], specs: [...selectedSpecs],
     notes: document.getElementById('fNotes').value.trim(),
     name: document.getElementById('fName').value.trim(),
     site: document.getElementById('fSite').value.trim(),
     contact: buildWaLink(document.getElementById('fContact').value.trim()) || document.getElementById('fContact').value.trim(),
     contactName: document.getElementById('fContactName').value.trim(),
-    catalog: document.getElementById('fCatalog').value.trim()
+    catalog: document.getElementById('fCatalog').value.trim(),
+    images: [...pendingImages]
   };
 }
 
 function clearForm() {
   ['fName','fSite','fContact','fContactName','fNotes','fCatalog','catAddInput','locAddInput','specAddInput'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
+    const el = document.getElementById(id); if (el) el.value = '';
   });
-  selectedCats = [];
-  selectedLocs = [];
-  selectedSpecs = [];
+  selectedCats = []; selectedLocs = []; selectedSpecs = [];
   setReachUI([]);
+  pendingImages = [];
+  renderImgPreview();
   editId = null;
   document.getElementById('formTitle').textContent = 'Novo Fornecedor';
   document.getElementById('saveBtn').textContent = 'Salvar Fornecedor';
   document.getElementById('cancelBtn').style.display = 'none';
   document.getElementById('waPreview').style.display = 'none';
-  renderCatChips();
-  renderLocChips();
-  renderSpecChips();
+  renderCatChips(); renderLocChips(); renderSpecChips();
 }
 
 function saveEntry() {
   const f = getForm();
   if (!f.cats.length || !f.name) { showMsg('Preencha ao menos uma categoria e o nome.', true); return; }
-  if (f.catalog && !isUrl(f.catalog)) {
-    showMsg('O link do catálogo precisa começar com http:// ou https://', true);
-    return;
-  }
+  if (f.catalog && !isUrl(f.catalog)) { showMsg('O link do catálogo precisa começar com http:// ou https://', true); return; }
   if (editId) {
     const i = db.findIndex(x => x.id === editId);
     if (i > -1) db[i] = { ...db[i], ...f };
   } else {
     db.push({ id: nextId(), ...f });
   }
-  persist();
-  clearForm();
-  populate();
-  renderAdminList();
-  renderList();
+  persist(); clearForm(); populate(); renderAdminList(); renderList();
   showMsg('Salvo com sucesso!');
 }
 
@@ -1526,19 +1273,17 @@ function editEntry(id) {
   const x = db.find(e => e.id === id);
   if (!x) return;
   editId = id;
-  selectedCats = [...(x.cats || [])];
-  selectedLocs = [...(x.locs || [])];
-  selectedSpecs = [...(x.specs || [])];
-  setReachUI(x.reach || []);
+  selectedCats = [...(x.cats||[])]; selectedLocs = [...(x.locs||[])]; selectedSpecs = [...(x.specs||[])];
+  setReachUI(x.reach||[]);
   document.getElementById('fName').value = x.name || '';
   document.getElementById('fSite').value = x.site || '';
   document.getElementById('fContact').value = isWa(x.contact) ? prettyPhone(x.contact) : (x.contact || '');
   document.getElementById('fContactName').value = x.contactName || '';
   document.getElementById('fNotes').value = x.notes || '';
   document.getElementById('fCatalog').value = x.catalog || '';
-  renderCatChips();
-  renderLocChips();
-  renderSpecChips();
+  pendingImages = [...(x.images || [])];
+  renderImgPreview();
+  renderCatChips(); renderLocChips(); renderSpecChips();
   previewWa();
   document.getElementById('formTitle').textContent = 'Editar Fornecedor';
   document.getElementById('saveBtn').textContent = 'Atualizar';
@@ -1551,30 +1296,21 @@ function cancelEdit() { clearForm(); }
 function deleteEntry(id) {
   if (!confirm('Excluir este fornecedor?')) return;
   db = db.filter(x => x.id !== id);
-  persist();
-  populate();
-  renderAdminList();
-  renderList();
+  persist(); populate(); renderAdminList(); renderList();
 }
 
 function showMsg(m, err) {
   const el = document.getElementById('formMsg');
-  el.textContent = m;
-  el.style.display = 'inline';
+  el.textContent = m; el.style.display = 'inline';
   el.style.color = err ? 'var(--danger-text)' : 'var(--success-text)';
   el.style.background = err ? 'var(--danger-bg)' : 'var(--success-bg)';
   el.style.borderColor = err ? 'var(--danger-border)' : 'var(--success-border)';
   setTimeout(() => el.style.display = 'none', 3000);
 }
 
-/* ---------- GERENCIAR CATEGORIAS/LOCAIS ---------- */
-function openManage() {
-  document.getElementById('manage-overlay').classList.add('visible');
-  switchManageTab('cats');
-}
-function closeManage() {
-  document.getElementById('manage-overlay').classList.remove('visible');
-}
+/* ---------- GERENCIAR ---------- */
+function openManage() { document.getElementById('manage-overlay').classList.add('visible'); switchManageTab('cats'); }
+function closeManage() { document.getElementById('manage-overlay').classList.remove('visible'); }
 function switchManageTab(tab) {
   manageTab = tab;
   document.getElementById('tabCats').classList.toggle('active', tab === 'cats');
@@ -1582,105 +1318,62 @@ function switchManageTab(tab) {
   document.getElementById('tabSpecs').classList.toggle('active', tab === 'specs');
   renderManageList();
 }
-
 function getManageList() {
   if (manageTab === 'cats') return { list: allCats, field: 'cats' };
   if (manageTab === 'locs') return { list: allLocs, field: 'locs' };
   return { list: allSpecs, field: 'specs' };
 }
-
 function renderManageList() {
   const { list, field } = getManageList();
   const node = document.getElementById('manageList');
-  if (!list.length) {
-    node.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:1rem;text-align:center">Nada cadastrado ainda.</p>';
-    return;
-  }
+  if (!list.length) { node.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:1rem;text-align:center">Nada cadastrado ainda.</p>'; return; }
   node.innerHTML = list.map(name => {
-    const count = db.filter(x => (x[field] || []).includes(name)).length;
+    const count = db.filter(x => (x[field]||[]).includes(name)).length;
     return `<div class="manage-row">
       <span class="manage-row-name">${escapeHtml(name)}</span>
-      <span class="manage-row-count">${count} ${count === 1 ? 'fornecedor' : 'fornecedores'}</span>
-      <button class="manage-row-btn rename" onclick="renameItem('${name.replace(/'/g, "\\'")}')">Renomear</button>
-      <button class="manage-row-btn del" onclick="deleteItem('${name.replace(/'/g, "\\'")}')">Excluir</button>
+      <span class="manage-row-count">${count} ${count===1?'fornecedor':'fornecedores'}</span>
+      <button class="manage-row-btn rename" onclick="renameItem('${name.replace(/'/g,"\\'")}')">Renomear</button>
+      <button class="manage-row-btn del" onclick="deleteItem('${name.replace(/'/g,"\\'")}')">Excluir</button>
     </div>`;
   }).join('');
 }
-
 function renameItem(oldName) {
   const newName = prompt(`Renomear "${oldName}" para:`, oldName);
   if (!newName || newName.trim() === '' || newName.trim() === oldName) return;
   const trimmed = newName.trim();
   const { list, field } = getManageList();
-
-  // Já existe outro com esse nome? Faz merge.
   const existing = list.find(n => n.toLowerCase() === trimmed.toLowerCase() && n !== oldName);
   const finalName = existing || trimmed;
-
   const idx = list.indexOf(oldName);
-  if (idx > -1) {
-    if (existing) {
-      list.splice(idx, 1);
-    } else {
-      list[idx] = trimmed;
-    }
-  }
-  list.sort((a,b) => a.localeCompare(b, 'pt-BR'));
-
+  if (idx > -1) { if (existing) list.splice(idx, 1); else list[idx] = trimmed; }
+  list.sort((a,b) => a.localeCompare(b,'pt-BR'));
   db.forEach(x => {
     if (x[field] && x[field].includes(oldName)) {
       x[field] = x[field].filter(v => v !== oldName);
       if (!x[field].includes(finalName)) x[field].push(finalName);
     }
   });
-
-  persist();
-  persistCatalogs();
-  populate();
-  renderAdminList();
-  renderList();
-  renderCatChips();
-  renderLocChips();
-  renderSpecChips();
-  renderManageList();
+  persist(); persistCatalogs(); populate(); renderAdminList(); renderList();
+  renderCatChips(); renderLocChips(); renderSpecChips(); renderManageList();
 }
-
 function deleteItem(name) {
-  const labelMap = { cats: 'categoria', locs: 'local', specs: 'especialidade' };
-  const tabLabel = labelMap[manageTab];
+  const labelMap = { cats:'categoria', locs:'local', specs:'especialidade' };
   const { list, field } = getManageList();
-  const count = db.filter(x => (x[field] || []).includes(name)).length;
+  const count = db.filter(x => (x[field]||[]).includes(name)).length;
   const msg = count
-    ? `Excluir a ${tabLabel} "${name}"?\n\nEla será removida de ${count} fornecedor(es), mas os fornecedores em si não serão apagados.`
-    : `Excluir a ${tabLabel} "${name}"?`;
+    ? `Excluir a ${labelMap[manageTab]} "${name}"?\n\nEla será removida de ${count} fornecedor(es).`
+    : `Excluir a ${labelMap[manageTab]} "${name}"?`;
   if (!confirm(msg)) return;
-
-  const idx = list.indexOf(name);
-  if (idx > -1) list.splice(idx, 1);
-
-  db.forEach(x => {
-    if (x[field]) x[field] = x[field].filter(v => v !== name);
-  });
-
-  persist();
-  persistCatalogs();
-  populate();
-  renderAdminList();
-  renderList();
-  renderCatChips();
-  renderLocChips();
-  renderSpecChips();
-  renderManageList();
+  const idx = list.indexOf(name); if (idx > -1) list.splice(idx, 1);
+  db.forEach(x => { if (x[field]) x[field] = x[field].filter(v => v !== name); });
+  persist(); persistCatalogs(); populate(); renderAdminList(); renderList();
+  renderCatChips(); renderLocChips(); renderSpecChips(); renderManageList();
 }
 
 /* ---------- SENHA ADMIN ---------- */
 const ADMIN_PASSWORD = 'eventos2024';
 const SESSION_KEY = 'admin_auth';
-
-function isAuthenticated() {
-  return sessionStorage.getItem(SESSION_KEY) === '1';
-}
-
+function isAuthenticated() { return sessionStorage.getItem(SESSION_KEY) === '1'; }
 function requestAdmin() {
   if (isAuthenticated()) { setMode('admin'); return; }
   document.getElementById('login-overlay').classList.add('visible');
@@ -1688,287 +1381,102 @@ function requestAdmin() {
   document.getElementById('loginErr').style.display = 'none';
   setTimeout(() => document.getElementById('loginInput').focus(), 100);
 }
-
 function tryLogin() {
   const val = document.getElementById('loginInput').value;
-  if (val === ADMIN_PASSWORD) {
-    sessionStorage.setItem(SESSION_KEY, '1');
-    closeLogin();
-    setMode('admin');
-  } else {
-    document.getElementById('loginErr').style.display = 'block';
-    document.getElementById('loginInput').value = '';
-    document.getElementById('loginInput').focus();
-  }
+  if (val === ADMIN_PASSWORD) { sessionStorage.setItem(SESSION_KEY, '1'); closeLogin(); setMode('admin'); }
+  else { document.getElementById('loginErr').style.display = 'block'; document.getElementById('loginInput').value = ''; document.getElementById('loginInput').focus(); }
 }
-
-function closeLogin() {
-  document.getElementById('login-overlay').classList.remove('visible');
-}
+function closeLogin() { document.getElementById('login-overlay').classList.remove('visible'); }
 
 /* ---------- EXPORTAR / IMPORTAR ---------- */
 function exportXLSX() {
-  // Monta os dados como array de arrays (AOA) pra ter controle de células
   const headers = ['Categorias','Especialidades','Locais','Atende','Fornecedor','Site/Instagram','Contato','Nome do Contato','Observações','Link Catálogo'];
-
   const data = [headers];
   db.forEach(x => {
-    data.push([
-      (x.cats || []).join(' | '),
-      (x.specs || []).join(' | '),
-      (x.locs || []).join(' | '),
-      (x.reach || []).join(' | '),
-      x.name || '',
-      x.site || '',
-      x.contact || '',
-      x.contactName || '',
-      x.notes || '',
-      x.catalog || ''
-    ]);
+    data.push([(x.cats||[]).join(' | '),(x.specs||[]).join(' | '),(x.locs||[]).join(' | '),(x.reach||[]).join(' | '),x.name||'',x.site||'',x.contact||'',x.contactName||'',x.notes||'',x.catalog||'']);
   });
-
-  // Cria a worksheet
   const ws = XLSX.utils.aoa_to_sheet(data);
-
-  // Define largura das colunas
-  ws['!cols'] = [
-    { wch: 28 }, // Categorias
-    { wch: 32 }, // Especialidades
-    { wch: 20 }, // Locais
-    { wch: 18 }, // Atende
-    { wch: 30 }, // Fornecedor
-    { wch: 40 }, // Site
-    { wch: 32 }, // Contato
-    { wch: 18 }, // Nome do Contato
-    { wch: 40 }, // Observações
-    { wch: 40 }  // Link Catálogo
-  ];
-
-  // Nota: freeze pane e cores no cabeçalho só funcionam na versão paga do SheetJS.
-  // Largura das colunas e hyperlinks funcionam na versão open source.
-
-  // Nota: largura das colunas e hyperlinks funcionam na versão open source do SheetJS.
-  // Cores no cabeçalho e freeze pane requerem a versão paga.
-
-  // Transforma links em hyperlinks clicáveis
+  ws['!cols'] = [{wch:28},{wch:32},{wch:20},{wch:18},{wch:30},{wch:40},{wch:32},{wch:18},{wch:40},{wch:40}];
   for (let r = 1; r < data.length; r++) {
-    // Site (coluna F = índice 5)
-    const siteCell = XLSX.utils.encode_cell({ r, c: 5 });
-    if (ws[siteCell] && ws[siteCell].v && (ws[siteCell].v.startsWith('http') || ws[siteCell].v.startsWith('www'))) {
-      ws[siteCell].l = { Target: ws[siteCell].v, Tooltip: 'Abrir site' };
-    }
-    // Contato (coluna G = índice 6)
-    const contactCell = XLSX.utils.encode_cell({ r, c: 6 });
-    if (ws[contactCell] && ws[contactCell].v && ws[contactCell].v.includes('wa.me')) {
-      ws[contactCell].l = { Target: ws[contactCell].v, Tooltip: 'Abrir WhatsApp' };
-    }
-    // Link Catálogo (coluna J = índice 9)
-    const catCell = XLSX.utils.encode_cell({ r, c: 9 });
-    if (ws[catCell] && ws[catCell].v && (ws[catCell].v.startsWith('http') || ws[catCell].v.startsWith('www'))) {
-      ws[catCell].l = { Target: ws[catCell].v, Tooltip: 'Abrir catálogo' };
-    }
+    const siteCell = XLSX.utils.encode_cell({r, c:5});
+    if (ws[siteCell] && ws[siteCell].v && (ws[siteCell].v.startsWith('http')||ws[siteCell].v.startsWith('www'))) ws[siteCell].l = {Target:ws[siteCell].v};
+    const contactCell = XLSX.utils.encode_cell({r, c:6});
+    if (ws[contactCell] && ws[contactCell].v && ws[contactCell].v.includes('wa.me')) ws[contactCell].l = {Target:ws[contactCell].v};
+    const catCell = XLSX.utils.encode_cell({r, c:9});
+    if (ws[catCell] && ws[catCell].v && (ws[catCell].v.startsWith('http')||ws[catCell].v.startsWith('www'))) ws[catCell].l = {Target:ws[catCell].v};
   }
-
-  // Cria o workbook
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Fornecedores');
-
-  // Adiciona uma segunda aba com as listas mestras (catálogos)
-  const catalogSheet = [
-    ['Categorias cadastradas', '', 'Locais cadastrados', '', 'Especialidades cadastradas']
-  ];
+  const catalogSheet = [['Categorias cadastradas','','Locais cadastrados','','Especialidades cadastradas']];
   const maxLen = Math.max(allCats.length, allLocs.length, allSpecs.length);
-  for (let i = 0; i < maxLen; i++) {
-    catalogSheet.push([
-      allCats[i] || '',
-      '',
-      allLocs[i] || '',
-      '',
-      allSpecs[i] || ''
-    ]);
-  }
+  for (let i = 0; i < maxLen; i++) catalogSheet.push([allCats[i]||'','',allLocs[i]||'','',allSpecs[i]||'']);
   const catWs = XLSX.utils.aoa_to_sheet(catalogSheet);
-  catWs['!cols'] = [{ wch: 30 }, { wch: 4 }, { wch: 25 }, { wch: 4 }, { wch: 30 }];
+  catWs['!cols'] = [{wch:30},{wch:4},{wch:25},{wch:4},{wch:30}];
   XLSX.utils.book_append_sheet(wb, catWs, 'Catálogos');
-
-  // Nome do arquivo com data
-  const now = new Date();
-  const stamp = now.toISOString().split('T')[0]; // YYYY-MM-DD
-  XLSX.writeFile(wb, `fornecedores-cadenza-${stamp}.xlsx`);
+  XLSX.writeFile(wb, `fornecedores-${new Date().toISOString().split('T')[0]}.xlsx`);
 }
 
 function exportJSON() {
-  const backup = {
-    version: 'v3',
-    exported_at: new Date().toISOString(),
-    counts: {
-      fornecedores: db.length,
-      categorias: allCats.length,
-      locais: allLocs.length,
-      especialidades: allSpecs.length
-    },
-    catalogs: {
-      cats: allCats,
-      locs: allLocs,
-      specs: allSpecs
-    },
-    suppliers: db
-  };
-  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const backup = { version:'v3', exported_at:new Date().toISOString(), catalogs:{cats:allCats,locs:allLocs,specs:allSpecs}, suppliers:db };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  const stamp = new Date().toISOString().split('T')[0];
-  a.href = url;
-  a.download = `backup-fornecedores-cadenza-${stamp}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = `backup-fornecedores-${new Date().toISOString().split('T')[0]}.json`;
+  a.click(); URL.revokeObjectURL(url);
 }
 
 function importJSON(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const confirmMsg = '⚠️ Restaurar backup vai SUBSTITUIR tudo que está aqui agora.\n\nRecomendação: faça um backup atual (botão "Backup JSON") antes de restaurar, por garantia.\n\nDeseja continuar?';
-  if (!confirm(confirmMsg)) {
-    event.target.value = '';
-    return;
-  }
-
+  const file = event.target.files[0]; if (!file) return;
+  if (!confirm('⚠️ Restaurar backup vai SUBSTITUIR tudo que está aqui agora.\n\nDeseja continuar?')) { event.target.value=''; return; }
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
       const data = JSON.parse(e.target.result);
-
-      // Valida que tem a estrutura mínima esperada
-      if (!data.suppliers || !Array.isArray(data.suppliers)) {
-        alert('❌ Arquivo inválido: não contém lista de fornecedores.');
-        return;
-      }
-
-      // Aceita backups de versões antigas também — passa cada entry pela migração
+      if (!data.suppliers || !Array.isArray(data.suppliers)) { alert('❌ Arquivo inválido.'); return; }
       db = data.suppliers.map(migrateEntry);
-
-      // Restaura catálogos se vieram no backup, senão reconstrói do db
-      if (data.catalogs) {
-        allCats = data.catalogs.cats || [];
-        allLocs = data.catalogs.locs || [];
-        allSpecs = data.catalogs.specs || [];
-      }
-      rebuildCatalogs(true);
-
-      persist();
-      persistCatalogs();
-      populate();
-      renderAdminList();
-      renderList();
-      renderCatChips();
-      renderLocChips();
-      renderSpecChips();
-
-      alert(`✅ Backup restaurado com sucesso!\n\n${db.length} fornecedores\n${allCats.length} categorias\n${allLocs.length} locais\n${allSpecs.length} especialidades`);
-    } catch(err) {
-      alert('❌ Erro ao ler o backup. O arquivo pode estar corrompido ou não ser um backup válido.\n\n' + err.message);
-    }
+      if (data.catalogs) { allCats = data.catalogs.cats||[]; allLocs = data.catalogs.locs||[]; allSpecs = data.catalogs.specs||[]; }
+      rebuildCatalogs(true); persist(); persistCatalogs(); populate(); renderAdminList(); renderList();
+      renderCatChips(); renderLocChips(); renderSpecChips();
+      alert(`✅ Backup restaurado: ${db.length} fornecedores`);
+    } catch(err) { alert('❌ Erro ao ler o backup.\n\n' + err.message); }
     event.target.value = '';
   };
   reader.readAsText(file);
 }
 
-function splitMulti(val) {
-  if (!val) return [];
-  return String(val).split(/[|;]/).map(s => s.trim()).filter(Boolean);
-}
+function splitMulti(val) { if (!val) return []; return String(val).split(/[|;]/).map(s => s.trim()).filter(Boolean); }
 
 function importXLSX(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const action = confirm(
-    'Como deseja importar?\n\nOK = Adicionar à lista atual\nCancelar = Substituir tudo'
-  );
-
+  const file = event.target.files[0]; if (!file) return;
+  const action = confirm('Como deseja importar?\n\nOK = Adicionar à lista atual\nCancelar = Substituir tudo');
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
       const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
+      const workbook = XLSX.read(data, {type:'array'});
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(sheet, { defval: '' });
-
-      if (!rows.length) { alert('Nenhum dado encontrado na planilha.'); return; }
-
-      const map = (row, keys) => {
-        for (const k of keys) {
-          const found = Object.keys(row).find(r => r.toLowerCase().includes(k.toLowerCase()));
-          if (found) return String(row[found] || '').trim();
-        }
-        return '';
-      };
-
+      const rows = XLSX.utils.sheet_to_json(sheet, {defval:''});
+      if (!rows.length) { alert('Nenhum dado encontrado.'); return; }
+      const map = (row, keys) => { for (const k of keys) { const found = Object.keys(row).find(r => r.toLowerCase().includes(k.toLowerCase())); if (found) return String(row[found]||'').trim(); } return ''; };
       const newEntries = rows.map((row, i) => {
-        const catsRaw = map(row, ['categorias', 'categoria', 'cat']);
-        const locsRaw = map(row, ['locais', 'local', 'loc', 'cidade']);
-        const reachRaw = map(row, ['atende', 'abrangência', 'abrangencia']);
-        const specsRaw = map(row, ['especialidades', 'especialidade', 'tags']);
-        const notesRaw = map(row, ['observações', 'observacoes', 'obs', 'anotações', 'anotacoes', 'notas']);
-        const contactRaw = map(row, ['contato', 'tel', 'whatsapp', 'telefone', 'contact']);
-        // Se o contato for um número/telefone, converte pra link
-        const contact = contactRaw.includes('wa.me') || !contactRaw
-          ? contactRaw
-          : (contactRaw.replace(/\D/g,'').length >= 8 ? buildWaLink(contactRaw) : contactRaw);
-
-        // Se não tem coluna de obs mas tem coluna antiga "sub", aplica o mesmo split do migrateEntry
-        let specs = splitMulti(specsRaw);
-        let notes = notesRaw;
-        if (!specs.length && !notes) {
-          const oldSub = map(row, ['sub', 'especial']);
-          if (oldSub) {
-            const split = splitSubField(oldSub);
-            specs = split.specs;
-            notes = split.notes;
-          }
-        }
-
-        return {
-          id: i + 1,
-          cats:        splitMulti(catsRaw),
-          locs:        splitMulti(locsRaw),
-          reach:       splitMulti(reachRaw).filter(r => ['Local','Regional','Nacional','Internacional'].includes(r)),
-          specs,
-          notes,
-          name:        map(row, ['fornecedor', 'nome', 'name', 'empresa']),
-          site:        map(row, ['site', 'instagram', 'ig', 'url', 'link site']),
-          contact,
-          contactName: map(row, ['nome do contato', 'responsável', 'atendente', 'contactname']),
-          catalog:     map(row, ['catálogo', 'catalogo', 'drive', 'link catálogo', 'link catalogo']),
-        };
+        const catsRaw = map(row, ['categorias','categoria','cat']);
+        const locsRaw = map(row, ['locais','local','loc','cidade']);
+        const reachRaw = map(row, ['atende','abrangência','abrangencia']);
+        const specsRaw = map(row, ['especialidades','especialidade','tags']);
+        const notesRaw = map(row, ['observações','observacoes','obs','anotações','anotacoes','notas']);
+        const contactRaw = map(row, ['contato','tel','whatsapp','telefone','contact']);
+        const contact = contactRaw.includes('wa.me') || !contactRaw ? contactRaw : (contactRaw.replace(/\D/g,'').length >= 8 ? buildWaLink(contactRaw) : contactRaw);
+        let specs = splitMulti(specsRaw); let notes = notesRaw;
+        if (!specs.length && !notes) { const oldSub = map(row,['sub','especial']); if (oldSub) { const split = splitSubField(oldSub); specs = split.specs; notes = split.notes; } }
+        return { id:i+1, cats:splitMulti(catsRaw), locs:splitMulti(locsRaw), reach:splitMulti(reachRaw).filter(r=>['Local','Regional','Nacional','Internacional'].includes(r)), specs, notes, name:map(row,['fornecedor','nome','name','empresa']), site:map(row,['site','instagram','ig','url']), contact, contactName:map(row,['nome do contato','responsável','atendente']), catalog:map(row,['catálogo','catalogo','drive']), images:[] };
       }).filter(x => x.name || x.cats.length);
-
-      if (!newEntries.length) {
-        alert('Nenhum fornecedor válido encontrado. Verifique se a planilha tem colunas como "Fornecedor" e "Categorias".');
-        return;
-      }
-
-      if (action) {
-        const maxId = db.length ? Math.max(...db.map(x => x.id)) : 0;
-        newEntries.forEach((e, i) => e.id = maxId + i + 1);
-        db = [...db, ...newEntries];
-      } else {
-        db = newEntries;
-      }
-
-      rebuildCatalogs(true);
-      persist();
-      populate();
-      renderAdminList();
-      renderList();
-      renderCatChips();
-      renderLocChips();
-      renderSpecChips();
-      alert(`✅ ${newEntries.length} fornecedores ${action ? 'adicionados' : 'importados'} com sucesso!`);
-    } catch(err) {
-      alert('Erro ao ler o arquivo. Certifique-se de enviar um arquivo .xlsx ou .xls válido.\n\n' + err.message);
-    }
+      if (!newEntries.length) { alert('Nenhum fornecedor válido encontrado.'); return; }
+      if (action) { const maxId = db.length ? Math.max(...db.map(x => x.id)) : 0; newEntries.forEach((e,i) => e.id = maxId+i+1); db = [...db, ...newEntries]; }
+      else { db = newEntries; }
+      rebuildCatalogs(true); persist(); populate(); renderAdminList(); renderList();
+      renderCatChips(); renderLocChips(); renderSpecChips();
+      alert(`✅ ${newEntries.length} fornecedores ${action?'adicionados':'importados'}!`);
+    } catch(err) { alert('Erro ao ler o arquivo.\n\n' + err.message); }
     event.target.value = '';
   };
   reader.readAsArrayBuffer(file);
