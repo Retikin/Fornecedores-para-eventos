@@ -32,6 +32,9 @@
       --purple-bg: #f3e5f5;
       --purple-text: #6a1b9a;
       --purple-border: #ce93d8;
+      --reach-bg: #e0f2f1;
+      --reach-text: #00695c;
+      --reach-border: #80cbc4;
       --radius: 10px;
       --radius-sm: 6px;
     }
@@ -126,11 +129,11 @@
     .card-top {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
-      margin-bottom: 3px;
+      margin-bottom: 5px;
     }
-    .card-name { font-weight: 600; font-size: 14px; color: var(--text); }
+    .card-name { font-weight: 600; font-size: 14px; color: var(--text); margin-right: 4px; }
 
     .tag {
       font-size: 11px;
@@ -141,8 +144,18 @@
       color: var(--muted);
       white-space: nowrap;
     }
+    .tag-cat {
+      background: var(--brand-light);
+      color: var(--brand);
+      border-color: #c5e1d3;
+    }
+    .tag-reach {
+      background: var(--reach-bg);
+      color: var(--reach-text);
+      border-color: var(--reach-border);
+    }
 
-    .card-cat { font-size: 12px; color: var(--muted); margin-bottom: 9px; }
+    .card-cat { font-size: 12px; color: var(--muted); margin-bottom: 9px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
     .card-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 
     .btn-wa {
@@ -200,7 +213,7 @@
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 14px;
     }
     @media (max-width: 560px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -213,6 +226,7 @@
       margin-bottom: 4px;
       font-weight: 500;
     }
+    .field label .req { color: var(--danger-text); }
     .field input {
       width: 100%;
       font-size: 13px;
@@ -232,6 +246,102 @@
       color: var(--muted);
       margin-top: 4px;
       font-style: italic;
+    }
+
+    /* ---- CHIPS PICKER (categorias e locais) ---- */
+    .chip-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      padding: 8px;
+      min-height: 44px;
+    }
+    .chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .chip-list:empty { display: none; }
+    .chip {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.12s;
+    }
+    .chip:hover { border-color: var(--brand-mid); }
+    .chip.selected {
+      background: var(--brand-mid);
+      color: white;
+      border-color: var(--brand-mid);
+      font-weight: 500;
+    }
+    .chip-add-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .chip-add-row input {
+      flex: 1;
+      font-size: 12px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface);
+      outline: none;
+    }
+    .chip-add-row input:focus { border-color: var(--brand-mid); }
+    .chip-add-btn {
+      font-size: 12px;
+      padding: 6px 12px;
+      background: var(--brand-mid);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .chip-add-btn:hover { background: var(--brand); }
+    .chip-empty {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+      padding: 2px 4px;
+    }
+
+    /* ---- CHECKBOX GROUP (atende) ---- */
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .check-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 5px 11px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.12s;
+    }
+    .check-chip input { display: none; }
+    .check-chip:hover { border-color: var(--brand-mid); }
+    .check-chip.checked {
+      background: var(--reach-bg);
+      color: var(--reach-text);
+      border-color: var(--reach-border);
+      font-weight: 500;
     }
 
     .form-actions {
@@ -284,7 +394,7 @@
     .admin-row-header {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
       margin-bottom: 8px;
     }
@@ -292,6 +402,7 @@
       font-weight: 600;
       font-size: 14px;
       color: var(--text);
+      margin-right: 4px;
     }
     .admin-row-buttons {
       margin-left: auto;
@@ -367,8 +478,20 @@
       margin-bottom: 10px;
     }
 
+    .btn-manage {
+      font-size: 12px;
+      padding: 6px 14px;
+      background: var(--brand-light);
+      color: var(--brand);
+      border: 1px solid #c5e1d3;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .btn-manage:hover { background: #d8ecdf; }
+
     /* ---- LOGIN OVERLAY ---- */
-    #login-overlay {
+    #login-overlay, #manage-overlay {
       display: none;
       position: fixed;
       inset: 0;
@@ -376,8 +499,9 @@
       z-index: 200;
       align-items: center;
       justify-content: center;
+      padding: 1rem;
     }
-    #login-overlay.visible { display: flex; }
+    #login-overlay.visible, #manage-overlay.visible { display: flex; }
 
     .login-box {
       background: var(--surface);
@@ -445,6 +569,104 @@
       cursor: pointer;
       margin-top: 6px;
     }
+
+    /* ---- MANAGE OVERLAY ---- */
+    .manage-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 560px;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    }
+    .manage-box h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+    .manage-box .manage-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .manage-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .manage-tab {
+      font-size: 13px;
+      padding: 8px 14px;
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .manage-tab.active {
+      color: var(--brand);
+      border-bottom-color: var(--brand-mid);
+    }
+    .manage-list {
+      display: grid;
+      gap: 6px;
+      margin-bottom: 1rem;
+      max-height: 380px;
+      overflow-y: auto;
+    }
+    .manage-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .manage-row-name {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .manage-row-count {
+      font-size: 11px;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+    .manage-row-btn {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      background: var(--surface);
+      color: var(--muted);
+    }
+    .manage-row-btn.rename { background: var(--info-bg); color: var(--info-text); border-color: var(--info-border); }
+    .manage-row-btn.del { background: var(--danger-bg); color: var(--danger-text); border-color: var(--danger-border); }
+    .manage-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    .manage-actions .btn-close {
+      font-size: 13px;
+      padding: 7px 16px;
+      background: var(--brand-mid);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -472,6 +694,22 @@
   </div>
 </div>
 
+<!-- MANAGE CATEGORIES / LOCATIONS OVERLAY -->
+<div id="manage-overlay">
+  <div class="manage-box">
+    <h2>Gerenciar Categorias e Locais</h2>
+    <p class="manage-sub">Renomeie ou exclua. As alterações são aplicadas a todos os fornecedores.</p>
+    <div class="manage-tabs">
+      <button class="manage-tab active" id="tabCats" onclick="switchManageTab('cats')">Categorias</button>
+      <button class="manage-tab" id="tabLocs" onclick="switchManageTab('locs')">Locais</button>
+    </div>
+    <div class="manage-list" id="manageList"></div>
+    <div class="manage-actions">
+      <button class="btn-close" onclick="closeManage()">Fechar</button>
+    </div>
+  </div>
+</div>
+
 <main>
 
   <!-- VIEW -->
@@ -484,6 +722,13 @@
       <select id="locFilter" onchange="renderList()">
         <option value="">Todos os locais</option>
       </select>
+      <select id="reachFilter" onchange="renderList()">
+        <option value="">Qualquer abrangência</option>
+        <option value="Local">Local</option>
+        <option value="Regional">Regional</option>
+        <option value="Nacional">Nacional</option>
+        <option value="Internacional">Internacional</option>
+      </select>
     </div>
     <p class="stats-bar" id="statsBar"></p>
     <div class="supplier-grid" id="list"></div>
@@ -495,12 +740,54 @@
     <div class="form-card">
       <h2 id="formTitle">Novo Fornecedor</h2>
       <div class="form-grid">
-        <div class="field"><label>Categoria *</label><input id="fCat" placeholder="Ex: Gráfica, Coffee Break..."/></div>
-        <div class="field"><label>Local</label><input id="fLoc" placeholder="Ex: SP, Florianópolis..."/></div>
-        <div class="field"><label>Nome do Fornecedor *</label><input id="fName" placeholder="Nome da empresa ou pessoa"/></div>
+
+        <!-- CATEGORIAS -->
+        <div class="field field-full">
+          <label>Categorias <span class="req">*</span></label>
+          <div class="chip-box">
+            <div class="chip-list" id="catChips"></div>
+            <div class="chip-add-row">
+              <input id="catAddInput" type="text" placeholder="+ Nova categoria (enter para adicionar)" onkeydown="if(event.key==='Enter'){event.preventDefault();addNewCat();}"/>
+              <button class="chip-add-btn" type="button" onclick="addNewCat()">Adicionar</button>
+            </div>
+          </div>
+          <p class="field-hint">Clique nas categorias para selecionar (pode ser mais de uma).</p>
+        </div>
+
+        <!-- LOCAIS -->
+        <div class="field field-full">
+          <label>Locais</label>
+          <div class="chip-box">
+            <div class="chip-list" id="locChips"></div>
+            <div class="chip-add-row">
+              <input id="locAddInput" type="text" placeholder="+ Novo local (enter para adicionar)" onkeydown="if(event.key==='Enter'){event.preventDefault();addNewLoc();}"/>
+              <button class="chip-add-btn" type="button" onclick="addNewLoc()">Adicionar</button>
+            </div>
+          </div>
+          <p class="field-hint">Clique nos locais para selecionar (pode ser mais de um).</p>
+        </div>
+
+        <!-- ATENDE -->
+        <div class="field field-full">
+          <label>Atende em</label>
+          <div class="checkbox-group" id="reachGroup">
+            <label class="check-chip"><input type="checkbox" value="Local" onchange="toggleCheckChip(this)"/> Local</label>
+            <label class="check-chip"><input type="checkbox" value="Regional" onchange="toggleCheckChip(this)"/> Regional</label>
+            <label class="check-chip"><input type="checkbox" value="Nacional" onchange="toggleCheckChip(this)"/> Nacional</label>
+            <label class="check-chip"><input type="checkbox" value="Internacional" onchange="toggleCheckChip(this)"/> Internacional</label>
+          </div>
+        </div>
+
+        <div class="field"><label>Nome do Fornecedor <span class="req">*</span></label><input id="fName" placeholder="Nome da empresa ou pessoa"/></div>
         <div class="field"><label>Site / Instagram</label><input id="fSite" placeholder="https://..."/></div>
-        <div class="field"><label>Contato (tel / WhatsApp)</label><input id="fContact" placeholder="11 9xxxx-xxxx ou https://wa.me/..."/></div>
+
+        <div class="field">
+          <label>Contato (tel / WhatsApp)</label>
+          <input id="fContact" placeholder="Ex: 48 99119-8358 (vira link do WhatsApp)" oninput="previewWa()"/>
+          <p class="field-hint" id="waPreview" style="display:none"></p>
+        </div>
         <div class="field"><label>Nome do Contato</label><input id="fContactName" placeholder="Ex: Comercial, Maria..."/></div>
+
         <div class="field field-full"><label>Especialidade / Obs</label><input id="fSub" placeholder="Ex: voucher de foto, crachás..."/></div>
         <div class="field field-full">
           <label>Catálogo de Brindes (link)</label>
@@ -518,6 +805,7 @@
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
       <p class="section-title" style="margin-bottom:0">Fornecedores cadastrados</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-manage" onclick="openManage()">⚙ Gerenciar categorias e locais</button>
         <button onclick="exportCSV()" style="font-size:12px;padding:6px 14px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬇ Exportar CSV</button>
         <label style="font-size:12px;padding:6px 14px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬆ Importar Excel<input type="file" accept=".xlsx,.xls" onchange="importXLSX(event)" style="display:none"/></label>
       </div>
@@ -542,6 +830,15 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+/* ============================================================
+   FORNECEDORES PARA EVENTOS - v2
+   - Categorias e locais como catálogo (multi-seleção)
+   - Cadastros antigos migrados automaticamente
+   - Campo "Atende em" (Local / Regional / Nacional / Internacional)
+   - WhatsApp gerado automaticamente a partir do número
+   - Gerenciador de categorias/locais (renomear/excluir)
+   ============================================================ */
+
 const SEED = [
   {id:1,cat:"Gráfica",sub:"voucher de foto, ficha de palco, adesivos de mesa, apostila",loc:"Florianópolis",name:"Duplic Digital",site:"https://www.duplic.com.br/",contact:"https://wa.me/554832333434",contactName:"Comercial"},
   {id:2,cat:"Gráfica",sub:"livretos",loc:"SP",name:"Promo Press",site:"https://www.promopress.com.br/",contact:"https://wa.me/551131263126",contactName:"Felipe"},
@@ -593,63 +890,324 @@ const SEED = [
   {id:48,cat:"Banner / Gráfica",sub:"",loc:"SP",name:"Felipe (Banner)",site:"",contact:"11 939375976",contactName:"Felipe"}
 ];
 
-const KEY = 'fornecedores_v1';
-let db = [], editId = null;
+const KEY = 'fornecedores_v2';
+const OLD_KEY = 'fornecedores_v1';
+const CATS_KEY = 'fornecedores_cats_v2';
+const LOCS_KEY = 'fornecedores_locs_v2';
+
+let db = [];
+let allCats = [];
+let allLocs = [];
+let editId = null;
+let selectedCats = [];
+let selectedLocs = [];
+let selectedReach = [];
+let manageTab = 'cats';
+
+/* ---------- MIGRAÇÃO ---------- */
+// Detecta "(nacional)", "(regional)", etc dentro do campo loc dos cadastros antigos
+function splitOldLocation(rawLoc) {
+  if (!rawLoc) return { locs: [], reach: [] };
+  const reachMap = {
+    'nacional': 'Nacional',
+    'internacional': 'Internacional',
+    'regional': 'Regional',
+    'local': 'Local'
+  };
+  const reach = [];
+  let cleaned = rawLoc;
+  // Pega tudo dentro de parênteses
+  cleaned = cleaned.replace(/\(([^)]+)\)/g, (_, inside) => {
+    const parts = inside.split(/[,;\/]/).map(s => s.trim().toLowerCase());
+    parts.forEach(p => {
+      if (reachMap[p] && !reach.includes(reachMap[p])) reach.push(reachMap[p]);
+    });
+    return '';
+  }).trim();
+  // O resto é o(s) local(is) propriamente dito(s)
+  const locs = cleaned
+    ? cleaned.split(/[,;\/]/).map(s => s.trim()).filter(Boolean)
+    : [];
+  return { locs, reach };
+}
+
+function migrateEntry(x) {
+  // Já no formato novo?
+  if (Array.isArray(x.cats)) return x;
+  const cats = x.cat ? [x.cat.trim()].filter(Boolean) : [];
+  const { locs, reach } = splitOldLocation(x.loc || '');
+  return {
+    id: x.id,
+    cats,
+    locs,
+    reach,
+    name: x.name || '',
+    site: x.site || '',
+    contact: x.contact || '',
+    contactName: x.contactName || '',
+    sub: x.sub || '',
+    catalog: x.catalog || ''
+  };
+}
 
 function load() {
+  // Tenta carregar a versão nova
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) { db = JSON.parse(raw); return; }
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      db = parsed.map(migrateEntry);
+      loadCatalogs();
+      return;
+    }
   } catch(e) {}
-  db = SEED.map(x => ({...x}));
+
+  // Senão tenta migrar a versão antiga
+  try {
+    const rawOld = localStorage.getItem(OLD_KEY);
+    if (rawOld) {
+      const oldDb = JSON.parse(rawOld);
+      db = oldDb.map(migrateEntry);
+      rebuildCatalogs();
+      persist();
+      return;
+    }
+  } catch(e) {}
+
+  // Senão usa o SEED
+  db = SEED.map(migrateEntry);
+  rebuildCatalogs();
   persist();
+}
+
+function loadCatalogs() {
+  try {
+    const rawCats = localStorage.getItem(CATS_KEY);
+    const rawLocs = localStorage.getItem(LOCS_KEY);
+    if (rawCats) allCats = JSON.parse(rawCats);
+    if (rawLocs) allLocs = JSON.parse(rawLocs);
+  } catch(e) {}
+  // Garante que toda categoria/local em uso esteja no catálogo
+  rebuildCatalogs(true);
+}
+
+function rebuildCatalogs(merge) {
+  const catsFromDb = [...new Set(db.flatMap(x => x.cats || []))];
+  const locsFromDb = [...new Set(db.flatMap(x => x.locs || []))];
+  if (merge) {
+    catsFromDb.forEach(c => { if (!allCats.includes(c)) allCats.push(c); });
+    locsFromDb.forEach(l => { if (!allLocs.includes(l)) allLocs.push(l); });
+  } else {
+    allCats = catsFromDb;
+    allLocs = locsFromDb;
+  }
+  allCats.sort((a,b) => a.localeCompare(b, 'pt-BR'));
+  allLocs.sort((a,b) => a.localeCompare(b, 'pt-BR'));
+  persistCatalogs();
 }
 
 function persist() {
   try { localStorage.setItem(KEY, JSON.stringify(db)); } catch(e) {}
 }
+function persistCatalogs() {
+  try {
+    localStorage.setItem(CATS_KEY, JSON.stringify(allCats));
+    localStorage.setItem(LOCS_KEY, JSON.stringify(allLocs));
+  } catch(e) {}
+}
 
 const nextId = () => db.length ? Math.max(...db.map(x => x.id)) + 1 : 1;
-const cats = () => [...new Set(db.map(x => x.cat))].sort();
-const locs = () => [...new Set(db.map(x => x.loc).filter(Boolean))].sort();
 
+/* ---------- HELPERS ---------- */
+function isWa(s) { return s && typeof s === 'string' && s.includes('wa.me'); }
+function isUrl(s) { return s && (s.startsWith('http') || s.startsWith('www')); }
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// Converte um número de telefone brasileiro em link wa.me
+function buildWaLink(raw) {
+  if (!raw) return '';
+  const s = raw.trim();
+  // Se já é link, normaliza
+  if (s.includes('wa.me')) {
+    const m = s.match(/wa\.me\/(\+?\d+)/);
+    if (m) return 'https://wa.me/' + m[1].replace(/\D/g,'');
+    return s;
+  }
+  // Só dígitos
+  let digits = s.replace(/\D/g, '');
+  if (!digits) return '';
+  // Se começa com 0, remove
+  if (digits.startsWith('0')) digits = digits.replace(/^0+/, '');
+  // Adiciona 55 se necessário (números BR com 10 ou 11 dígitos)
+  if ((digits.length === 10 || digits.length === 11) && !digits.startsWith('55')) {
+    digits = '55' + digits;
+  }
+  return 'https://wa.me/' + digits;
+}
+
+// Mostra um telefone amigável a partir do link wa.me
+function prettyPhone(waOrTel) {
+  if (!waOrTel) return '';
+  let d = waOrTel.match(/wa\.me\/(\+?\d+)/);
+  if (d) {
+    let n = d[1].replace(/\D/g,'');
+    if (n.startsWith('55')) n = n.substring(2);
+    if (n.length === 11) return n.substring(0,2) + ' ' + n.substring(2,7) + '-' + n.substring(7);
+    if (n.length === 10) return n.substring(0,2) + ' ' + n.substring(2,6) + '-' + n.substring(6);
+    return n;
+  }
+  return waOrTel;
+}
+
+/* ---------- CHIPS PICKER ---------- */
+function renderChips(target, items, selected, onClick) {
+  const el = document.getElementById(target);
+  if (!items.length) {
+    el.innerHTML = '<span class="chip-empty">Nenhum item ainda. Adicione abaixo.</span>';
+    return;
+  }
+  el.innerHTML = items.map(name => {
+    const sel = selected.includes(name) ? ' selected' : '';
+    return `<span class="chip${sel}" onclick="${onClick}('${name.replace(/'/g, "\\'")}')">${escapeHtml(name)}</span>`;
+  }).join('');
+}
+
+function renderCatChips() {
+  renderChips('catChips', allCats, selectedCats, 'toggleCat');
+}
+function renderLocChips() {
+  renderChips('locChips', allLocs, selectedLocs, 'toggleLoc');
+}
+
+function toggleCat(name) {
+  const i = selectedCats.indexOf(name);
+  if (i > -1) selectedCats.splice(i, 1);
+  else selectedCats.push(name);
+  renderCatChips();
+}
+function toggleLoc(name) {
+  const i = selectedLocs.indexOf(name);
+  if (i > -1) selectedLocs.splice(i, 1);
+  else selectedLocs.push(name);
+  renderLocChips();
+}
+
+function addNewCat() {
+  const inp = document.getElementById('catAddInput');
+  const v = inp.value.trim();
+  if (!v) return;
+  // Evita duplicata case-insensitive
+  const exists = allCats.find(c => c.toLowerCase() === v.toLowerCase());
+  if (exists) {
+    if (!selectedCats.includes(exists)) selectedCats.push(exists);
+  } else {
+    allCats.push(v);
+    allCats.sort((a,b) => a.localeCompare(b, 'pt-BR'));
+    if (!selectedCats.includes(v)) selectedCats.push(v);
+    persistCatalogs();
+  }
+  inp.value = '';
+  renderCatChips();
+}
+
+function addNewLoc() {
+  const inp = document.getElementById('locAddInput');
+  const v = inp.value.trim();
+  if (!v) return;
+  const exists = allLocs.find(l => l.toLowerCase() === v.toLowerCase());
+  if (exists) {
+    if (!selectedLocs.includes(exists)) selectedLocs.push(exists);
+  } else {
+    allLocs.push(v);
+    allLocs.sort((a,b) => a.localeCompare(b, 'pt-BR'));
+    if (!selectedLocs.includes(v)) selectedLocs.push(v);
+    persistCatalogs();
+  }
+  inp.value = '';
+  renderLocChips();
+}
+
+/* ---------- CHECK CHIPS (abrangência) ---------- */
+function toggleCheckChip(input) {
+  const label = input.closest('.check-chip');
+  if (input.checked) {
+    label.classList.add('checked');
+    if (!selectedReach.includes(input.value)) selectedReach.push(input.value);
+  } else {
+    label.classList.remove('checked');
+    selectedReach = selectedReach.filter(v => v !== input.value);
+  }
+}
+
+function setReachUI(values) {
+  selectedReach = [...values];
+  document.querySelectorAll('#reachGroup input').forEach(inp => {
+    const on = values.includes(inp.value);
+    inp.checked = on;
+    inp.closest('.check-chip').classList.toggle('checked', on);
+  });
+}
+
+/* ---------- WHATSAPP PREVIEW ---------- */
+function previewWa() {
+  const raw = document.getElementById('fContact').value.trim();
+  const el = document.getElementById('waPreview');
+  if (!raw) { el.style.display = 'none'; return; }
+  const link = buildWaLink(raw);
+  if (link && link.includes('wa.me')) {
+    el.style.display = 'block';
+    el.innerHTML = `💬 Será salvo como: <a href="${link}" target="_blank" style="color:var(--success-text)">${link}</a>`;
+  } else {
+    el.style.display = 'none';
+  }
+}
+
+/* ---------- POPULATE FILTERS ---------- */
 function populate() {
-  // Catálogo público
   const cs = document.getElementById('catFilter');
   const ls = document.getElementById('locFilter');
   const cv = cs.value, lv = ls.value;
   cs.innerHTML = '<option value="">Todas as categorias</option>' +
-    cats().map(c => `<option value="${c}"${c===cv?' selected':''}>${c}</option>`).join('');
+    allCats.map(c => `<option value="${escapeHtml(c)}"${c===cv?' selected':''}>${escapeHtml(c)}</option>`).join('');
   ls.innerHTML = '<option value="">Todos os locais</option>' +
-    locs().map(l => `<option value="${l}"${l===lv?' selected':''}>${l}</option>`).join('');
+    allLocs.map(l => `<option value="${escapeHtml(l)}"${l===lv?' selected':''}>${escapeHtml(l)}</option>`).join('');
 
-  // Admin
   const acs = document.getElementById('adminCatFilter');
   const als = document.getElementById('adminLocFilter');
   if (acs && als) {
     const acv = acs.value, alv = als.value;
     acs.innerHTML = '<option value="">Todas as categorias</option>' +
-      cats().map(c => `<option value="${c}"${c===acv?' selected':''}>${c}</option>`).join('');
+      allCats.map(c => `<option value="${escapeHtml(c)}"${c===acv?' selected':''}>${escapeHtml(c)}</option>`).join('');
     als.innerHTML = '<option value="">Todos os locais</option>' +
-      locs().map(l => `<option value="${l}"${l===alv?' selected':''}>${l}</option>`).join('');
+      allLocs.map(l => `<option value="${escapeHtml(l)}"${l===alv?' selected':''}>${escapeHtml(l)}</option>`).join('');
   }
 }
 
-function isWa(s) { return s && s.includes('wa.me'); }
-function isUrl(s) { return s && (s.startsWith('http') || s.startsWith('www')); }
-function escapeHtml(s) {
-  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ---------- RENDER CATÁLOGO PÚBLICO ---------- */
+function entryMatchesSearch(x, q) {
+  if (!q) return true;
+  const blob = [
+    ...(x.cats || []),
+    ...(x.locs || []),
+    ...(x.reach || []),
+    x.name, x.sub, x.contactName
+  ].join(' ').toLowerCase();
+  return blob.includes(q);
 }
 
 function renderList() {
   const q = (document.getElementById('search').value || '').toLowerCase();
   const cf = document.getElementById('catFilter').value;
   const lf = document.getElementById('locFilter').value;
+  const rf = document.getElementById('reachFilter').value;
 
   let items = db.filter(x => {
-    if (cf && x.cat !== cf) return false;
-    if (lf && x.loc !== lf) return false;
-    if (q && ![x.cat, x.name, x.loc, x.sub, x.contactName].join(' ').toLowerCase().includes(q)) return false;
+    if (cf && !(x.cats || []).includes(cf)) return false;
+    if (lf && !(x.locs || []).includes(lf)) return false;
+    if (rf && !(x.reach || []).includes(rf)) return false;
+    if (!entryMatchesSearch(x, q)) return false;
     return true;
   });
 
@@ -669,36 +1227,45 @@ function renderList() {
   empty.style.display = 'none';
 
   list.innerHTML = items.map(x => {
-    const waBtn = isWa(x.contact)
-      ? `<a href="${escapeHtml(x.contact)}" target="_blank" class="btn-wa">&#128222; WhatsApp${x.contactName ? ' · ' + escapeHtml(x.contactName) : ''}</a>` : '';
-    const telBtn = (!isWa(x.contact) && x.contact)
-      ? `<span class="btn-tel">&#128222; ${escapeHtml(x.contact)}${x.contactName ? ' · ' + escapeHtml(x.contactName) : ''}</span>` : '';
+    const waLink = isWa(x.contact) ? x.contact : (x.contact ? buildWaLink(x.contact) : '');
+    const waBtn = waLink
+      ? `<a href="${escapeHtml(waLink)}" target="_blank" class="btn-wa">📞 WhatsApp${x.contactName ? ' · ' + escapeHtml(x.contactName) : ''}</a>` : '';
     const siteBtn = isUrl(x.site)
-      ? `<a href="${escapeHtml(x.site)}" target="_blank" class="btn-site">&#127760; Site/IG</a>` : '';
+      ? `<a href="${escapeHtml(x.site)}" target="_blank" class="btn-site">🌐 Site/IG</a>` : '';
     const catalogBtn = isUrl(x.catalog)
-      ? `<a href="${escapeHtml(x.catalog)}" target="_blank" class="btn-catalog">&#128196; Catálogo</a>` : '';
+      ? `<a href="${escapeHtml(x.catalog)}" target="_blank" class="btn-catalog">📄 Catálogo</a>` : '';
+
+    const locTags = (x.locs || []).map(l => `<span class="tag">${escapeHtml(l)}</span>`).join('');
+    const reachTags = (x.reach || []).map(r => `<span class="tag tag-reach">${escapeHtml(r)}</span>`).join('');
+    const catTags = (x.cats || []).map(c => `<span class="tag tag-cat">${escapeHtml(c)}</span>`).join('');
+
     return `<div class="card">
       <div class="card-body">
         <div class="card-top">
           <span class="card-name">${escapeHtml(x.name)}</span>
-          ${x.loc ? `<span class="tag">${escapeHtml(x.loc)}</span>` : ''}
+          ${locTags}
+          ${reachTags}
         </div>
-        <p class="card-cat">${escapeHtml(x.cat)}${x.sub ? ' · ' + escapeHtml(x.sub) : ''}</p>
-        <div class="card-actions">${waBtn}${telBtn}${siteBtn}${catalogBtn}</div>
+        <div class="card-cat">
+          ${catTags}
+          ${x.sub ? `<span style="margin-left:4px">· ${escapeHtml(x.sub)}</span>` : ''}
+        </div>
+        <div class="card-actions">${waBtn}${siteBtn}${catalogBtn}</div>
       </div>
     </div>`;
   }).join('');
 }
 
+/* ---------- RENDER ADMIN ---------- */
 function renderAdminList() {
   const q = (document.getElementById('adminSearch').value || '').toLowerCase();
   const cf = document.getElementById('adminCatFilter').value;
   const lf = document.getElementById('adminLocFilter').value;
 
   let items = db.filter(x => {
-    if (cf && x.cat !== cf) return false;
-    if (lf && x.loc !== lf) return false;
-    if (q && ![x.cat, x.name, x.loc, x.sub, x.contactName, x.contact, x.site].join(' ').toLowerCase().includes(q)) return false;
+    if (cf && !(x.cats || []).includes(cf)) return false;
+    if (lf && !(x.locs || []).includes(lf)) return false;
+    if (!entryMatchesSearch(x, q)) return false;
     return true;
   });
 
@@ -712,33 +1279,40 @@ function renderAdminList() {
 
   document.getElementById('adminList').innerHTML = items.map(x => {
     const spec = (label, value, isLink) => {
-      if (!value) return `<div><span class="spec-label">${label}:</span><span class="spec-empty">—</span></div>`;
-      if (isLink && isUrl(value)) {
-        return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">${escapeHtml(value)}</a></div>`;
+      if (!value || (Array.isArray(value) && !value.length)) {
+        return `<div><span class="spec-label">${label}:</span><span class="spec-empty">—</span></div>`;
       }
-      if (isLink && isWa(value)) {
-        return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">WhatsApp</a></div>`;
+      if (Array.isArray(value)) {
+        return `<div><span class="spec-label">${label}:</span><span class="spec-value">${value.map(escapeHtml).join(', ')}</span></div>`;
+      }
+      if (isLink && (isUrl(value) || isWa(value))) {
+        const text = isWa(value) ? 'WhatsApp · ' + prettyPhone(value) : value;
+        return `<div><span class="spec-label">${label}:</span><a class="spec-value" href="${escapeHtml(value)}" target="_blank">${escapeHtml(text)}</a></div>`;
       }
       return `<div><span class="spec-label">${label}:</span><span class="spec-value">${escapeHtml(value)}</span></div>`;
     };
 
     const catalogLine = isUrl(x.catalog)
-      ? `<div class="admin-row-catalog">&#128196; Catálogo de brindes: <a href="${escapeHtml(x.catalog)}" target="_blank">Abrir link &rarr;</a></div>`
-      : `<div class="admin-row-catalog" style="color:var(--muted)">&#128196; Sem catálogo de brindes.</div>`;
+      ? `<div class="admin-row-catalog">📄 Catálogo de brindes: <a href="${escapeHtml(x.catalog)}" target="_blank">Abrir link →</a></div>`
+      : `<div class="admin-row-catalog" style="color:var(--muted)">📄 Sem catálogo de brindes.</div>`;
+
+    const catTags = (x.cats || []).map(c => `<span class="tag tag-cat">${escapeHtml(c)}</span>`).join('');
+    const locTags = (x.locs || []).map(l => `<span class="tag">${escapeHtml(l)}</span>`).join('');
+    const reachTags = (x.reach || []).map(r => `<span class="tag tag-reach">${escapeHtml(r)}</span>`).join('');
 
     return `<div class="admin-row">
       <div class="admin-row-header">
         <span class="admin-row-name">${escapeHtml(x.name)}</span>
-        ${x.cat ? `<span class="tag">${escapeHtml(x.cat)}</span>` : ''}
-        ${x.loc ? `<span class="tag">${escapeHtml(x.loc)}</span>` : ''}
+        ${catTags}
+        ${locTags}
+        ${reachTags}
         <div class="admin-row-buttons">
           <button class="btn-edit" onclick="editEntry(${x.id})">Editar</button>
           <button class="btn-del" onclick="deleteEntry(${x.id})">Excluir</button>
         </div>
       </div>
       <div class="admin-row-specs">
-        ${spec('Tipo / Especialidade', x.sub)}
-        ${spec('Local', x.loc)}
+        ${spec('Especialidade', x.sub)}
         ${spec('Contato', x.contact, true)}
         ${spec('Nome do contato', x.contactName)}
         ${spec('Site / Instagram', x.site, true)}
@@ -748,21 +1322,29 @@ function renderAdminList() {
   }).join('');
 }
 
+/* ---------- MODE ---------- */
 function setMode(m) {
   document.getElementById('view-mode').style.display = m === 'view' ? 'block' : 'none';
   document.getElementById('admin-mode').style.display = m === 'admin' ? 'block' : 'none';
   document.getElementById('btnView').classList.toggle('active', m === 'view');
   document.getElementById('btnAdmin').classList.toggle('active', m === 'admin');
-  if (m === 'admin') { populate(); renderAdminList(); }
+  if (m === 'admin') {
+    populate();
+    renderAdminList();
+    renderCatChips();
+    renderLocChips();
+  }
 }
 
+/* ---------- FORM ---------- */
 function getForm() {
   return {
-    cat: document.getElementById('fCat').value.trim(),
-    loc: document.getElementById('fLoc').value.trim(),
+    cats: [...selectedCats],
+    locs: [...selectedLocs],
+    reach: [...selectedReach],
     name: document.getElementById('fName').value.trim(),
     site: document.getElementById('fSite').value.trim(),
-    contact: document.getElementById('fContact').value.trim(),
+    contact: buildWaLink(document.getElementById('fContact').value.trim()) || document.getElementById('fContact').value.trim(),
     contactName: document.getElementById('fContactName').value.trim(),
     sub: document.getElementById('fSub').value.trim(),
     catalog: document.getElementById('fCatalog').value.trim()
@@ -770,16 +1352,25 @@ function getForm() {
 }
 
 function clearForm() {
-  ['fCat','fLoc','fName','fSite','fContact','fContactName','fSub','fCatalog'].forEach(id => document.getElementById(id).value = '');
+  ['fName','fSite','fContact','fContactName','fSub','fCatalog','catAddInput','locAddInput'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  selectedCats = [];
+  selectedLocs = [];
+  setReachUI([]);
   editId = null;
   document.getElementById('formTitle').textContent = 'Novo Fornecedor';
   document.getElementById('saveBtn').textContent = 'Salvar Fornecedor';
   document.getElementById('cancelBtn').style.display = 'none';
+  document.getElementById('waPreview').style.display = 'none';
+  renderCatChips();
+  renderLocChips();
 }
 
 function saveEntry() {
   const f = getForm();
-  if (!f.cat || !f.name) { showMsg('Preencha ao menos categoria e nome.', true); return; }
+  if (!f.cats.length || !f.name) { showMsg('Preencha ao menos uma categoria e o nome.', true); return; }
   if (f.catalog && !isUrl(f.catalog)) {
     showMsg('O link do catálogo precisa começar com http:// ou https://', true);
     return;
@@ -802,14 +1393,18 @@ function editEntry(id) {
   const x = db.find(e => e.id === id);
   if (!x) return;
   editId = id;
-  document.getElementById('fCat').value = x.cat || '';
-  document.getElementById('fLoc').value = x.loc || '';
+  selectedCats = [...(x.cats || [])];
+  selectedLocs = [...(x.locs || [])];
+  setReachUI(x.reach || []);
   document.getElementById('fName').value = x.name || '';
   document.getElementById('fSite').value = x.site || '';
-  document.getElementById('fContact').value = x.contact || '';
+  document.getElementById('fContact').value = isWa(x.contact) ? prettyPhone(x.contact) : (x.contact || '');
   document.getElementById('fContactName').value = x.contactName || '';
   document.getElementById('fSub').value = x.sub || '';
   document.getElementById('fCatalog').value = x.catalog || '';
+  renderCatChips();
+  renderLocChips();
+  previewWa();
   document.getElementById('formTitle').textContent = 'Editar Fornecedor';
   document.getElementById('saveBtn').textContent = 'Atualizar';
   document.getElementById('cancelBtn').style.display = 'inline';
@@ -837,7 +1432,109 @@ function showMsg(m, err) {
   setTimeout(() => el.style.display = 'none', 3000);
 }
 
-// ---- SENHA ADMIN ---- //
+/* ---------- GERENCIAR CATEGORIAS/LOCAIS ---------- */
+function openManage() {
+  document.getElementById('manage-overlay').classList.add('visible');
+  switchManageTab('cats');
+}
+function closeManage() {
+  document.getElementById('manage-overlay').classList.remove('visible');
+}
+function switchManageTab(tab) {
+  manageTab = tab;
+  document.getElementById('tabCats').classList.toggle('active', tab === 'cats');
+  document.getElementById('tabLocs').classList.toggle('active', tab === 'locs');
+  renderManageList();
+}
+
+function renderManageList() {
+  const items = manageTab === 'cats' ? allCats : allLocs;
+  const list = document.getElementById('manageList');
+  if (!items.length) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:1rem;text-align:center">Nada cadastrado ainda.</p>';
+    return;
+  }
+  list.innerHTML = items.map(name => {
+    const count = manageTab === 'cats'
+      ? db.filter(x => (x.cats || []).includes(name)).length
+      : db.filter(x => (x.locs || []).includes(name)).length;
+    return `<div class="manage-row">
+      <span class="manage-row-name">${escapeHtml(name)}</span>
+      <span class="manage-row-count">${count} ${count === 1 ? 'fornecedor' : 'fornecedores'}</span>
+      <button class="manage-row-btn rename" onclick="renameItem('${name.replace(/'/g, "\\'")}')">Renomear</button>
+      <button class="manage-row-btn del" onclick="deleteItem('${name.replace(/'/g, "\\'")}')">Excluir</button>
+    </div>`;
+  }).join('');
+}
+
+function renameItem(oldName) {
+  const newName = prompt(`Renomear "${oldName}" para:`, oldName);
+  if (!newName || newName.trim() === '' || newName.trim() === oldName) return;
+  const trimmed = newName.trim();
+  const list = manageTab === 'cats' ? allCats : allLocs;
+  const field = manageTab === 'cats' ? 'cats' : 'locs';
+
+  // Já existe outro com esse nome? Faz merge.
+  const existing = list.find(n => n.toLowerCase() === trimmed.toLowerCase() && n !== oldName);
+  const finalName = existing || trimmed;
+
+  // Atualiza no catálogo
+  const idx = list.indexOf(oldName);
+  if (idx > -1) {
+    if (existing) {
+      list.splice(idx, 1); // remove o antigo, manter o existente
+    } else {
+      list[idx] = trimmed;
+    }
+  }
+  list.sort((a,b) => a.localeCompare(b, 'pt-BR'));
+
+  // Atualiza em todos os fornecedores
+  db.forEach(x => {
+    if (x[field] && x[field].includes(oldName)) {
+      x[field] = x[field].filter(v => v !== oldName);
+      if (!x[field].includes(finalName)) x[field].push(finalName);
+    }
+  });
+
+  persist();
+  persistCatalogs();
+  populate();
+  renderAdminList();
+  renderList();
+  renderCatChips();
+  renderLocChips();
+  renderManageList();
+}
+
+function deleteItem(name) {
+  const tabName = manageTab === 'cats' ? 'categoria' : 'local';
+  const field = manageTab === 'cats' ? 'cats' : 'locs';
+  const count = db.filter(x => (x[field] || []).includes(name)).length;
+  const msg = count
+    ? `Excluir a ${tabName} "${name}"?\n\nEla será removida de ${count} fornecedor(es), mas os fornecedores em si não serão apagados.`
+    : `Excluir a ${tabName} "${name}"?`;
+  if (!confirm(msg)) return;
+
+  const list = manageTab === 'cats' ? allCats : allLocs;
+  const idx = list.indexOf(name);
+  if (idx > -1) list.splice(idx, 1);
+
+  db.forEach(x => {
+    if (x[field]) x[field] = x[field].filter(v => v !== name);
+  });
+
+  persist();
+  persistCatalogs();
+  populate();
+  renderAdminList();
+  renderList();
+  renderCatChips();
+  renderLocChips();
+  renderManageList();
+}
+
+/* ---------- SENHA ADMIN ---------- */
 const ADMIN_PASSWORD = 'eventos2024';
 const SESSION_KEY = 'admin_auth';
 
@@ -870,11 +1567,16 @@ function closeLogin() {
   document.getElementById('login-overlay').classList.remove('visible');
 }
 
-// ---- EXPORTAR / IMPORTAR ---- //
+/* ---------- EXPORTAR / IMPORTAR ---------- */
 function exportCSV() {
-  const headers = ['Categoria','Especialidade','Local','Fornecedor','Site/Instagram','Contato','Nome do Contato','Link Catálogo'];
-  const rows = db.map(x => [x.cat, x.sub, x.loc, x.name, x.site, x.contact, x.contactName, x.catalog]
-    .map(v => `"${(v||'').replace(/"/g,'""')}"`).join(','));
+  const headers = ['Categorias','Especialidade','Locais','Atende','Fornecedor','Site/Instagram','Contato','Nome do Contato','Link Catálogo'];
+  const rows = db.map(x => {
+    const cats = (x.cats || []).join(' | ');
+    const locs = (x.locs || []).join(' | ');
+    const reach = (x.reach || []).join(' | ');
+    return [cats, x.sub, locs, reach, x.name, x.site, x.contact, x.contactName, x.catalog]
+      .map(v => `"${(v||'').replace(/"/g,'""')}"`).join(',');
+  });
   const csv = [headers.join(','), ...rows].join('\n');
   const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
@@ -883,6 +1585,11 @@ function exportCSV() {
   a.download = 'fornecedores-eventos.csv';
   a.click();
   URL.revokeObjectURL(url);
+}
+
+function splitMulti(val) {
+  if (!val) return [];
+  return String(val).split(/[|;]/).map(s => s.trim()).filter(Boolean);
 }
 
 function importXLSX(event) {
@@ -911,19 +1618,34 @@ function importXLSX(event) {
         return '';
       };
 
-      const newEntries = rows.map((row, i) => ({
-        id: (action ? nextId() + i : i + 1),
-        cat:         map(row, ['categoria', 'cat']),
-        sub:         map(row, ['especialidade', 'obs', 'sub', 'especial']),
-        loc:         map(row, ['local', 'loc', 'cidade']),
-        name:        map(row, ['fornecedor', 'nome', 'name', 'empresa']),
-        site:        map(row, ['site', 'instagram', 'ig', 'url', 'link']),
-        contact:     map(row, ['contato', 'tel', 'whatsapp', 'telefone', 'contact']),
-        contactName: map(row, ['nome do contato', 'responsável', 'atendente', 'contactname']),
-        catalog:     map(row, ['catálogo', 'catalogo', 'drive', 'link catálogo', 'link catalogo']),
-      })).filter(x => x.name || x.cat);
+      const newEntries = rows.map((row, i) => {
+        const catsRaw = map(row, ['categorias', 'categoria', 'cat']);
+        const locsRaw = map(row, ['locais', 'local', 'loc', 'cidade']);
+        const reachRaw = map(row, ['atende', 'abrangência', 'abrangencia']);
+        const contactRaw = map(row, ['contato', 'tel', 'whatsapp', 'telefone', 'contact']);
+        // Se o contato for um número/telefone, converte pra link
+        const contact = contactRaw.includes('wa.me') || !contactRaw
+          ? contactRaw
+          : (contactRaw.replace(/\D/g,'').length >= 8 ? buildWaLink(contactRaw) : contactRaw);
 
-      if (!newEntries.length) { alert('Nenhum fornecedor válido encontrado. Verifique se a planilha tem colunas como "Fornecedor" e "Categoria".'); return; }
+        return {
+          id: i + 1,
+          cats:        splitMulti(catsRaw),
+          locs:        splitMulti(locsRaw),
+          reach:       splitMulti(reachRaw).filter(r => ['Local','Regional','Nacional','Internacional'].includes(r)),
+          sub:         map(row, ['especialidade', 'obs', 'sub', 'especial']),
+          name:        map(row, ['fornecedor', 'nome', 'name', 'empresa']),
+          site:        map(row, ['site', 'instagram', 'ig', 'url', 'link site']),
+          contact,
+          contactName: map(row, ['nome do contato', 'responsável', 'atendente', 'contactname']),
+          catalog:     map(row, ['catálogo', 'catalogo', 'drive', 'link catálogo', 'link catalogo']),
+        };
+      }).filter(x => x.name || x.cats.length);
+
+      if (!newEntries.length) {
+        alert('Nenhum fornecedor válido encontrado. Verifique se a planilha tem colunas como "Fornecedor" e "Categorias".');
+        return;
+      }
 
       if (action) {
         const maxId = db.length ? Math.max(...db.map(x => x.id)) : 0;
@@ -933,10 +1655,13 @@ function importXLSX(event) {
         db = newEntries;
       }
 
+      rebuildCatalogs(true);
       persist();
       populate();
       renderAdminList();
       renderList();
+      renderCatChips();
+      renderLocChips();
       alert(`✅ ${newEntries.length} fornecedores ${action ? 'adicionados' : 'importados'} com sucesso!`);
     } catch(err) {
       alert('Erro ao ler o arquivo. Certifique-se de enviar um arquivo .xlsx ou .xls válido.\n\n' + err.message);
@@ -946,6 +1671,7 @@ function importXLSX(event) {
   reader.readAsArrayBuffer(file);
 }
 
+/* ---------- INIT ---------- */
 load();
 populate();
 renderList();
