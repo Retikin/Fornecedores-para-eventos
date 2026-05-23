@@ -156,6 +156,18 @@
     }
 
     .card-cat { font-size: 12px; color: var(--muted); margin-bottom: 9px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+    .card-notes {
+      font-size: 11px;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 9px;
+      padding: 5px 8px;
+      background: #fcfaf3;
+      border-left: 2px solid var(--accent);
+      border-radius: 3px;
+    }
+    .spec-inline { color: var(--text); }
+    .notes-inline { color: var(--muted); }
     .card-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 
     .btn-wa {
@@ -239,6 +251,21 @@
       transition: border 0.15s;
     }
     .field input:focus { border-color: var(--brand-mid); background: white; }
+    .field textarea {
+      width: 100%;
+      font-size: 13px;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      color: var(--text);
+      outline: none;
+      transition: border 0.15s;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 70px;
+    }
+    .field textarea:focus { border-color: var(--brand-mid); background: white; }
     .field-full { grid-column: 1 / -1; }
 
     .field-hint {
@@ -694,14 +721,15 @@
   </div>
 </div>
 
-<!-- MANAGE CATEGORIES / LOCATIONS OVERLAY -->
+<!-- MANAGE CATEGORIES / LOCATIONS / SPECS OVERLAY -->
 <div id="manage-overlay">
   <div class="manage-box">
-    <h2>Gerenciar Categorias e Locais</h2>
+    <h2>Gerenciar Categorias, Locais e Especialidades</h2>
     <p class="manage-sub">Renomeie ou exclua. As alterações são aplicadas a todos os fornecedores.</p>
     <div class="manage-tabs">
       <button class="manage-tab active" id="tabCats" onclick="switchManageTab('cats')">Categorias</button>
       <button class="manage-tab" id="tabLocs" onclick="switchManageTab('locs')">Locais</button>
+      <button class="manage-tab" id="tabSpecs" onclick="switchManageTab('specs')">Especialidades</button>
     </div>
     <div class="manage-list" id="manageList"></div>
     <div class="manage-actions">
@@ -788,7 +816,25 @@
         </div>
         <div class="field"><label>Nome do Contato</label><input id="fContactName" placeholder="Ex: Comercial, Maria..."/></div>
 
-        <div class="field field-full"><label>Especialidade / Obs</label><input id="fSub" placeholder="Ex: voucher de foto, crachás..."/></div>
+        <!-- ESPECIALIDADES -->
+        <div class="field field-full">
+          <label>Especialidades</label>
+          <div class="chip-box">
+            <div class="chip-list" id="specChips"></div>
+            <div class="chip-add-row">
+              <input id="specAddInput" type="text" placeholder="+ Nova especialidade (enter para adicionar)" onkeydown="if(event.key==='Enter'){event.preventDefault();addNewSpec();}"/>
+              <button class="chip-add-btn" type="button" onclick="addNewSpec()">Adicionar</button>
+            </div>
+          </div>
+          <p class="field-hint">Ex: crachás, moletom, backdrop, voucher de foto... (clique pra selecionar várias).</p>
+        </div>
+
+        <!-- OBSERVAÇÕES -->
+        <div class="field field-full">
+          <label>Observações</label>
+          <textarea id="fNotes" placeholder="Anotações livres: indicações, atendimento, prazos, lembretes..."></textarea>
+          <p class="field-hint">Campo livre pra anotações que não cabem em uma tag.</p>
+        </div>
         <div class="field field-full">
           <label>Catálogo de Brindes (link)</label>
           <input id="fCatalog" type="url" placeholder="https://..."/>
@@ -805,7 +851,7 @@
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
       <p class="section-title" style="margin-bottom:0">Fornecedores cadastrados</p>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn-manage" onclick="openManage()">⚙ Gerenciar categorias e locais</button>
+        <button class="btn-manage" onclick="openManage()">⚙ Gerenciar categorias, locais e especialidades</button>
         <button onclick="exportCSV()" style="font-size:12px;padding:6px 14px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬇ Exportar CSV</button>
         <label style="font-size:12px;padding:6px 14px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);border-radius:var(--radius-sm);cursor:pointer;font-weight:500">⬆ Importar Excel<input type="file" accept=".xlsx,.xls" onchange="importXLSX(event)" style="display:none"/></label>
       </div>
@@ -894,13 +940,16 @@ const KEY = 'fornecedores_v2';
 const OLD_KEY = 'fornecedores_v1';
 const CATS_KEY = 'fornecedores_cats_v2';
 const LOCS_KEY = 'fornecedores_locs_v2';
+const SPECS_KEY = 'fornecedores_specs_v2';
 
 let db = [];
 let allCats = [];
 let allLocs = [];
+let allSpecs = [];
 let editId = null;
 let selectedCats = [];
 let selectedLocs = [];
+let selectedSpecs = [];
 let selectedReach = [];
 let manageTab = 'cats';
 
@@ -931,21 +980,57 @@ function splitOldLocation(rawLoc) {
   return { locs, reach };
 }
 
+// Decide se uma string parece uma lista de tags (curta, vírgulas) ou uma observação livre
+function splitSubField(rawSub) {
+  if (!rawSub) return { specs: [], notes: '' };
+  const s = rawSub.trim();
+
+  // Se contém palavras-indicadoras de observação, vai inteiro pra notes
+  const noteIndicators = /\bindica[cç][aã]o\b|\bcontato\b|\bobserva[cç][aã]o\b|\batende\b|\brecome[nm]da/i;
+  if (noteIndicators.test(s)) return { specs: [], notes: s };
+
+  // Se não tem vírgula e tem mais de 4 palavras, parece frase: vai pra notes
+  if (!s.includes(',') && s.split(/\s+/).length > 4) return { specs: [], notes: s };
+
+  // Tenta quebrar por vírgula ou ponto-e-vírgula
+  if (s.includes(',') || s.includes(';')) {
+    const parts = s.split(/[,;]/).map(p => p.trim()).filter(Boolean);
+    // Se algum pedaço é uma frase grande (>5 palavras), trata tudo como nota
+    if (parts.some(p => p.split(/\s+/).length > 5)) return { specs: [], notes: s };
+    return { specs: parts, notes: '' };
+  }
+
+  // Caso geral: vira uma tag única
+  return { specs: [s], notes: '' };
+}
+
 function migrateEntry(x) {
-  // Já no formato novo?
-  if (Array.isArray(x.cats)) return x;
+  // v3 final: já tem cats E specs como arrays
+  if (Array.isArray(x.cats) && Array.isArray(x.specs)) {
+    return x;
+  }
+  // v2 intermediária: tem cats array mas ainda usa "sub" (string única)
+  if (Array.isArray(x.cats)) {
+    const { specs, notes } = splitSubField(x.sub || '');
+    const result = { ...x, specs, notes };
+    delete result.sub;
+    return result;
+  }
+  // v1 (formato original): cat singular, sub string, loc string
   const cats = x.cat ? [x.cat.trim()].filter(Boolean) : [];
   const { locs, reach } = splitOldLocation(x.loc || '');
+  const { specs, notes } = splitSubField(x.sub || '');
   return {
     id: x.id,
     cats,
     locs,
     reach,
+    specs,
+    notes,
     name: x.name || '',
     site: x.site || '',
     contact: x.contact || '',
     contactName: x.contactName || '',
-    sub: x.sub || '',
     catalog: x.catalog || ''
   };
 }
@@ -984,25 +1069,30 @@ function loadCatalogs() {
   try {
     const rawCats = localStorage.getItem(CATS_KEY);
     const rawLocs = localStorage.getItem(LOCS_KEY);
+    const rawSpecs = localStorage.getItem(SPECS_KEY);
     if (rawCats) allCats = JSON.parse(rawCats);
     if (rawLocs) allLocs = JSON.parse(rawLocs);
+    if (rawSpecs) allSpecs = JSON.parse(rawSpecs);
   } catch(e) {}
-  // Garante que toda categoria/local em uso esteja no catálogo
   rebuildCatalogs(true);
 }
 
 function rebuildCatalogs(merge) {
   const catsFromDb = [...new Set(db.flatMap(x => x.cats || []))];
   const locsFromDb = [...new Set(db.flatMap(x => x.locs || []))];
+  const specsFromDb = [...new Set(db.flatMap(x => x.specs || []))];
   if (merge) {
     catsFromDb.forEach(c => { if (!allCats.includes(c)) allCats.push(c); });
     locsFromDb.forEach(l => { if (!allLocs.includes(l)) allLocs.push(l); });
+    specsFromDb.forEach(s => { if (!allSpecs.includes(s)) allSpecs.push(s); });
   } else {
     allCats = catsFromDb;
     allLocs = locsFromDb;
+    allSpecs = specsFromDb;
   }
   allCats.sort((a,b) => a.localeCompare(b, 'pt-BR'));
   allLocs.sort((a,b) => a.localeCompare(b, 'pt-BR'));
+  allSpecs.sort((a,b) => a.localeCompare(b, 'pt-BR'));
   persistCatalogs();
 }
 
@@ -1013,6 +1103,7 @@ function persistCatalogs() {
   try {
     localStorage.setItem(CATS_KEY, JSON.stringify(allCats));
     localStorage.setItem(LOCS_KEY, JSON.stringify(allLocs));
+    localStorage.setItem(SPECS_KEY, JSON.stringify(allSpecs));
   } catch(e) {}
 }
 
@@ -1080,6 +1171,9 @@ function renderCatChips() {
 function renderLocChips() {
   renderChips('locChips', allLocs, selectedLocs, 'toggleLoc');
 }
+function renderSpecChips() {
+  renderChips('specChips', allSpecs, selectedSpecs, 'toggleSpec');
+}
 
 function toggleCat(name) {
   const i = selectedCats.indexOf(name);
@@ -1092,6 +1186,12 @@ function toggleLoc(name) {
   if (i > -1) selectedLocs.splice(i, 1);
   else selectedLocs.push(name);
   renderLocChips();
+}
+function toggleSpec(name) {
+  const i = selectedSpecs.indexOf(name);
+  if (i > -1) selectedSpecs.splice(i, 1);
+  else selectedSpecs.push(name);
+  renderSpecChips();
 }
 
 function addNewCat() {
@@ -1127,6 +1227,23 @@ function addNewLoc() {
   }
   inp.value = '';
   renderLocChips();
+}
+
+function addNewSpec() {
+  const inp = document.getElementById('specAddInput');
+  const v = inp.value.trim();
+  if (!v) return;
+  const exists = allSpecs.find(s => s.toLowerCase() === v.toLowerCase());
+  if (exists) {
+    if (!selectedSpecs.includes(exists)) selectedSpecs.push(exists);
+  } else {
+    allSpecs.push(v);
+    allSpecs.sort((a,b) => a.localeCompare(b, 'pt-BR'));
+    if (!selectedSpecs.includes(v)) selectedSpecs.push(v);
+    persistCatalogs();
+  }
+  inp.value = '';
+  renderSpecChips();
 }
 
 /* ---------- CHECK CHIPS (abrangência) ---------- */
@@ -1192,7 +1309,8 @@ function entryMatchesSearch(x, q) {
     ...(x.cats || []),
     ...(x.locs || []),
     ...(x.reach || []),
-    x.name, x.sub, x.contactName
+    ...(x.specs || []),
+    x.name, x.notes, x.contactName
   ].join(' ').toLowerCase();
   return blob.includes(q);
 }
@@ -1238,6 +1356,12 @@ function renderList() {
     const locTags = (x.locs || []).map(l => `<span class="tag">${escapeHtml(l)}</span>`).join('');
     const reachTags = (x.reach || []).map(r => `<span class="tag tag-reach">${escapeHtml(r)}</span>`).join('');
     const catTags = (x.cats || []).map(c => `<span class="tag tag-cat">${escapeHtml(c)}</span>`).join('');
+    const specsLine = (x.specs && x.specs.length)
+      ? `<span class="spec-inline">${x.specs.map(escapeHtml).join(' · ')}</span>`
+      : '';
+    const notesLine = x.notes
+      ? `<span class="notes-inline" title="${escapeHtml(x.notes)}">${escapeHtml(x.notes.length > 80 ? x.notes.substring(0,80) + '…' : x.notes)}</span>`
+      : '';
 
     return `<div class="card">
       <div class="card-body">
@@ -1248,8 +1372,9 @@ function renderList() {
         </div>
         <div class="card-cat">
           ${catTags}
-          ${x.sub ? `<span style="margin-left:4px">· ${escapeHtml(x.sub)}</span>` : ''}
+          ${specsLine ? `<span style="margin-left:4px">· ${specsLine}</span>` : ''}
         </div>
+        ${notesLine ? `<div class="card-notes">${notesLine}</div>` : ''}
         <div class="card-actions">${waBtn}${siteBtn}${catalogBtn}</div>
       </div>
     </div>`;
@@ -1299,6 +1424,7 @@ function renderAdminList() {
     const catTags = (x.cats || []).map(c => `<span class="tag tag-cat">${escapeHtml(c)}</span>`).join('');
     const locTags = (x.locs || []).map(l => `<span class="tag">${escapeHtml(l)}</span>`).join('');
     const reachTags = (x.reach || []).map(r => `<span class="tag tag-reach">${escapeHtml(r)}</span>`).join('');
+    const specSpecs = (x.specs && x.specs.length) ? x.specs.join(', ') : '';
 
     return `<div class="admin-row">
       <div class="admin-row-header">
@@ -1312,11 +1438,12 @@ function renderAdminList() {
         </div>
       </div>
       <div class="admin-row-specs">
-        ${spec('Especialidade', x.sub)}
+        ${spec('Especialidades', specSpecs)}
         ${spec('Contato', x.contact, true)}
         ${spec('Nome do contato', x.contactName)}
         ${spec('Site / Instagram', x.site, true)}
       </div>
+      ${x.notes ? `<div class="admin-row-catalog" style="background:#fcfaf3;border-left:2px solid var(--accent);padding-left:8px;border-top:none;margin-top:8px"><strong style="color:var(--muted);font-size:11px">OBS:</strong> ${escapeHtml(x.notes)}</div>` : ''}
       ${catalogLine}
     </div>`;
   }).join('');
@@ -1333,6 +1460,7 @@ function setMode(m) {
     renderAdminList();
     renderCatChips();
     renderLocChips();
+    renderSpecChips();
   }
 }
 
@@ -1342,22 +1470,24 @@ function getForm() {
     cats: [...selectedCats],
     locs: [...selectedLocs],
     reach: [...selectedReach],
+    specs: [...selectedSpecs],
+    notes: document.getElementById('fNotes').value.trim(),
     name: document.getElementById('fName').value.trim(),
     site: document.getElementById('fSite').value.trim(),
     contact: buildWaLink(document.getElementById('fContact').value.trim()) || document.getElementById('fContact').value.trim(),
     contactName: document.getElementById('fContactName').value.trim(),
-    sub: document.getElementById('fSub').value.trim(),
     catalog: document.getElementById('fCatalog').value.trim()
   };
 }
 
 function clearForm() {
-  ['fName','fSite','fContact','fContactName','fSub','fCatalog','catAddInput','locAddInput'].forEach(id => {
+  ['fName','fSite','fContact','fContactName','fNotes','fCatalog','catAddInput','locAddInput','specAddInput'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
   selectedCats = [];
   selectedLocs = [];
+  selectedSpecs = [];
   setReachUI([]);
   editId = null;
   document.getElementById('formTitle').textContent = 'Novo Fornecedor';
@@ -1366,6 +1496,7 @@ function clearForm() {
   document.getElementById('waPreview').style.display = 'none';
   renderCatChips();
   renderLocChips();
+  renderSpecChips();
 }
 
 function saveEntry() {
@@ -1395,15 +1526,17 @@ function editEntry(id) {
   editId = id;
   selectedCats = [...(x.cats || [])];
   selectedLocs = [...(x.locs || [])];
+  selectedSpecs = [...(x.specs || [])];
   setReachUI(x.reach || []);
   document.getElementById('fName').value = x.name || '';
   document.getElementById('fSite').value = x.site || '';
   document.getElementById('fContact').value = isWa(x.contact) ? prettyPhone(x.contact) : (x.contact || '');
   document.getElementById('fContactName').value = x.contactName || '';
-  document.getElementById('fSub').value = x.sub || '';
+  document.getElementById('fNotes').value = x.notes || '';
   document.getElementById('fCatalog').value = x.catalog || '';
   renderCatChips();
   renderLocChips();
+  renderSpecChips();
   previewWa();
   document.getElementById('formTitle').textContent = 'Editar Fornecedor';
   document.getElementById('saveBtn').textContent = 'Atualizar';
@@ -1444,20 +1577,25 @@ function switchManageTab(tab) {
   manageTab = tab;
   document.getElementById('tabCats').classList.toggle('active', tab === 'cats');
   document.getElementById('tabLocs').classList.toggle('active', tab === 'locs');
+  document.getElementById('tabSpecs').classList.toggle('active', tab === 'specs');
   renderManageList();
 }
 
+function getManageList() {
+  if (manageTab === 'cats') return { list: allCats, field: 'cats' };
+  if (manageTab === 'locs') return { list: allLocs, field: 'locs' };
+  return { list: allSpecs, field: 'specs' };
+}
+
 function renderManageList() {
-  const items = manageTab === 'cats' ? allCats : allLocs;
-  const list = document.getElementById('manageList');
-  if (!items.length) {
-    list.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:1rem;text-align:center">Nada cadastrado ainda.</p>';
+  const { list, field } = getManageList();
+  const node = document.getElementById('manageList');
+  if (!list.length) {
+    node.innerHTML = '<p style="color:var(--muted);font-size:13px;padding:1rem;text-align:center">Nada cadastrado ainda.</p>';
     return;
   }
-  list.innerHTML = items.map(name => {
-    const count = manageTab === 'cats'
-      ? db.filter(x => (x.cats || []).includes(name)).length
-      : db.filter(x => (x.locs || []).includes(name)).length;
+  node.innerHTML = list.map(name => {
+    const count = db.filter(x => (x[field] || []).includes(name)).length;
     return `<div class="manage-row">
       <span class="manage-row-name">${escapeHtml(name)}</span>
       <span class="manage-row-count">${count} ${count === 1 ? 'fornecedor' : 'fornecedores'}</span>
@@ -1471,25 +1609,22 @@ function renameItem(oldName) {
   const newName = prompt(`Renomear "${oldName}" para:`, oldName);
   if (!newName || newName.trim() === '' || newName.trim() === oldName) return;
   const trimmed = newName.trim();
-  const list = manageTab === 'cats' ? allCats : allLocs;
-  const field = manageTab === 'cats' ? 'cats' : 'locs';
+  const { list, field } = getManageList();
 
   // Já existe outro com esse nome? Faz merge.
   const existing = list.find(n => n.toLowerCase() === trimmed.toLowerCase() && n !== oldName);
   const finalName = existing || trimmed;
 
-  // Atualiza no catálogo
   const idx = list.indexOf(oldName);
   if (idx > -1) {
     if (existing) {
-      list.splice(idx, 1); // remove o antigo, manter o existente
+      list.splice(idx, 1);
     } else {
       list[idx] = trimmed;
     }
   }
   list.sort((a,b) => a.localeCompare(b, 'pt-BR'));
 
-  // Atualiza em todos os fornecedores
   db.forEach(x => {
     if (x[field] && x[field].includes(oldName)) {
       x[field] = x[field].filter(v => v !== oldName);
@@ -1504,19 +1639,20 @@ function renameItem(oldName) {
   renderList();
   renderCatChips();
   renderLocChips();
+  renderSpecChips();
   renderManageList();
 }
 
 function deleteItem(name) {
-  const tabName = manageTab === 'cats' ? 'categoria' : 'local';
-  const field = manageTab === 'cats' ? 'cats' : 'locs';
+  const labelMap = { cats: 'categoria', locs: 'local', specs: 'especialidade' };
+  const tabLabel = labelMap[manageTab];
+  const { list, field } = getManageList();
   const count = db.filter(x => (x[field] || []).includes(name)).length;
   const msg = count
-    ? `Excluir a ${tabName} "${name}"?\n\nEla será removida de ${count} fornecedor(es), mas os fornecedores em si não serão apagados.`
-    : `Excluir a ${tabName} "${name}"?`;
+    ? `Excluir a ${tabLabel} "${name}"?\n\nEla será removida de ${count} fornecedor(es), mas os fornecedores em si não serão apagados.`
+    : `Excluir a ${tabLabel} "${name}"?`;
   if (!confirm(msg)) return;
 
-  const list = manageTab === 'cats' ? allCats : allLocs;
   const idx = list.indexOf(name);
   if (idx > -1) list.splice(idx, 1);
 
@@ -1531,6 +1667,7 @@ function deleteItem(name) {
   renderList();
   renderCatChips();
   renderLocChips();
+  renderSpecChips();
   renderManageList();
 }
 
@@ -1569,12 +1706,13 @@ function closeLogin() {
 
 /* ---------- EXPORTAR / IMPORTAR ---------- */
 function exportCSV() {
-  const headers = ['Categorias','Especialidade','Locais','Atende','Fornecedor','Site/Instagram','Contato','Nome do Contato','Link Catálogo'];
+  const headers = ['Categorias','Especialidades','Locais','Atende','Fornecedor','Site/Instagram','Contato','Nome do Contato','Observações','Link Catálogo'];
   const rows = db.map(x => {
     const cats = (x.cats || []).join(' | ');
+    const specs = (x.specs || []).join(' | ');
     const locs = (x.locs || []).join(' | ');
     const reach = (x.reach || []).join(' | ');
-    return [cats, x.sub, locs, reach, x.name, x.site, x.contact, x.contactName, x.catalog]
+    return [cats, specs, locs, reach, x.name, x.site, x.contact, x.contactName, x.notes, x.catalog]
       .map(v => `"${(v||'').replace(/"/g,'""')}"`).join(',');
   });
   const csv = [headers.join(','), ...rows].join('\n');
@@ -1622,18 +1760,33 @@ function importXLSX(event) {
         const catsRaw = map(row, ['categorias', 'categoria', 'cat']);
         const locsRaw = map(row, ['locais', 'local', 'loc', 'cidade']);
         const reachRaw = map(row, ['atende', 'abrangência', 'abrangencia']);
+        const specsRaw = map(row, ['especialidades', 'especialidade', 'tags']);
+        const notesRaw = map(row, ['observações', 'observacoes', 'obs', 'anotações', 'anotacoes', 'notas']);
         const contactRaw = map(row, ['contato', 'tel', 'whatsapp', 'telefone', 'contact']);
         // Se o contato for um número/telefone, converte pra link
         const contact = contactRaw.includes('wa.me') || !contactRaw
           ? contactRaw
           : (contactRaw.replace(/\D/g,'').length >= 8 ? buildWaLink(contactRaw) : contactRaw);
 
+        // Se não tem coluna de obs mas tem coluna antiga "sub", aplica o mesmo split do migrateEntry
+        let specs = splitMulti(specsRaw);
+        let notes = notesRaw;
+        if (!specs.length && !notes) {
+          const oldSub = map(row, ['sub', 'especial']);
+          if (oldSub) {
+            const split = splitSubField(oldSub);
+            specs = split.specs;
+            notes = split.notes;
+          }
+        }
+
         return {
           id: i + 1,
           cats:        splitMulti(catsRaw),
           locs:        splitMulti(locsRaw),
           reach:       splitMulti(reachRaw).filter(r => ['Local','Regional','Nacional','Internacional'].includes(r)),
-          sub:         map(row, ['especialidade', 'obs', 'sub', 'especial']),
+          specs,
+          notes,
           name:        map(row, ['fornecedor', 'nome', 'name', 'empresa']),
           site:        map(row, ['site', 'instagram', 'ig', 'url', 'link site']),
           contact,
@@ -1662,6 +1815,7 @@ function importXLSX(event) {
       renderList();
       renderCatChips();
       renderLocChips();
+      renderSpecChips();
       alert(`✅ ${newEntries.length} fornecedores ${action ? 'adicionados' : 'importados'} com sucesso!`);
     } catch(err) {
       alert('Erro ao ler o arquivo. Certifique-se de enviar um arquivo .xlsx ou .xls válido.\n\n' + err.message);
